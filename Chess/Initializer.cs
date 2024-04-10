@@ -31,6 +31,10 @@ namespace Chess
                 {
                     return new King(false, new Point(x,y));
                 }
+                if (x == 0 || x == 7)
+                {
+                    return new Castle(false, new Point(x, y));
+                }
             } else if(y == 1)
             {
                 return new Pawn(false, new Point(x, y), isWhiteDown);
@@ -44,6 +48,10 @@ namespace Chess
                 if (x == 4)
                 {
                     return new King(true, new Point(x, y));
+                }
+                if (x == 0 || x == 7)
+                {
+                    return new Castle(true, new Point(x, y));
                 }
             }
 
