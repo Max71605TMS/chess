@@ -8,15 +8,25 @@ namespace Chess
 {
     public class King : Figure
     {
-        private bool _isInInitialPositon = true;
+        private bool _isInInitialPositon = true; //начальная позиция
+
+        private bool _isDirectionUp = true; // направление
 
         public King(bool isWhite, Point point) : base(isWhite, point)
         {
         }
 
-        public override IEnumerable<Point> GetAvaliablePositions(IEnumerable<Figure> figures)
+        public override IEnumerable<Point> GetAvaliablePositions(IEnumerable<Figure> figures) //Получить доступную позицию
         {
-            throw new NotImplementedException();
+            var positions = new List<Point>();
+
+            if (_isDirectionUp)
+            {
+                
+            }
+
+
+            return positions;
         }
 
         public override Image GetImage()
@@ -42,6 +52,10 @@ namespace Chess
                     return (Position.X + Position.Y) % 2 == 0 ? Properties.Resources.King_Black_White : Properties.Resources.King_Black_Black;
                 }
             }
+        }
+        private bool ChekFigureup(IEnumerable<Figure> figures)
+        {
+            return 
         }
     }
 }
