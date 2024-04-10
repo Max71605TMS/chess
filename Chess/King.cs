@@ -8,9 +8,10 @@ namespace Chess
 {
     public class King : Figure
     {
+        private const int BoardSize = 8; // размер шахматной доски
+
         private bool _isInInitialPositon = true; //начальная позиция
 
-        private bool _isDirectionUp = true; // направление
 
         public King(bool isWhite, Point point) : base(isWhite, point)
         {
@@ -20,16 +21,70 @@ namespace Chess
         {
             var positions = new List<Point>();
 
-            if (_isDirectionUp)
-            {
-                
-            }
+                var possibleMove = figures.Any(f => f.Position == new Point(Position.X, Position.Y + 1));
+                if (Position.Y < BoardSize - 1 && !possibleMove)
+                {
+                    positions.Add(new Point(Position.X, Position.Y + 1));
+                }
 
+                possibleMove = figures.Any(f => f.Position == new Point(Position.X, Position.Y - 1));
+                if (Position.Y < BoardSize - 1 && !possibleMove)
+                {
+                    positions.Add(new Point(Position.X, Position.Y - 1));
+                }
+
+                possibleMove = figures.Any(f => f.Position == new Point(Position.X + 1, Position.Y));
+                if (Position.X < BoardSize - 1 && !possibleMove)
+                {
+                    positions.Add(new Point(Position.X + 1, Position.Y));
+                }
+
+                possibleMove = figures.Any(f => f.Position == new Point(Position.X - 1, Position.Y));
+                if (Position.X < BoardSize - 1 && !possibleMove)
+                {
+                    positions.Add(new Point(Position.X - 1, Position.Y));
+                }
+
+                possibleMove = figures.Any(f => f.Position == new Point(Position.X + 1, Position.Y - 1));
+                if (Position.X < BoardSize - 1 && Position.Y < BoardSize - 1 && !possibleMove)
+                {
+                    positions.Add(new Point(Position.X + 1, Position.Y - 1));
+                }
+
+                possibleMove = figures.Any(f => f.Position == new Point(Position.X + 1, Position.Y + 1));
+                if (Position.X < BoardSize - 1 && Position.Y < BoardSize - 1 && !possibleMove)
+                {
+                    positions.Add(new Point(Position.X + 1, Position.Y + 1));
+                }
+
+                possibleMove = figures.Any(f => f.Position == new Point(Position.X - 1, Position.Y + 1));
+                if (Position.X < BoardSize - 1 && Position.Y < BoardSize - 1 && !possibleMove)
+                {
+                    positions.Add(new Point(Position.X - 1, Position.Y + 1));
+                }
+
+                possibleMove = figures.Any(f => f.Position == new Point(Position.X - 1, Position.Y - 1));
+                if (Position.X < BoardSize - 1 && Position.Y < BoardSize - 1 && !possibleMove)
+                {
+                    positions.Add(new Point(Position.X - 1, Position.Y - 1));
+                }
+
+                //ракеровка! добавить поля ладьи с _isInInitialPositon в проверку
+
+                if (_isInInitialPositon)
+                {
+                    positions.Add(new Point(Position.X + 2, Position.Y));
+                }
+
+                if (_isInInitialPositon)
+                {
+                    positions.Add(new Point(Position.X - 2, Position.Y));
+                }
 
             return positions;
         }
 
-        public override Image GetImage()
+        public override Image GetImage() // получение картинки фигуры
         {
             if (isWhite)
             {
@@ -52,10 +107,6 @@ namespace Chess
                     return (Position.X + Position.Y) % 2 == 0 ? Properties.Resources.King_Black_White : Properties.Resources.King_Black_Black;
                 }
             }
-        }
-        private bool ChekFigureup(IEnumerable<Figure> figures)
-        {
-            return 
         }
     }
 }
