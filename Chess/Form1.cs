@@ -56,7 +56,8 @@ namespace Chess
                         //TODO: add green for enemyes figures
                     }
                 }
-            } else
+            } 
+            else
             {
                 var point = (Point)button.Tag;
                 if(_avaliablePositions.Any(position => position == point))
@@ -67,6 +68,7 @@ namespace Chess
                     _currentfigure.isChoosen = false;
                     _currentfigure.Position = point;
                     chessButtons[point.X, point.Y].Image = _currentfigure.GetImage();
+                    isWhiteTurn = !isWhiteTurn;
                 }
             }
 

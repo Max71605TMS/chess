@@ -26,23 +26,49 @@ namespace Chess
                 {
                     positions.Add(new Point(Position.X, Position.Y + 1));
                 }
+
                 var isAnyFiguresBehindPlus = figures.Any(f => f.Position == new Point(Position.X, Position.Y + 2));
                 if (_isFirstTurn && !isAnyFiguresBehind && !isAnyFiguresBehindPlus)
                 {
                     positions.Add(new Point(Position.X, Position.Y + 2));
                 }
-                
-            } else
+
+                var isAnyEnemyFigureDiagonallyToTheLeft = figures.Any(f => f.isWhite == !this.isWhite && f.Position == new Point(Position.X - 1, Position.Y + 1));
+                if(isAnyEnemyFigureDiagonallyToTheLeft)
+                {
+                    positions.Add(new Point(Position.X - 1, Position.Y + 1));
+                }
+
+                var isAnyEnemyFigureDiagonallyToTheRight = figures.Any(f => f.isWhite == !this.isWhite && f.Position == new Point(Position.X + 1, Position.Y + 1));
+                if (isAnyEnemyFigureDiagonallyToTheRight)
+                {
+                    positions.Add(new Point(Position.X + 1, Position.Y + 1));
+                }
+            } 
+            else
             {
                 var isAnyFiguresBehind = figures.Any(f => f.Position == new Point(Position.X, Position.Y - 1));
                 if (Position.Y > 1 && !isAnyFiguresBehind)
                 {
                     positions.Add(new Point(Position.X, Position.Y - 1));
                 }
+
                 var isAnyFiguresBehindPlus = figures.Any(f => f.Position == new Point(Position.X, Position.Y - 2));
                 if (_isFirstTurn && !isAnyFiguresBehind && !isAnyFiguresBehindPlus)
                 {
                     positions.Add(new Point(Position.X, Position.Y - 2));
+                }
+
+                var isAnyEnemyFigureDiagonallyToTheLeft = figures.Any(f => f.isWhite == !this.isWhite && f.Position == new Point(Position.X - 1, Position.Y - 1));
+                if (isAnyEnemyFigureDiagonallyToTheLeft)
+                {
+                    positions.Add(new Point(Position.X - 1, Position.Y - 1));
+                }
+
+                var isAnyEnemyFigureDiagonallyToTheRight = figures.Any(f => f.isWhite == !this.isWhite && f.Position == new Point(Position.X + 1, Position.Y - 1));
+                if (isAnyEnemyFigureDiagonallyToTheRight)
+                {
+                    positions.Add(new Point(Position.X + 1, Position.Y - 1));
                 }
             }
             
