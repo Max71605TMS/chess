@@ -10,7 +10,7 @@ namespace Chess
     {
         private const int BoardSize = 8; // размер шахматной доски
 
-        private bool _isInInitialPositon = true; //начальная позиция
+        public bool _isInInitialPositon = true; //начальная позиция
 
 
         public King(bool isWhite, Point point) : base(isWhite, point)
@@ -69,14 +69,14 @@ namespace Chess
                     positions.Add(new Point(Position.X - 1, Position.Y - 1));
                 }
 
-                //ракеровка! добавить поля ладьи с _isInInitialPositon в проверку
+            //ракеровка! добавить поля в Castle с _isInInitialPositon в проверку
 
-                if (_isInInitialPositon)
+                if (_isInInitialPositon /*&& Castle._isInInitialPositon*/)
                 {
                     positions.Add(new Point(Position.X + 2, Position.Y));
                 }
-
-                if (_isInInitialPositon)
+                
+                if (_isInInitialPositon /*&& Castle._isInInitialPositon*/)
                 {
                     positions.Add(new Point(Position.X - 2, Position.Y));
                 }
