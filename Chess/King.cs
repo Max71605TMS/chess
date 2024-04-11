@@ -55,50 +55,43 @@ namespace Chess
         {
             var allTheKingMoves = new List<Point>();
 
-            var possibleMove = figures.Any(f => f.Position == new Point(Position.X, Position.Y + 1));
-            if (Position.Y < BoardSize - 1 && !possibleMove)
+            var point = new Point(Position.X, Position.Y + 1);
+            if (Position.Y < BoardSize - 1 )
             {
                 allTheKingMoves.Add(new Point(Position.X, Position.Y + 1));
             }
-
-            possibleMove = figures.Any(f => f.Position == new Point(Position.X, Position.Y - 1));
-            if (Position.Y < BoardSize - 1 && !possibleMove)
+            point = new Point(Position.X, Position.Y - 1);
+            if (Position.Y < BoardSize - 1)
             {
                 allTheKingMoves.Add(new Point(Position.X, Position.Y - 1));
             }
-
-            possibleMove = figures.Any(f => f.Position == new Point(Position.X + 1, Position.Y));
-            if (Position.X < BoardSize - 1 && !possibleMove)
+            point = new Point(Position.X + 1, Position.Y);
+            if (Position.X < BoardSize - 1)
             {
                 allTheKingMoves.Add(new Point(Position.X + 1, Position.Y));
             }
-
-            possibleMove = figures.Any(f => f.Position == new Point(Position.X - 1, Position.Y));
-            if (Position.X < BoardSize - 1 && !possibleMove)
+            point = new Point(Position.X - 1, Position.Y);
+            if (Position.X < BoardSize - 1)
             {
                 allTheKingMoves.Add(new Point(Position.X - 1, Position.Y));
             }
-
-            possibleMove = figures.Any(f => f.Position == new Point(Position.X + 1, Position.Y - 1));
-            if (Position.X < BoardSize - 1 && Position.Y < BoardSize - 1 && !possibleMove)
+            point = new Point(Position.X + 1, Position.Y - 1);
+            if (Position.X < BoardSize - 1 && Position.Y < BoardSize - 1)
             {
                 allTheKingMoves.Add(new Point(Position.X + 1, Position.Y - 1));
             }
-
-            possibleMove = figures.Any(f => f.Position == new Point(Position.X + 1, Position.Y + 1));
-            if (Position.X < BoardSize - 1 && Position.Y < BoardSize - 1 && !possibleMove)
+            point = new Point(Position.X + 1, Position.Y + 1);
+            if (Position.X < BoardSize - 1 && Position.Y < BoardSize - 1)
             {
                 allTheKingMoves.Add(new Point(Position.X + 1, Position.Y + 1));
             }
-
-            possibleMove = figures.Any(f => f.Position == new Point(Position.X - 1, Position.Y + 1));
-            if (Position.X < BoardSize - 1 && Position.Y < BoardSize - 1 && !possibleMove)
+            point = new Point(Position.X - 1, Position.Y + 1);
+            if (Position.X < BoardSize - 1 && Position.Y < BoardSize - 1)
             {
                 allTheKingMoves.Add(new Point(Position.X - 1, Position.Y + 1));
             }
-
-            possibleMove = figures.Any(f => f.Position == new Point(Position.X - 1, Position.Y - 1));
-            if (Position.X < BoardSize - 1 && Position.Y < BoardSize - 1 && !possibleMove)
+            point = new Point(Position.X - 1, Position.Y - 1);
+            if (Position.X < BoardSize - 1 && Position.Y < BoardSize - 1)
             {
                 allTheKingMoves.Add(new Point(Position.X - 1, Position.Y - 1));
             }
