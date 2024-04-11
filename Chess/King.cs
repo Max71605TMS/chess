@@ -40,7 +40,7 @@ namespace Chess
 
 
 
-            return howСanHeWalk;
+            return allTheKingMoves;
         }
 
         public override Image GetImage() // получение картинки фигуры
