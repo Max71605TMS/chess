@@ -6,6 +6,7 @@ namespace Chess;
 
 public partial class Form1 : Form
 {
+    //Team Two
     private const int BoardSize = 8;
     private const int ButtonSize = 75;
 
