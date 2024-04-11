@@ -41,45 +41,37 @@ public partial class Form1 : Form
         }
     }
 
-    private void ChessButton_Click(object sender, EventArgs e)
-    {
-        var button = (Button)sender;
-        if (button.Tag is Figure figure)
+        private void ChessButton_Click(object sender, EventArgs e)
         {
-            if (figure.isWhite == isWhiteTurn)
+            var button = (Button)sender;
+            if(button.Tag is Figure figure)
             {
-                _avaliablePositions = figure.GetAvaliablePositions(_figures);
-                figure.isChoosen = true;
-                _currentfigure = figure;
-                chessButtons[figure.Position.X, figure.Position.Y].Image = figure.GetImage();
-                foreach (var position in _avaliablePositions)
+                if(figure.isWhite == isWhiteTurn)
                 {
-                    chessButtons[position.X, position.Y].Image = Properties.Resources.Empty_Green;
-                    //TODO: add green for enemyes figures
+                    _avaliablePositions = figure.GetAvaliablePositions(_figures);
+                    figure.isChoosen = true;
+                    _currentfigure = figure;
+                    chessButtons[figure.Position.X, figure.Position.Y].Image = figure.GetImage();
+                    foreach(var position in _avaliablePositions)
+                    {
+                        chessButtons[position.X, position.Y].Image = Properties.Resources.Empty_Green; 
+                        //TODO: add green for enemyes figures
+                    }
+                }
+            } else
+            {
+                var point = (Point)button.Tag;
+                if(_avaliablePositions.Any(position => position == point))
+                {
+                    chessButtons[_currentfigure.Position.X, _currentfigure.Position.Y].Image = Properties.Resources.Empty_Black;
+                    chessButtons[_currentfigure.Position.X, _currentfigure.Position.Y].Tag = new Point(point.X, point.Y);
+                    chessButtons[point.X, point.Y].Tag = _currentfigure;
+                    _currentfigure.isChoosen = false;
+                    _currentfigure.Position = point;
+                    chessButtons[point.X, point.Y].Image = _currentfigure.GetImage();
                 }
             }
-        }
-        else
-        {
-            var point = (Point)button.Tag;
-            if (_avaliablePositions.Any(position => position == point))
-            {
-                chessButtons[_currentfigure.Position.X, _currentfigure.Position.Y].Image =
-                    Properties.Resources.Empty_Black;
-                chessButtons[_currentfigure.Position.X, _currentfigure.Position.Y].Tag = new Point(point.X, point.Y);
-                chessButtons[point.X, point.Y].Tag = _currentfigure;
-                _currentfigure.isChoosen = false;
-                _currentfigure.Position = point;
-                chessButtons[point.X, point.Y].Image = _currentfigure.GetImage();
-            }
-        }
-    }
 
-    private void button1_Click(object sender, EventArgs e)
-    {
-    }
-
-    private void button1_Click_1(object sender, EventArgs e)
-    {
+        }
     }
 }
