@@ -12,6 +12,7 @@ namespace Chess
         internal static Button GetButton(int ButtonSize, int x, int y, int offestX = 0, int offsetY = 0)
         {
             var figure = GetFigure(x, y, true);
+
             return new Button
             {
                 Width = ButtonSize,
@@ -30,6 +31,10 @@ namespace Chess
                 if(x == 4)
                 {
                     return new King(false, new Point(x,y));
+                } 
+                else if (x == 1 || x == 6)
+                {                   
+                    return new Horse(false, new Point(x, y));                    
                 }
             } else if(y == 1)
             {
@@ -44,14 +49,13 @@ namespace Chess
                 if (x == 4)
                 {
                     return new King(true, new Point(x, y));
-                }
-            } else if (y == 7)
-            {
-                if(x == 2 || x == 6)
+                }              
+                else if (x == 1 || x == 6)
                 {
                     return new Horse(true, new Point(x, y));
                 }
-            }
+                
+            } 
             else if (y == 0)
             {
                 if(x == 2 || x == 6)
