@@ -23,7 +23,7 @@ namespace Chess
             {
                 if(isChoosen)
                 {
-                    return Properties.Resources.Bishop_Black_Green;
+                    return Properties.Resources.Bishop_White_Green;
                 }
                 else
                 {
