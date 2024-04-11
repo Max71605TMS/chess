@@ -55,43 +55,43 @@ namespace Chess
         {
             var allTheKingMoves = new List<Point>();
 
-            var point = new Point(Position.X, Position.Y + 1);
-            if (Position.Y < BoardSize - 1 )
+            var point = new Point(Position.X, Position.Y);
+            if (Position.Y + 1 < BoardSize )
             {
                 allTheKingMoves.Add(new Point(Position.X, Position.Y + 1));
             }
-            point = new Point(Position.X, Position.Y - 1);
-            if (Position.Y < BoardSize - 1)
+          
+            if (Position.Y - 1 < BoardSize)
             {
                 allTheKingMoves.Add(new Point(Position.X, Position.Y - 1));
             }
-            point = new Point(Position.X + 1, Position.Y);
-            if (Position.X < BoardSize - 1)
+
+            if (Position.X + 1 < BoardSize)
             {
                 allTheKingMoves.Add(new Point(Position.X + 1, Position.Y));
             }
-            point = new Point(Position.X - 1, Position.Y);
-            if (Position.X < BoardSize - 1)
+
+            if (Position.X - 1 < BoardSize)
             {
                 allTheKingMoves.Add(new Point(Position.X - 1, Position.Y));
             }
-            point = new Point(Position.X + 1, Position.Y - 1);
-            if (Position.X < BoardSize - 1 && Position.Y < BoardSize - 1)
+        
+            if (Position.X + 1 < BoardSize && Position.Y  - 1 < BoardSize )
             {
                 allTheKingMoves.Add(new Point(Position.X + 1, Position.Y - 1));
             }
-            point = new Point(Position.X + 1, Position.Y + 1);
-            if (Position.X < BoardSize - 1 && Position.Y < BoardSize - 1)
+
+            if (Position.X + 1 < BoardSize  && Position.Y + 1< BoardSize )
             {
                 allTheKingMoves.Add(new Point(Position.X + 1, Position.Y + 1));
             }
-            point = new Point(Position.X - 1, Position.Y + 1);
-            if (Position.X < BoardSize - 1 && Position.Y < BoardSize - 1)
+
+            if (Position.X - 1 < BoardSize && Position.Y + 1< BoardSize)
             {
                 allTheKingMoves.Add(new Point(Position.X - 1, Position.Y + 1));
             }
-            point = new Point(Position.X - 1, Position.Y - 1);
-            if (Position.X < BoardSize - 1 && Position.Y < BoardSize - 1)
+
+            if (Position.X - 1< BoardSize && Position.Y - 1< BoardSize)
             {
                 allTheKingMoves.Add(new Point(Position.X - 1, Position.Y - 1));
             }
