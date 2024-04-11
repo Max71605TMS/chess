@@ -8,8 +8,11 @@ namespace Chess
 {
     internal class Bishop : Figure
     {
+        private const int BoardSize = 8;
+
         public Bishop(bool isWhite, Point point) : base(isWhite, point)
         {
+
         }
 
         public override IEnumerable<Point> GetAvaliablePositions(IEnumerable<Figure> figures)
@@ -38,7 +41,7 @@ namespace Chess
                 }
                 else
                 {
-                    return (Position.X + Position.Y) % 2 == 0 ? Properties.Resources.Bishop_Black_White : Properties.Resources.Castle_Black_Black;
+                    return (Position.X + Position.Y) % 2 == 0 ? Properties.Resources.Bishop_Black_White : Properties.Resources.Bishop_Black_Black;
                 }
                 
 
