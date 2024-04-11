@@ -21,9 +21,26 @@ namespace Chess
 
         public override IEnumerable<Point> GetAvaliablePositions(IEnumerable<Figure> figures) //Получить доступную позицию
         {
+            var listFigurePoint = figures.Select(f => f.Position).ToList();  //??????
             var allTheKingMoves = AllTheKingMoves(figures); // все возможные ходы короля без учета фигур
-            
-            return allTheKingMoves;
+            var howСanHeWalk = new List<Point>();
+
+            foreach (var move in allTheKingMoves)
+            {
+                foreach (var figure in listFigurePoint)
+                {
+                    if (move.X != figure.X && move.Y != figure.Y)
+                    {
+                        if(figures.Any(fig => fig.isWhite))
+                        howСanHeWalk.Add(move);
+                    }
+                }
+            }
+
+
+
+
+            return howСanHeWalk;
         }
 
         public override Image GetImage() // получение картинки фигуры

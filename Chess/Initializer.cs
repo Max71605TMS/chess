@@ -33,11 +33,11 @@ namespace Chess
                 }
             } else if(y == 1)
             {
-                //return new Pawn(false, new Point(x, y), isWhiteDown);
+                return new Pawn(false, new Point(x, y), isWhiteDown);
             }
             else if (y == 6)
             {
-                //return new Pawn(true, new Point(x, y), !isWhiteDown);
+                return new Pawn(true, new Point(x, y), !isWhiteDown);
             }
             else if (y == 7)
             {
