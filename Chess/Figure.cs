@@ -9,6 +9,7 @@ namespace Chess
 {
     public abstract class Figure
     {
+        
         public Point Position { get; set; }
 
         public Image Image { get; set; }
@@ -21,7 +22,10 @@ namespace Chess
         {
             this.isWhite = isWhite;
             this.Position = point;
+            
         }
+
+        
 
         public abstract IEnumerable<Point> GetAvaliablePositions(IEnumerable<Figure> figures);
 

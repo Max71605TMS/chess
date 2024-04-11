@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Chess.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace Chess
 {
-    public class King : Figure
+    public class King : Figure, IMarkable
     {
-        private bool _isInInitialPositon = true;
-
         public King(bool isWhite, Point point) : base(isWhite, point)
         {
         }
+
+        public bool IsFirstTurn { get; set; } = true;
 
         public override IEnumerable<Point> GetAvaliablePositions(IEnumerable<Figure> figures)
         {

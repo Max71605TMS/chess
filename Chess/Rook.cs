@@ -1,9 +1,12 @@
-﻿using Chess.Properties;
+﻿using Chess.Interfaces;
+using Chess.Properties;
 
 namespace Chess;
 
-public class Rook : Figure
+public class Rook : Figure, IMarkable
 {
+    public bool IsFirstTurn { get; set; } = true;
+
     public Rook(bool isWhite, Point point) : base(isWhite, point)
     {
     }
