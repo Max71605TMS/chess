@@ -45,6 +45,19 @@ namespace Chess
                 {
                     return new King(true, new Point(x, y));
                 }
+            } else if (y == 7)
+            {
+                if(x == 2 || x == 6)
+                {
+                    return new Horse(true, new Point(x, y));
+                }
+            }
+            else if (y == 0)
+            {
+                if(x == 2 || x == 6)
+                {
+                    return new Horse(false, new Point(x, y));
+                }
             }
 
             return null;
