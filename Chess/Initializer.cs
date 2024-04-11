@@ -4,60 +4,51 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using Chess;
 
-namespace Chess
+internal static class Initializer
 {
-    internal static class Initializer
+    internal static Button GetButton(int ButtonSize, int x, int y, int offestX = 0, int offsetY = 0)
     {
-        internal static Button GetButton(int ButtonSize, int x, int y, int offestX = 0, int offsetY = 0)
+        var figure = GetFigure(x, y, true);
+        return new Button
         {
-            var figure = GetFigure(x, y, true);
-            return new Button
-            {
-                Width = ButtonSize,
-                Height = ButtonSize,
-                Location = new Point(x * ButtonSize + offestX, y * ButtonSize + offsetY),
-                BackColor = (x + y) % 2 == 0 ? Color.White : Color.Black,
-                Tag = figure != null ? figure : new Point(x,y),
-                Image = figure != null ? figure.GetImage() : null
-            };
+            Width = ButtonSize,
+            Height = ButtonSize,
+            Location = new Point(x * ButtonSize + offestX, y * ButtonSize + offsetY),
+            BackColor = (x + y) % 2 == 0 ? Color.White : Color.Black,
+            Tag = figure is not null ? figure : new Point(x, y),
+            Image = figure?.GetImage()
+        };
+    }
+
+    private static Figure? GetFigure(int x, int y, bool isWhiteDown)
+    {
+        switch (y)
+        {
+            case 0 or 7:
+                switch (x)
+                {
+                    case 0:
+                    case 7:
+                        return new Rook(y is 7, new Point(x, y));
+                    case 1:
+                    case 6:
+                        break;
+                    case 2:
+                    case 5:
+                        break;
+                    case 3:
+                        break;
+                    case 4:
+                        return new King(y is 7, new Point(x, y));
+                }
+
+                break;
+            case 1 or 6:
+                return new Pawn(y is 6, new Point(x, y), isWhiteDown);
         }
 
-        private static Figure GetFigure(int x, int y, bool isWhiteDown)
-        {
-            if(y == 0)
-            {
-                if(x == 4)
-                {
-                    return new King(false, new Point(x,y));
-                }
-                if (x == 0 || x == 7)
-                {
-                    return new Castle(false, new Point(x, y));
-                }
-            } else if(y == 1)
-            {
-                return new Pawn(false, new Point(x, y), isWhiteDown);
-            }
-            else if (y == 6)
-            {
-                return new Pawn(true, new Point(x, y), !isWhiteDown);
-            }
-            else if (y == 7)
-            {
-                if (x == 4)
-                {
-                    return new King(true, new Point(x, y));
-                }
-                if (x == 0 || x == 7)
-                {
-                    return new Castle(true, new Point(x, y));
-                }
-            }
-
-            return null;
-        }
-
-        
+        return null;
     }
 }
