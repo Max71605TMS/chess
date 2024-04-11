@@ -31,7 +31,10 @@ namespace Chess
 
         private List<Point> AllTheKingMoves()
         {
-            var allTheKingMoves = new List<Point>
+            var allTheKingMoves = new List<Point>();
+
+            var point = new Point(Position.X, Position.Y + 1);
+            if (Position.Y < BoardSize - 1 )
             {
                 new Point(Position.X, Position.Y + 1),
                 new Point(Position.X, Position.Y - 1),
@@ -43,7 +46,7 @@ namespace Chess
                 new Point(Position.X - 1, Position.Y - 1)
             };
 
-            if (_isInInitialPositon)
+            if (_isInInitialPositon /*&& Castle._isInInitialPositon*/)
             {
                 allTheKingMoves.Add(new Point(Position.X + 2, Position.Y));
                 allTheKingMoves.Add(new Point(Position.X - 2, Position.Y));
