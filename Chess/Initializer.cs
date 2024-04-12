@@ -67,8 +67,8 @@ internal static class Initializer
                 }
 
                 break;
-            /*case 1 or 6:
-                return new Pawn(y is 6, new Point(x, y), isWhiteDown);*/
+            case 1 or 6:
+                return new Pawn(y is 6, new Point(x, y), isWhiteDown);
         }
 
         return null;

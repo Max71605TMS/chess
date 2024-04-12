@@ -9,6 +9,8 @@ namespace Chess
 {
     public class King : Figure, IMarkable
     {
+        private const int BoardSize = 8; // размер шахматной доски
+
         public King(bool isWhite, Point point) : base(isWhite, point)
         {
         }
@@ -17,7 +19,23 @@ namespace Chess
 
         public override IEnumerable<Point> GetAvaliablePositions(IEnumerable<Figure> figures)
         {
-            throw new NotImplementedException();
+            var king = new King(isWhite, new Point(Position.X, Position.Y));  
+
+            var allTheKingMoves = AllTheKingMoves(figures); // все возможные ходы короля без учета фигур
+            List <Point> getAvaliablePositions = new List<Point>();    
+            if (king.isWhite)
+            {
+                var whiteFigures = figures.Where(f => f.isWhite).ToList();
+
+                foreach (var move in allTheKingMoves)
+                {
+                    if (whiteFigures.All(f => f.Position != move))
+                    {
+                        getAvaliablePositions.Add(move);
+                    }
+                }
+            }
+            return getAvaliablePositions;
         }
 
         public override Image GetImage()
@@ -43,6 +61,65 @@ namespace Chess
                     return (Position.X + Position.Y) % 2 == 0 ? Properties.Resources.King_Black_White : Properties.Resources.King_Black_Black;
                 }
             }
+        }
+        private List<Point> AllTheKingMoves(IEnumerable<Figure> figures)
+        {
+            var allTheKingMoves = new List<Point>();
+
+            var point = new Point(Position.X, Position.Y);
+            if (Position.Y + 1 < BoardSize)
+            {
+                allTheKingMoves.Add(new Point(Position.X, Position.Y + 1));
+            }
+
+            if (Position.Y - 1 < BoardSize)
+            {
+                allTheKingMoves.Add(new Point(Position.X, Position.Y - 1));
+            }
+
+            if (Position.X + 1 < BoardSize)
+            {
+                allTheKingMoves.Add(new Point(Position.X + 1, Position.Y));
+            }
+
+            if (Position.X - 1 < BoardSize)
+            {
+                allTheKingMoves.Add(new Point(Position.X - 1, Position.Y));
+            }
+
+            if (Position.X + 1 < BoardSize && Position.Y - 1 < BoardSize)
+            {
+                allTheKingMoves.Add(new Point(Position.X + 1, Position.Y - 1));
+            }
+
+            if (Position.X + 1 < BoardSize && Position.Y + 1 < BoardSize)
+            {
+                allTheKingMoves.Add(new Point(Position.X + 1, Position.Y + 1));
+            }
+
+            if (Position.X - 1 < BoardSize && Position.Y + 1 < BoardSize)
+            {
+                allTheKingMoves.Add(new Point(Position.X - 1, Position.Y + 1));
+            }
+
+            if (Position.X - 1 < BoardSize && Position.Y - 1 < BoardSize)
+            {
+                allTheKingMoves.Add(new Point(Position.X - 1, Position.Y - 1));
+            }
+
+            //ракеровка! добавить поля в Castle с _isInInitialPositon в проверку
+
+            if (IsFirstTurn)
+            {
+                allTheKingMoves.Add(new Point(Position.X + 2, Position.Y));
+            }
+
+            if (IsFirstTurn)
+            {
+                allTheKingMoves.Add(new Point(Position.X - 2, Position.Y));
+            }
+
+            return allTheKingMoves;
         }
     }
 }
