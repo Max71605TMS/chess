@@ -20,10 +20,9 @@ namespace Chess
 
         public override IEnumerable<Point> GetAvaliablePositions(IEnumerable<Figure> figures)
         {
-            var king = new King(isWhite, new Point(Position.X, Position.Y));
             var allTheKingMoves = AllTheKingMoves(figures); // все возможные ходы короля без учета фигур
             List<Point> getAvaliablePositions = new List<Point>();
-            if (king.isWhite)
+            if (isWhite)
             {
                 var whiteFigures = figures.Where(f => f.isWhite).ToList();
 
