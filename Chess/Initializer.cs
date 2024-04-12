@@ -48,7 +48,8 @@ internal static class Initializer
     {
         switch (y)
         {
-            case 0 or 7:
+            case 0:
+            case 7:
                 switch (x)
                 {
                     case 0:
@@ -56,7 +57,7 @@ internal static class Initializer
                         return new Rook(y is 7, new Point(x, y));
                     case 1:
                     case 6:
-                        break;
+                        return new Knights(y is 7, new Point(x, y));
                     case 2:
                     case 5:
                         break;
@@ -67,7 +68,8 @@ internal static class Initializer
                 }
 
                 break;
-            case 1 or 6:
+            case 1:
+            case 6:
                 return new Pawn(y is 6, new Point(x, y), isWhiteDown);
         }
 
