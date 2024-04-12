@@ -33,6 +33,7 @@
             // 
             // button1
             // 
+            /*
             button1.Location = new Point(851, 30);
             button1.Name = "button1";
             button1.Size = new Size(97, 76);
@@ -40,10 +41,11 @@
             button1.Text = "button1";
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click_1;
+            */
             // 
             // Form1
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 12F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(957, 564);
             Controls.Add(button1);

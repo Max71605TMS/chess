@@ -9,6 +9,8 @@ namespace Chess
 {
     internal class Knights : Figure
     {
+        private const int BoardSize = 8;
+
         public Knights(bool isWhite, Point point) : base(isWhite, point)
         {
         }
@@ -16,13 +18,13 @@ namespace Chess
         public override IEnumerable<Point> GetAvaliablePositions(IEnumerable<Figure> figures)
         {
             var positions = new List<Point>();
-            for (var i = 0;i < 8; i++) 
+            for (var i = 0; i < BoardSize; i++)
             {
-                for (var j = 0;j < 8;j++) 
+                for (var j = 0; j < BoardSize; j++)
                 {
-                    if (Math.Abs(i - Position.Y) * Math.Abs(j - Position.Y) == 2)
+                    if ((Math.Abs(j - Position.X) * Math.Abs(i - Position.Y)) == 2)
                     {
-                        positions.Add(new Point(Position.X, Position.Y));
+                        positions.Add(new Point(j, i));
                     }
                 }
             }
