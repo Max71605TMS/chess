@@ -20,6 +20,7 @@ internal static class Initializer
             Location = new Point(x * ButtonSize + offestX, y * ButtonSize + offsetY),
             BackColor = (x + y) % 2 == 0 ? Color.White : Color.Black,
             Tag = new Point(x, y),
+
         };
     }
 
@@ -40,10 +41,6 @@ internal static class Initializer
 
         return figures;
     }
-
-
-    
-
     public static Figure? GetFigure(int x, int y, bool isWhiteDown)
     {
         switch (y)

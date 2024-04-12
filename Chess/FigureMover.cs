@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -20,7 +21,7 @@ namespace Chess
         public Figure _currentfigure { get; private set; }
 
         public List<Figure> Figures { get; private set; }
-
+        
         public FigureMover(bool isWhiteDown)
         {
             Figures = Initializer.GetFigures(isWhiteDown);
@@ -43,6 +44,7 @@ namespace Chess
 
         public void Move(Point point)
         {
+            
             _currentfigure.isChoosen = false;
             if (AvaliablePositions.Any(position => position == point))
             {
@@ -51,7 +53,7 @@ namespace Chess
                 {
                     markableFigure.IsFirstTurn = false;
                 }
-                
+
                 _currentfigure.Position = point;
                 _isWhiteTurn = !_isWhiteTurn;
 
