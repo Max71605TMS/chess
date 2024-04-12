@@ -58,7 +58,8 @@ namespace Chess
                 if (isChoosen)
                 {
                     return Properties.Resources.King_White_Green;
-                } else
+                } 
+                else
                 {
                     return (Position.X + Position.Y) % 2 == 0 ? Properties.Resources.King_White_White : Properties.Resources.King_White_Black;
                 }
@@ -80,42 +81,42 @@ namespace Chess
             var allTheKingMoves = new List<Point>();
 
             var point = new Point(Position.X, Position.Y);
-            if (Position.Y + 1 < BoardSize)
+            if (Position.Y + 1 < BoardSize && Position.Y + 1 >= 0)
             {
                 allTheKingMoves.Add(new Point(Position.X, Position.Y + 1));
             }
 
-            if (Position.Y - 1 < BoardSize)
+            if (Position.Y - 1 < BoardSize && Position.Y - 1 >= 0)
             {
                 allTheKingMoves.Add(new Point(Position.X, Position.Y - 1));
             }
 
-            if (Position.X + 1 < BoardSize)
+            if (Position.X + 1 < BoardSize && Position.X + 1 >= 0)
             {
                 allTheKingMoves.Add(new Point(Position.X + 1, Position.Y));
             }
 
-            if (Position.X - 1 < BoardSize)
+            if (Position.X - 1 < BoardSize && Position.X - 1 >= 0)
             {
                 allTheKingMoves.Add(new Point(Position.X - 1, Position.Y));
             }
 
-            if (Position.X + 1 < BoardSize && Position.Y - 1 < BoardSize)
+            if (Position.X + 1 < BoardSize && Position.Y - 1 < BoardSize && Position.X + 1 >=0 && Position.Y - 1 >=0)
             {
                 allTheKingMoves.Add(new Point(Position.X + 1, Position.Y - 1));
             }
 
-            if (Position.X + 1 < BoardSize && Position.Y + 1 < BoardSize)
+            if (Position.X + 1 < BoardSize && Position.Y + 1 < BoardSize && Position.X + 1 >= 0 && Position.Y + 1 >= 0)
             {
                 allTheKingMoves.Add(new Point(Position.X + 1, Position.Y + 1));
             }
 
-            if (Position.X - 1 < BoardSize && Position.Y + 1 < BoardSize)
+            if (Position.X - 1 < BoardSize && Position.Y + 1 < BoardSize && Position.X - 1 >= 0 && Position.Y + 1 >= 0)
             {
                 allTheKingMoves.Add(new Point(Position.X - 1, Position.Y + 1));
             }
 
-            if (Position.X - 1 < BoardSize && Position.Y - 1 < BoardSize)
+            if (Position.X - 1 < BoardSize && Position.Y - 1 < BoardSize && Position.X - 1 >= 0 && Position.Y - 1 >= 0)
             {
                 allTheKingMoves.Add(new Point(Position.X - 1, Position.Y - 1));
             }

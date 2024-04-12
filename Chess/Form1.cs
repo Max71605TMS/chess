@@ -12,11 +12,7 @@ public partial class Form1 : Form
 
     private readonly Button[,] chessButtons = new Button[BoardSize, BoardSize];
 
-    
-
     private readonly FigureMover _figureMover;
-
-
 
     private readonly bool isWhiteTurn = true;
 
@@ -51,7 +47,8 @@ public partial class Form1 : Form
                 }
                
                 chessButtons[position.X, position.Y].Image = figure.GetImage();
-            } else if(isFillCells) {
+            } else if(isFillCells)
+            {
                 chessButtons[position.X, position.Y].Image = Properties.Resources.Empty_Green;
             }
             else

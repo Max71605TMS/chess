@@ -63,10 +63,5 @@ namespace Chess
                 }
             }
         }
-
-       
-
-        
-        
     }
 }

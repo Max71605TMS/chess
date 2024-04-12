@@ -25,8 +25,6 @@ namespace Chess
             
         }
 
-        
-
         public abstract IEnumerable<Point> GetAvaliablePositions(IEnumerable<Figure> figures);
 
         public abstract Image GetImage();
