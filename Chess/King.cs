@@ -1,6 +1,7 @@
 ﻿using Chess.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,10 +20,9 @@ namespace Chess
 
         public override IEnumerable<Point> GetAvaliablePositions(IEnumerable<Figure> figures)
         {
-            var king = new King(isWhite, new Point(Position.X, Position.Y));  
-
+            var king = new King(isWhite, new Point(Position.X, Position.Y));
             var allTheKingMoves = AllTheKingMoves(figures); // все возможные ходы короля без учета фигур
-            List <Point> getAvaliablePositions = new List<Point>();    
+            List<Point> getAvaliablePositions = new List<Point>();
             if (king.isWhite)
             {
                 var whiteFigures = figures.Where(f => f.isWhite).ToList();
@@ -35,8 +35,21 @@ namespace Chess
                     }
                 }
             }
-            return getAvaliablePositions;
+            else
+            {
+                var blackFigures = figures.Where(f => f.isWhite == false).ToList();
+
+                foreach (var move in allTheKingMoves)
+                {
+                    if (blackFigures.All(f => f.Position != move))
+                    {
+                        getAvaliablePositions.Add(move);
+                    }
+                }
+            }
+            return getAvaliablePositions;   
         }
+        
 
         public override Image GetImage()
         {
