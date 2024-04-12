@@ -29,8 +29,35 @@ namespace Chess
                     }
                 }
             }
-           
-            return positions;
+
+            var getAvaliablePositions = new List<Point>();
+
+            if (isWhite)
+            {
+                var whiteFigures = figures.Where(f => f.isWhite).ToList();
+
+                foreach (var move in positions)
+                {
+                    if (whiteFigures.All(f => f.Position != move))
+                    {
+                        getAvaliablePositions.Add(move);
+                    }
+                }
+            }
+            else
+            {
+                var blackFigures = figures.Where(f => f.isWhite == false).ToList();
+
+                foreach (var move in positions)
+                {
+                    if (blackFigures.All(f => f.Position != move))
+                    {
+                        getAvaliablePositions.Add(move);
+                    }
+                }
+            }
+
+            return getAvaliablePositions;
         }
 
         public override Image GetImage()
