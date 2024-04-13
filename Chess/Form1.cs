@@ -37,6 +37,18 @@ public partial class Form1 : Form
         }
     }
 
+    private void SetTurnIcon()
+    {
+        if (_figureMover._isWhiteTurn)
+        {
+            pbTurnIcon.Image = Resources.Empty_White;
+        }
+        else
+        {
+            pbTurnIcon.Image = Resources.Empty_Black;
+        }
+    }
+
     private void SetImageToAvaliablePositions(bool isFillCells)
     {
         foreach (var position in _figureMover.AvaliablePositions)
@@ -107,6 +119,7 @@ public partial class Form1 : Form
             _figureMover.Move(point);
             SetFigures();
             SetImageToAvaliablePositions(false);
+            SetTurnIcon();
         }
     }
 

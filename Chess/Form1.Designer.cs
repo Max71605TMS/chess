@@ -28,32 +28,60 @@
         /// </summary>
         private void InitializeComponent()
         {
-            button1 = new Button();
+            label1 = new Label();
+            label2 = new Label();
+            pbTurnIcon = new PictureBox();
+            ((System.ComponentModel.ISupportInitialize)pbTurnIcon).BeginInit();
             SuspendLayout();
             // 
-            // button1
+            // label1
             // 
-            button1.Location = new Point(851, 30);
-            button1.Name = "button1";
-            button1.Size = new Size(97, 76);
-            button1.TabIndex = 0;
-            button1.Text = "button1";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click_1;
+            label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            label1.Location = new Point(826, 44);
+            label1.Name = "label1";
+            label1.Size = new Size(79, 21);
+            label1.TabIndex = 1;
+            label1.Text = "turn now";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            label2.Location = new Point(752, 44);
+            label2.Name = "label2";
+            label2.Size = new Size(32, 21);
+            label2.TabIndex = 2;
+            label2.Text = "It's";
+            // 
+            // pbTurnIcon
+            // 
+            pbTurnIcon.Image = Properties.Resources.Empty_White;
+            pbTurnIcon.Location = new Point(790, 35);
+            pbTurnIcon.Name = "pbTurnIcon";
+            pbTurnIcon.Size = new Size(30, 30);
+            pbTurnIcon.TabIndex = 3;
+            pbTurnIcon.TabStop = false;
             // 
             // Form1
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(957, 564);
-            Controls.Add(button1);
+            ClientSize = new Size(902, 690);
+            Controls.Add(pbTurnIcon);
+            Controls.Add(label2);
+            Controls.Add(label1);
+            Margin = new Padding(3, 2, 3, 2);
             Name = "Form1";
             Text = "Form1";
+            ((System.ComponentModel.ISupportInitialize)pbTurnIcon).EndInit();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
-
-        private Button button1;
+        private Label label1;
+        private Label label2;
+        private PictureBox pbTurnIcon;
     }
 }
