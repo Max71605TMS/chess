@@ -42,9 +42,9 @@ namespace Chess
             if (isWhite)
             {
                 if (isChoosen)
-                    return Resources.Knight_Black_Green;
+                    return Resources.Knight_White_Green;
 
-                return (Position.X + Position.Y) % 2 == 0 ? Resources.Knight_Black_White : Resources.Knight_Black_Black;
+                return (Position.X + Position.Y) % 2 == 0 ? Resources.Knight_White_White : Resources.Knight_White_Black;
             }
 
             if (isChoosen)

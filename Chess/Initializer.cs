@@ -56,10 +56,11 @@ internal static class Initializer
                     case 6:
                         return new Knights(y is 7, new Point(x, y));
                     case 2:
+                        return new Bishop(y is 7, new Point(x, y));
                     case 5:
-                        break;
+                        return new Bishop(y is 7, new Point(x, y));
                     case 3:
-                        break;
+                        return new Queen(y is 7, new Point(x, y));
                     case 4:
                         return new King(y is 7, new Point(x, y));
                 }
