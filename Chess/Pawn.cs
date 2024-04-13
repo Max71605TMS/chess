@@ -23,7 +23,7 @@ namespace Chess
         {
            
             var positions = new List<Point>();
-            if (_isDirectionUp && isWhite)
+            if (_isDirectionUp && IsWhite)
             {
                 var isAnyFiguresBehind = figures.Any(f => f.Position == new Point(Position.X, Position.Y - 1));
                 if (Position.Y > 1 && !isAnyFiguresBehind)
@@ -60,9 +60,9 @@ namespace Chess
 
         public override Image GetImage()
         {
-            if (isWhite)
+            if (IsWhite)
             {
-                if (isChoosen)
+                if (IsChoosen)
                 {
                     return Properties.Resources.Pawn_White_Green;
                 }
@@ -74,7 +74,7 @@ namespace Chess
             }
             else
             {
-                if (isChoosen)
+                if (IsChoosen)
                 {
                     return Properties.Resources.Pawn_Black_Green;
                 }

@@ -20,15 +20,15 @@ namespace Chess
 
         public override Image GetImage()
         {
-            if (isWhite)
+            if (IsWhite)
             {
-                if (isChoosen)
+                if (IsChoosen)
                     return Resources.Queen_White_Green;
 
                 return (Position.X + Position.Y) % 2 == 0 ? Resources.Queen_White_White : Resources.Queen_White_Black;
             }
 
-            if (isChoosen)
+            if (IsChoosen)
                 return Resources.Queen_Black_Green;
             return (Position.X + Position.Y) % 2 == 0 ? Resources.Queen_Black_White : Resources.Queen_Black_Black;
         }

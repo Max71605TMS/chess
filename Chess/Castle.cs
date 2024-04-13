@@ -59,9 +59,9 @@ namespace Chess
 
         public override Image GetImage()
         {
-            if (isWhite)
+            if (IsWhite)
             {
-                if (isChoosen)
+                if (IsChoosen)
                 {
                     return Properties.Resources.Castle_White_Green;
                 }
@@ -72,7 +72,7 @@ namespace Chess
             }
             else
             {
-                if (isChoosen)
+                if (IsChoosen)
                 {
                     return Properties.Resources.Castle_Black_Green;
                 }

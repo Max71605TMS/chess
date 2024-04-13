@@ -32,9 +32,9 @@ namespace Chess
 
         public override Image GetImage()
         {
-            if (isWhite)
+            if (IsWhite)
             {
-                if (isChoosen)
+                if (IsChoosen)
                 {
                     return Properties.Resources.Bishop_White_Green;
                 }
@@ -46,7 +46,7 @@ namespace Chess
             }
             else
             {
-                if (isChoosen)
+                if (IsChoosen)
                 {
                     return Properties.Resources.Bishop_Black_Green;
                 }
@@ -69,7 +69,7 @@ namespace Chess
 
                 if (figure is not null)
                 {
-                    if (figure.isWhite != isWhite)
+                    if (figure.IsWhite != IsWhite)
                         positions.Add(new Point(x, y));
                     break;
                 }

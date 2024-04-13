@@ -31,10 +31,10 @@ internal static class Initializer
         {
             for (var x = 0; x < BoardSize; x++)
             {
-               var figure = GetFigure(x, y, isWhiteDown);
-                if(figure is not null)
+                var figure = GetFigure(x, y, isWhiteDown);
+                if (figure is not null)
                 {
-                    figures.Add(figure);    
+                    figures.Add(figure);
                 }
             }
         }

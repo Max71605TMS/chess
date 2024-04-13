@@ -22,9 +22,9 @@ namespace Chess
         {
             var allTheKingMoves = AllTheKingMoves(figures); // все возможные ходы короля без учета фигур
             List<Point> getAvaliablePositions = new List<Point>();
-            if (isWhite)
+            if (IsWhite)
             {
-                var whiteFigures = figures.Where(f => f.isWhite).ToList();
+                var whiteFigures = figures.Where(f => f.IsWhite).ToList();
 
                 foreach (var move in allTheKingMoves)
                 {
@@ -36,7 +36,7 @@ namespace Chess
             }
             else
             {
-                var blackFigures = figures.Where(f => f.isWhite == false).ToList();
+                var blackFigures = figures.Where(f => f.IsWhite == false).ToList();
 
                 foreach (var move in allTheKingMoves)
                 {
@@ -52,9 +52,9 @@ namespace Chess
 
         public override Image GetImage()
         {
-            if (isWhite)
+            if (IsWhite)
             {
-                if (isChoosen)
+                if (IsChoosen)
                 {
                     return Properties.Resources.King_White_Green;
                 } 
@@ -65,7 +65,7 @@ namespace Chess
                 
             } else
             {
-                if (isChoosen)
+                if (IsChoosen)
                 {
                     return Properties.Resources.King_Black_Green;
                 }
