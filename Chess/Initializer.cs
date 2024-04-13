@@ -59,7 +59,7 @@ internal static class Initializer
                         break;
                     case 2:
                     case 5:
-                        break;
+                        return new Bishop(y is 7, new Point(x, y));                        
                     case 3:
                         break;
                     case 4:
