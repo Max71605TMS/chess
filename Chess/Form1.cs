@@ -42,11 +42,11 @@ public partial class Form1 : Form
             {
                 if (isFillCells)
                 {
-                    figure.isChoosen = true;
+                    figure.IsChoosen = true;
                 }
                 else
                 {
-                    figure.isChoosen = false;
+                    figure.IsChoosen = false;
                 }
 
                 chessButtons[position.X, position.Y].Image = figure.GetImage();
@@ -96,7 +96,7 @@ public partial class Form1 : Form
 
         var button = (Button)sender;
 
-        if (button.Tag is Figure figure && figure.isWhite == _figureMover.IsWhiteTurn)
+        if (button.Tag is Figure figure && figure.IsWhite == _figureMover.IsWhiteTurn)
         {
 
             _figureMover.ChooseFigure(figure);
