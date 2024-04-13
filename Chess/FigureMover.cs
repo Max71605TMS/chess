@@ -1,72 +1,53 @@
 ﻿using Chess.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
-namespace Chess
+namespace Chess;
+
+public class FigureMover
 {
-    public class FigureMover
+    private const int BoardSize = 8;
+
+    public FigureMover(bool isWhiteDown)
     {
-        private const int BoardSize = 8;
+        Figures = Initializer.GetFigures(isWhiteDown);
+    }
 
-        public bool _isWhiteTurn { get; private set; }  = true;
+    public bool _isWhiteTurn { get; private set; } = true;
 
-        public IEnumerable<Point> AvaliablePositions { get; private set; }
+    public IEnumerable<Point> AvaliablePositions { get; private set; }
 
-        public Figure _currentfigure { get; private set; }
+    public Figure _currentfigure { get; private set; }
 
-        public List<Figure> Figures { get; private set; }
+    public List<Figure> Figures { get; }
 
-        public FigureMover(bool isWhiteDown)
+    public void ChooseFigure(Figure figure)
+    {
+        if (figure.isWhite == _isWhiteTurn)
         {
-            Figures = Initializer.GetFigures(isWhiteDown);
+            figure.isChoosen = true;
+            AvaliablePositions = figure.GetAvaliablePositions(Figures);
+            _currentfigure = figure;
         }
+    }
 
-        public void ChooseFigure(Figure figure)
+    public Figure GetFigure(Point point)
+    {
+        return Figures.FirstOrDefault(x => x.Position == point);
+    }
+
+    public void Move(Point point)
+    {
+        _currentfigure.isChoosen = false;
+        if (AvaliablePositions.Any(position => position == point))
         {
-            if (figure.isWhite == _isWhiteTurn)
-            {
-                AvaliablePositions = figure.GetAvaliablePositions(Figures);
-                figure.isChoosen = true;
-                _currentfigure = figure;
-            }
+            if (_currentfigure is IMarkable markableFigure) markableFigure.IsFirstTurn = false;
+
+            _currentfigure.Position = point;
+            _isWhiteTurn = !_isWhiteTurn;
+
+            var attactedFigure = Figures.FirstOrDefault(figure =>
+                figure.Position == point && figure.isWhite != _currentfigure.isWhite);
+
+            if (attactedFigure != null) Figures.Remove(attactedFigure);
         }
-
-        public Figure GetFigure(Point point) 
-        { 
-            return Figures.FirstOrDefault(x=>x.Position == point);
-        }
-
-        public void Move(Point point)
-        {
-            _currentfigure.isChoosen = false;
-            if (AvaliablePositions.Any(position => position == point))
-            {
-
-                if(_currentfigure is IMarkable markableFigure)
-                {
-                    markableFigure.IsFirstTurn = false;
-                }
-                
-                _currentfigure.Position = point;
-                _isWhiteTurn = !_isWhiteTurn;
-
-                var attactedFigure = Figures.FirstOrDefault(figure => figure.Position == point && figure.isWhite != _currentfigure.isWhite);
-
-                if (attactedFigure!= null)
-                {
-                    Figures.Remove(attactedFigure);
-                }
-            }
-        }
-
-       
-
-        
-        
     }
 }

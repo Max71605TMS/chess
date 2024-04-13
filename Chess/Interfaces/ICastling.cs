@@ -1,13 +1,13 @@
 ﻿namespace Chess.Interfaces;
 
-public interface IMoveByDirection
+public interface ICastling
 {
-    public IEnumerable<Point> GetPositionsByDirection(IEnumerable<Figure> figures, Figure figure, int xDirection,
-        int yDirection)
+    public IEnumerable<Point> GetCastlingPositionsByDirection(IEnumerable<Figure> figures, Figure figure,
+        int xDirection)
     {
         var positions = new List<Point>();
         var x = figure.Position.X + xDirection;
-        var y = figure.Position.Y + yDirection;
+        var y = figure.Position.Y;
 
         while (x is >= 0 and <= 7 && y is >= 0 and <= 7)
         {
@@ -15,15 +15,15 @@ public interface IMoveByDirection
 
             if (figureOnTheWay is not null)
             {
-                if (figureOnTheWay.isWhite != figure.isWhite)
-                    positions.Add(new Point(x, y));
+                if (figureOnTheWay.isWhite != figure.isWhite) break;
+
+                if (figureOnTheWay is Rook { IsFirstTurn: true } or King { IsFirstTurn: true })
+                    positions.Add(figureOnTheWay.Position);
+
                 break;
             }
 
-            positions.Add(new Point(x, y));
-
             x += xDirection;
-            y += yDirection;
         }
 
         return positions;
