@@ -18,7 +18,7 @@ namespace Chess
 
         public IEnumerable<Point> AvaliablePositions { get; private set; }
 
-        public Figure Currentfigure { get; private set; }
+        public Figure CurrentFigure { get; private set; }
 
         public List<Figure> Figures { get; private set; }
 
@@ -30,7 +30,7 @@ namespace Chess
             {
                 AvaliablePositions = figure.GetAvaliablePositions(Figures);
                 figure.isChoosen = true;
-                Currentfigure = figure;
+                CurrentFigure = figure;
             }
         }
 
@@ -38,19 +38,19 @@ namespace Chess
 
         public void Move(Point point)
         {
-            Currentfigure.isChoosen = false;
+            CurrentFigure.isChoosen = false;
             if (AvaliablePositions.Any(position => position == point))
             {
 
-                if (Currentfigure is IMarkable markableFigure)
+                if (CurrentFigure is IMarkable markableFigure)
                 {
                     markableFigure.IsFirstTurn = false;
                 }
 
-                Currentfigure.Position = point;
+                CurrentFigure.Position = point;
                 IsWhiteTurn = !IsWhiteTurn;
 
-                var attactedFigure = Figures.FirstOrDefault(figure => figure.Position == point && figure.isWhite != Currentfigure.isWhite);
+                var attactedFigure = Figures.FirstOrDefault(figure => figure.Position == point && figure.isWhite != CurrentFigure.isWhite);
 
                 if (attactedFigure != null)
                 {

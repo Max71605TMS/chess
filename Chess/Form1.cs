@@ -93,20 +93,20 @@ public partial class Form1 : Form
 
     private void ChessButton_Click(object sender, EventArgs e)
     {
-        
+
         var button = (Button)sender;
 
-        if (button.Tag is Figure figure && figure.isWhite == _figureMover._isWhiteTurn)
+        if (button.Tag is Figure figure && figure.isWhite == _figureMover.IsWhiteTurn)
         {
 
             _figureMover.ChooseFigure(figure);
             button.Image = figure.GetImage();
             SetImageToAvaliablePositions(true);
         }
-        else if (_figureMover._currentfigure != null)
+        else if (_figureMover.CurrentFigure != null)
         {
             var point = button.Tag is Figure ? ((Figure)button.Tag).Position : (Point)button.Tag;
-            ClearCurrentCell(_figureMover.Currentfigure.Position);
+            ClearCurrentCell(_figureMover.CurrentFigure.Position);
             _figureMover.Move(point);
             SetFigures();
             SetImageToAvaliablePositions(false);

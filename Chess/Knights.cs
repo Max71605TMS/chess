@@ -26,7 +26,7 @@ namespace Chess
                     {
                         var figure = figures.SingleOrDefault(f => f.Position == new Point(j, i));
                         if (figure == null ||
-                            (figure != null && 
+                            (figure != null &&
                             figure.isWhite != isWhite))
                         {
                             positions.Add(new Point(j, i));
