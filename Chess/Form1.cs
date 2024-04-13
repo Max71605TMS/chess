@@ -29,6 +29,7 @@ public partial class Form1 : Form
         {
             chessButtons[figure.Position.X, figure.Position.Y].Tag = figure;
             chessButtons[figure.Position.X, figure.Position.Y].Image = figure.GetImage();
+
         }
     }
 
@@ -71,6 +72,7 @@ public partial class Form1 : Form
     private void ClearCurrentCell(Point point)
     {
         chessButtons[point.X, point.Y].Image = GetEmptyImage(point);
+        chessButtons[point.X, point.Y].Tag = point;
     }
 
 
@@ -91,17 +93,17 @@ public partial class Form1 : Form
 
     private void ChessButton_Click(object sender, EventArgs e)
     {
+        
         var button = (Button)sender;
 
-        //Если в клетке находится фигура и она белая и сейчас ход белых
-        if (button.Tag is Figure figure && figure.isWhite == _figureMover.IsWhiteTurn)
+        if (button.Tag is Figure figure && figure.isWhite == _figureMover._isWhiteTurn)
         {
+
             _figureMover.ChooseFigure(figure);
             button.Image = figure.GetImage();
             SetImageToAvaliablePositions(true);
         }
-        // 
-        else if (_figureMover.Currentfigure != null)
+        else if (_figureMover._currentfigure != null)
         {
             var point = button.Tag is Figure ? ((Figure)button.Tag).Position : (Point)button.Tag;
             ClearCurrentCell(_figureMover.Currentfigure.Position);
@@ -109,13 +111,5 @@ public partial class Form1 : Form
             SetFigures();
             SetImageToAvaliablePositions(false);
         }
-    }
-
-    private void button1_Click(object sender, EventArgs e)
-    {
-    }
-
-    private void button1_Click_1(object sender, EventArgs e)
-    {
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Chess.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,9 +7,10 @@ using System.Threading.Tasks;
 
 namespace Chess
 {
-    public class Castle : Figure
+    public class Castle : Figure, IMarkable
     {
         private const int BoardSize = 8;
+        public bool IsFirstTurn { get; set; } = true;
 
         public Castle(bool isWhite, Point point) : base(isWhite, point)
         {

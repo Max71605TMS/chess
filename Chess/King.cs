@@ -12,18 +12,17 @@ namespace Chess
     {
         private const int BoardSize = 8; // размер шахматной доски
 
+        public bool IsFirstTurn { get; set; } = true;
+
         public King(bool isWhite, Point point) : base(isWhite, point)
         {
         }
 
-        public bool IsFirstTurn { get; set; } = true;
-
         public override IEnumerable<Point> GetAvaliablePositions(IEnumerable<Figure> figures)
         {
-            var king = new King(isWhite, new Point(Position.X, Position.Y));
             var allTheKingMoves = AllTheKingMoves(figures); // все возможные ходы короля без учета фигур
             List<Point> getAvaliablePositions = new List<Point>();
-            if (king.isWhite)
+            if (isWhite)
             {
                 var whiteFigures = figures.Where(f => f.isWhite).ToList();
 
@@ -76,6 +75,11 @@ namespace Chess
                 }
             }
         }
+        /// <summary>
+        /// Все ходы короля без учета фигур
+        /// </summary>
+        /// <param name="figures"></param>
+        /// <returns></returns>
         private List<Point> AllTheKingMoves(IEnumerable<Figure> figures)
         {
             var allTheKingMoves = new List<Point>();
@@ -135,5 +139,16 @@ namespace Chess
 
             return allTheKingMoves;
         }
+
+        //    private bool Сastling(King king, Castle castle)
+        //    {
+        //        bool castling = true;
+        //        if (king.IsFirstTurn && castle.IsFirstTurn )
+        //        {
+
+        //        }
+
+        //        return castling;
+        //    }
     }
 }
