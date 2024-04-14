@@ -37,16 +37,17 @@ public partial class Form1 : Form
     {
         foreach (var position in _figureMover.AvaliablePositions)
         {
+
             var figure = _figureMover.GetFigure(position);
             if (figure != null)
             {
                 if (isFillCells)
                 {
-                    figure.isChoosen = true;
+                    figure.IsChoosen = true;
                 }
                 else
                 {
-                    figure.isChoosen = false;
+                    figure.IsChoosen = false;
                 }
 
                 chessButtons[position.X, position.Y].Image = figure.GetImage();
@@ -93,23 +94,71 @@ public partial class Form1 : Form
 
     private void ChessButton_Click(object sender, EventArgs e)
     {
-
         var button = (Button)sender;
 
-        if (button.Tag is Figure figure && figure.isWhite == _figureMover.IsWhiteTurn)
+        if (button.Tag is Figure figure &&
+            figure.IsWhite == _figureMover.IsWhiteTurn)
         {
+            if (_figureMover.CurrentFigure == null ||
+                _figureMover.CurrentFigure.IsWhite != figure.IsWhite)
+            {
+                ShowFigureMoves(figure);
+            }
+            else if (_figureMover.CurrentFigure.IsWhite == figure.IsWhite)
+            {
+                var previousFigure = _figureMover.CurrentFigure;
+                TakebacksToTryDifferentMove(previousFigure);
+                ShowFigureMoves(figure);
+            }
 
-            _figureMover.ChooseFigure(figure);
-            button.Image = figure.GetImage();
-            SetImageToAvaliablePositions(true);
         }
-        else if (_figureMover.CurrentFigure != null)
+        else if (_figureMover.CurrentFigure != null &&
+                _figureMover.CurrentFigure.IsWhite == _figureMover.IsWhiteTurn)
         {
             var point = button.Tag is Figure ? ((Figure)button.Tag).Position : (Point)button.Tag;
             ClearCurrentCell(_figureMover.CurrentFigure.Position);
             _figureMover.Move(point);
             SetFigures();
             SetImageToAvaliablePositions(false);
+
+            bool isCheck = GameStatus.IsCheck(_figureMover.IsWhiteTurn, _figureMover.Figures);
+
+            if (isCheck)
+            {
+                bool isMate = GameStatus.IsMate(_figureMover.IsWhiteTurn, _figureMover.Figures);
+                if (isMate)
+                {
+                    if (_figureMover.IsWhiteTurn)
+                    { MessageBox.Show("Black win"); }
+                    else { MessageBox.Show("White win"); }
+                }
+                else
+                {
+                    if (_figureMover.IsWhiteTurn)
+                    { MessageBox.Show("White King in Check!"); }
+                    else { MessageBox.Show("Black King in Check!"); }
+                }
+            }
+            else
+            {
+                bool isStalemate = GameStatus.IsStalemate(_figureMover.IsWhiteTurn, _figureMover.Figures);
+                if (isStalemate)
+                { MessageBox.Show("Draw"); }
+            }
         }
+    }
+
+    private void TakebacksToTryDifferentMove(Figure previousFigure)
+    {
+        previousFigure.IsChoosen = false;
+        chessButtons[previousFigure.Position.X, previousFigure.Position.Y].Image = previousFigure.GetImage();
+        SetImageToAvaliablePositions(false);
+    }
+
+    private void ShowFigureMoves(Figure figure)
+    {
+        _figureMover.ChooseFigure(figure);
+        chessButtons[figure.Position.X, figure.Position.Y].Image = figure.GetImage();
+        SetImageToAvaliablePositions(true);
     }
 }

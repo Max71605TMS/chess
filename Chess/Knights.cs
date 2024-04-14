@@ -27,7 +27,7 @@ namespace Chess
                         var figure = figures.SingleOrDefault(f => f.Position == new Point(j, i));
                         if (figure == null ||
                             (figure != null &&
-                            figure.isWhite != isWhite))
+                            figure.IsWhite != IsWhite))
                         {
                             positions.Add(new Point(j, i));
                         }
@@ -39,15 +39,15 @@ namespace Chess
 
         public override Image GetImage()
         {
-            if (isWhite)
+            if (IsWhite)
             {
-                if (isChoosen)
-                    return Resources.Knight_Black_Green;
+                if (IsChoosen)
+                    return Resources.Knight_White_Green;
 
-                return (Position.X + Position.Y) % 2 == 0 ? Resources.Knight_Black_White : Resources.Knight_Black_Black;
+                return (Position.X + Position.Y) % 2 == 0 ? Resources.Knight_White_White : Resources.Knight_White_Black;
             }
 
-            if (isChoosen)
+            if (IsChoosen)
                 return Resources.Knight_Black_Green;
             return (Position.X + Position.Y) % 2 == 0 ? Resources.Knight_Black_White : Resources.Knight_Black_Black;
         }
