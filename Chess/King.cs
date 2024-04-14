@@ -36,15 +36,26 @@ namespace Chess
             var theKingBlackAttack = AttacKing(positionBlackKing);
             var theKingWhiteAttack = AttacKing(positionWhiteKing);
 
+            var blackRook = figures.Where(f => f is Rook).Where(f => f.IsWhite == false);
+            var whiteRook = figures.Where(f => f is Rook).Where(f => f.IsWhite);
+
+            //allTheKingMoves.Add(new Point(Position.X + 2, Position.Y));
+            //allTheKingMoves.Add(new Point(Position.X - 2, Position.Y));
+
             List<Point> getAvaliablePositions = new List<Point>();
 
             if (IsWhite)
             {
+                if(whiteRook != null && IsFirstTurn)
+                {
+                  
+                    
+                }
+
                 foreach (var move in allTheKingMoves)
                 {
-                    
                     if (whiteFiguresPositions.All(f => f.Position != move) && attackBlackFiguresPositions.All(attack => attack != move)
-                                                                           && theKingBlackAttack.All(attack => attack != move))
+                                                                           && theKingBlackAttack.All(attack => attack != move))          
                     {
                         getAvaliablePositions.Add(move);
                     }
@@ -55,7 +66,6 @@ namespace Chess
             {                
                 foreach (var move in allTheKingMoves)
                 {
-                    
                     if (blackFiguresPositions.All(f => f.Position != move) && attackWhiteFiguresPositions.All(attack => attack != move)
                                                                            && theKingWhiteAttack.All(attack => attack != move))
                     {
@@ -101,11 +111,7 @@ namespace Chess
                 }
             }
         }
-        /// <summary>
-        /// Все ходы короля без учета фигур
-        /// </summary>
-        /// <param name="figures"></param>
-        /// <returns></returns>
+
         private List<Point> AllTheKingMoves(IEnumerable<Figure> figures)
         {
             var allTheKingMoves = new List<Point>();
@@ -150,19 +156,6 @@ namespace Chess
             {
                 allTheKingMoves.Add(new Point(Position.X - 1, Position.Y - 1));
             }
-
-            //ракеровка! добавить поля в Castle с _isInInitialPositon в проверку
-
-            if (IsFirstTurn)
-            {
-                allTheKingMoves.Add(new Point(Position.X + 2, Position.Y));
-            }
-
-            if (IsFirstTurn)
-            {
-                allTheKingMoves.Add(new Point(Position.X - 2, Position.Y));
-            }
-
             return allTheKingMoves;
         }
 
@@ -213,6 +206,16 @@ namespace Chess
 
             return AttacKing;
         }
+
+        //private bool checkAttackPosition(List<Point> attackFigurePosition,List<Point> allTheKingMoves) 
+        //{
+        //    bool result = false;
+        //    foreach (var move in attackFigurePosition)
+        //    {
+        //        if (attackFigurePosition.All(attack => attack != move)) result = true;
+        //    }
+        //    return result;
+        //}
 
     }
 }
