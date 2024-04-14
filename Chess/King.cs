@@ -1,5 +1,6 @@
 ﻿using Chess.Interfaces;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Eventing.Reader;
 using System.Linq;
@@ -10,37 +11,44 @@ namespace Chess
 {
     public class King : Figure, IMarkable
     {
-        private const int BoardSize = 8; // размер шахматной доски
+        private const int BoardSize = 8;
 
         public bool IsFirstTurn { get; set; } = true;
-
+ 
         public King(bool isWhite, Point point) : base(isWhite, point)
         {
         }
 
         public override IEnumerable<Point> GetAvaliablePositions(IEnumerable<Figure> figures)
         {
-            var allTheKingMoves = AllTheKingMoves(figures); // все возможные ходы короля без учета фигур
+            var allTheKingMoves = AllTheKingMoves(figures); 
+
             List<Point> getAvaliablePositions = new List<Point>();
             if (IsWhite)
             {
                 var whiteFigures = figures.Where(f => f.IsWhite).ToList();
 
+                //var atackFigure = figures.Where(f => !f.isWhite)
+                //                   .Select(f => f.GetAvaliablePositions(figures))
+                //                   .SelectMany(p => p);
+
+                var whiteFiguresPositions = figures.Where(f => f.IsWhite).ToList(); 
                 foreach (var move in allTheKingMoves)
                 {
-                    if (whiteFigures.All(f => f.Position != move))
+                    if (whiteFiguresPositions.All(f => f.Position != move) /*&& atackFigure.All(p => p != move)*/)
                     {
                         getAvaliablePositions.Add(move);
                     }
                 }
             }
-            else
+            
+            if(!IsWhite)
             {
-                var blackFigures = figures.Where(f => f.IsWhite == false).ToList();
+                var blackFiguresPositions = figures.Where(f => f.IsWhite == false).ToList();
 
                 foreach (var move in allTheKingMoves)
                 {
-                    if (blackFigures.All(f => f.Position != move))
+                    if (blackFiguresPositions.All(f => f.Position != move) )
                     {
                         getAvaliablePositions.Add(move);
                     }
@@ -48,7 +56,6 @@ namespace Chess
             }
             return getAvaliablePositions;   
         }
-        
 
         public override Image GetImage()
         {
@@ -140,15 +147,5 @@ namespace Chess
             return allTheKingMoves;
         }
 
-        //    private bool Сastling(King king, Castle castle)
-        //    {
-        //        bool castling = true;
-        //        if (king.IsFirstTurn && castle.IsFirstTurn )
-        //        {
-
-        //        }
-
-        //        return castling;
-        //    }
     }
 }

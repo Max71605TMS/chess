@@ -49,9 +49,41 @@ namespace Chess
                     positions.Add(new Point(Position.X, Position.Y + 2));
                 }
             }
-            
-            //add all positions
 
+            //add all positions
+            if (IsWhite)
+            {
+                var blackFigures = figures.Where(f => f.IsWhite == false).ToList();
+                var pointAtackLeft = new Point(Position.X - 1, Position.Y - 1);
+                var pointAtackRight = new Point(Position.X + 1, Position.Y - 1);
+                
+                
+                    if (blackFigures.Any(f => f.Position == pointAtackLeft))
+                    {
+                         positions.Add(new Point(Position.X - 1, Position.Y - 1));
+                    }
+
+                    if (blackFigures.Any(f => f.Position == pointAtackRight))
+                    {
+                        positions.Add(new Point(Position.X + 1, Position.Y - 1));
+                    }
+            }
+            else
+            {
+                var whiteFigures = figures.Where(f => f.IsWhite).ToList();
+                var pointAtackLeft = new Point(Position.X - 1, Position.Y + 1);
+                var pointAtackRight = new Point(Position.X + 1, Position.Y + 1);
+
+                if (whiteFigures.Any(f => f.Position == pointAtackLeft))
+                {
+                    positions.Add(pointAtackLeft);
+                }
+
+                if (whiteFigures.Any(f => f.Position == pointAtackRight))
+                {
+                    positions.Add(pointAtackRight);
+                }
+            }
 
 
 

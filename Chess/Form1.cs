@@ -37,6 +37,7 @@ public partial class Form1 : Form
     {
         foreach (var position in _figureMover.AvaliablePositions)
         {
+
             var figure = _figureMover.GetFigure(position);
             if (figure != null)
             {
