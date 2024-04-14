@@ -1,4 +1,5 @@
-﻿using Chess.Properties;
+﻿using Chess.Interfaces;
+using Chess.Properties;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Chess
 {
-    internal class Queen : Figure
+    internal class Queen : Figure, IMovementBishop
     {
         public Queen(bool isWhite, Point point) : base(isWhite, point)
         {
@@ -15,7 +16,19 @@ namespace Chess
 
         public override IEnumerable<Point> GetAvaliablePositions(IEnumerable<Figure> figures)
         {
-            throw new NotImplementedException();
+            var positions = new List<Point>();
+
+            positions.AddRange(((IMovementBishop)this).GetMove(figures, this, -1, 1));
+            positions.AddRange(((IMovementBishop)this).GetMove(figures, this, 1, 1));
+            positions.AddRange(((IMovementBishop)this).GetMove(figures, this, 1, -1));
+            positions.AddRange(((IMovementBishop)this).GetMove(figures, this, -1, -1));
+
+            positions.AddRange(((IMovementBishop)this).GetMove(figures, this, -1, 0));
+            positions.AddRange(((IMovementBishop)this).GetMove(figures, this, 1, 0));
+            positions.AddRange(((IMovementBishop)this).GetMove(figures, this, 0, -1));
+            positions.AddRange(((IMovementBishop)this).GetMove(figures, this, 0, 1));
+
+            return positions;
         }
 
         public override Image GetImage()
