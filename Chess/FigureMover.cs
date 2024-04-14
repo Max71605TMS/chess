@@ -16,7 +16,7 @@ namespace Chess
 
         public bool _isWhiteTurn { get; private set; }  = true;
 
-        public IEnumerable<Point> AvaliablePositions { get; private set; }
+        public  IEnumerable<Point> AvaliablePositions { get;  set; }
 
         public Figure _currentfigure { get; private set; }
 

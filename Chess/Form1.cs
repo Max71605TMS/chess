@@ -25,7 +25,7 @@ public partial class Form1 : Form
 
     private void SetFigures()
     {
-        
+
         foreach (var figure in _figureMover.Figures)
         {
             chessButtons[figure.Position.X, figure.Position.Y].Tag = figure;
@@ -38,6 +38,7 @@ public partial class Form1 : Form
     {
         foreach (var position in _figureMover.AvaliablePositions)
         {
+
             var figure = _figureMover.GetFigure(position);
             if (figure != null)
             {
@@ -94,7 +95,7 @@ public partial class Form1 : Form
 
     private void ChessButton_Click(object sender, EventArgs e)
     {
-        
+
         var button = (Button)sender;
 
         if (button.Tag is Figure figure && figure.isWhite == _figureMover._isWhiteTurn)
