@@ -9,7 +9,6 @@ namespace Chess
 {
     public abstract class Figure
     {
-        
         public Point Position { get; set; }
 
         public Image Image { get; set; }

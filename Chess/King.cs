@@ -14,47 +14,55 @@ namespace Chess
         private const int BoardSize = 8;
 
         public bool IsFirstTurn { get; set; } = true;
- 
+
         public King(bool isWhite, Point point) : base(isWhite, point)
         {
         }
 
         public override IEnumerable<Point> GetAvaliablePositions(IEnumerable<Figure> figures)
         {
-            var allTheKingMoves = AllTheKingMoves(figures); 
+
+            var allTheKingMoves = AllTheKingMoves(figures);
+
+            var whiteFiguresPositions = figures.Where(f => f.IsWhite);
+            var blackFiguresPositions = figures.Where(f => f.IsWhite == false);
+
+            var attackBlackFiguresPositions = blackFiguresPositions.Where(f => !(f is Pawn))
+                                                                  .Where(f => !(f is King))
+                                                                  .Select(position => position.GetAvaliablePositions(figures))
+                                                                  .SelectMany(p => p).ToList();
+
+            var attackWhiteFiguresPositions = whiteFiguresPositions.Where(f => !(f is Pawn))
+                                                                 .Where(f => !(f is King))
+                                                                 .Select(position => position.GetAvaliablePositions(figures))
+                                                                 .SelectMany(p => p).ToList();
+
 
             List<Point> getAvaliablePositions = new List<Point>();
             if (IsWhite)
             {
-                var whiteFigures = figures.Where(f => f.IsWhite).ToList();
-
-                //var atackFigure = figures.Where(f => !f.isWhite)
-                //                   .Select(f => f.GetAvaliablePositions(figures))
-                //                   .SelectMany(p => p);
-
-                var whiteFiguresPositions = figures.Where(f => f.IsWhite).ToList(); 
                 foreach (var move in allTheKingMoves)
                 {
-                    if (whiteFiguresPositions.All(f => f.Position != move) /*&& atackFigure.All(p => p != move)*/)
+                    
+                    if (whiteFiguresPositions.All(f => f.Position != move) && attackBlackFiguresPositions.All(attack => attack != move))
                     {
                         getAvaliablePositions.Add(move);
                     }
                 }
             }
-            
-            if(!IsWhite)
+
+            if (!IsWhite)
             {
-                var blackFiguresPositions = figures.Where(f => f.IsWhite == false).ToList();
-
                 foreach (var move in allTheKingMoves)
                 {
-                    if (blackFiguresPositions.All(f => f.Position != move) )
+                    
+                    if (blackFiguresPositions.All(f => f.Position != move) && attackWhiteFiguresPositions.All(attack => attack != move))
                     {
                         getAvaliablePositions.Add(move);
                     }
                 }
             }
-            return getAvaliablePositions;   
+            return getAvaliablePositions;
         }
 
         public override Image GetImage()
@@ -64,13 +72,14 @@ namespace Chess
                 if (IsChoosen)
                 {
                     return Properties.Resources.King_White_Green;
-                } 
+                }
                 else
                 {
                     return (Position.X + Position.Y) % 2 == 0 ? Properties.Resources.King_White_White : Properties.Resources.King_White_Black;
                 }
-                
-            } else
+
+            }
+            else
             {
                 if (IsChoosen)
                 {
@@ -112,7 +121,7 @@ namespace Chess
                 allTheKingMoves.Add(new Point(Position.X - 1, Position.Y));
             }
 
-            if (Position.X + 1 < BoardSize && Position.Y - 1 < BoardSize && Position.X + 1 >=0 && Position.Y - 1 >=0)
+            if (Position.X + 1 < BoardSize && Position.Y - 1 < BoardSize && Position.X + 1 >= 0 && Position.Y - 1 >= 0)
             {
                 allTheKingMoves.Add(new Point(Position.X + 1, Position.Y - 1));
             }
