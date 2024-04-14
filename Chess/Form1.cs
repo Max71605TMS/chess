@@ -94,17 +94,26 @@ public partial class Form1 : Form
 
     private void ChessButton_Click(object sender, EventArgs e)
     {
-
         var button = (Button)sender;
 
-        if (button.Tag is Figure figure && figure.IsWhite == _figureMover.IsWhiteTurn)
+        if (button.Tag is Figure figure &&
+            figure.IsWhite == _figureMover.IsWhiteTurn)
         {
+            if (_figureMover.CurrentFigure == null ||
+                _figureMover.CurrentFigure.IsWhite != figure.IsWhite)
+            {
+                ShowFigureMoves(figure);
+            }
+            else if (_figureMover.CurrentFigure.IsWhite == figure.IsWhite)
+            {
+                var previousFigure = _figureMover.CurrentFigure;
+                TakebacksToTryDifferentMove(previousFigure);
+                ShowFigureMoves(figure);
+            }
 
-            _figureMover.ChooseFigure(figure);
-            button.Image = figure.GetImage();
-            SetImageToAvaliablePositions(true);
         }
-        else if (_figureMover.CurrentFigure != null)
+        else if (_figureMover.CurrentFigure != null &&
+                _figureMover.CurrentFigure.IsWhite == _figureMover.IsWhiteTurn)
         {
             var point = button.Tag is Figure ? ((Figure)button.Tag).Position : (Point)button.Tag;
             ClearCurrentCell(_figureMover.CurrentFigure.Position);
@@ -112,5 +121,19 @@ public partial class Form1 : Form
             SetFigures();
             SetImageToAvaliablePositions(false);
         }
+    }
+
+    private void TakebacksToTryDifferentMove(Figure previousFigure)
+    {
+        previousFigure.IsChoosen = false;
+        chessButtons[previousFigure.Position.X, previousFigure.Position.Y].Image = previousFigure.GetImage();
+        SetImageToAvaliablePositions(false);
+    }
+
+    private void ShowFigureMoves(Figure figure)
+    {
+        _figureMover.ChooseFigure(figure);
+        chessButtons[figure.Position.X, figure.Position.Y].Image = figure.GetImage();
+        SetImageToAvaliablePositions(true);
     }
 }
