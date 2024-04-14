@@ -38,9 +38,9 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
-            label1.Location = new Point(826, 44);
+            label1.Location = new Point(944, 59);
             label1.Name = "label1";
-            label1.Size = new Size(79, 21);
+            label1.Size = new Size(98, 28);
             label1.TabIndex = 1;
             label1.Text = "turn now";
             // 
@@ -48,30 +48,30 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
-            label2.Location = new Point(752, 44);
+            label2.Location = new Point(859, 59);
             label2.Name = "label2";
-            label2.Size = new Size(32, 21);
+            label2.Size = new Size(40, 28);
             label2.TabIndex = 2;
             label2.Text = "It's";
             // 
             // pbTurnIcon
             // 
             pbTurnIcon.Image = Properties.Resources.Empty_White;
-            pbTurnIcon.Location = new Point(790, 35);
+            pbTurnIcon.Location = new Point(903, 47);
+            pbTurnIcon.Margin = new Padding(3, 4, 3, 4);
             pbTurnIcon.Name = "pbTurnIcon";
-            pbTurnIcon.Size = new Size(30, 30);
+            pbTurnIcon.Size = new Size(34, 40);
             pbTurnIcon.TabIndex = 3;
             pbTurnIcon.TabStop = false;
             // 
             // Form1
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(902, 690);
+            ClientSize = new Size(1031, 920);
             Controls.Add(pbTurnIcon);
             Controls.Add(label2);
             Controls.Add(label1);
-            Margin = new Padding(3, 2, 3, 2);
             Name = "Form1";
             Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)pbTurnIcon).EndInit();

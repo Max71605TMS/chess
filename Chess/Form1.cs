@@ -1,6 +1,4 @@
 using Chess.Properties;
-using System.Drawing.Printing;
-using System.Resources;
 
 namespace Chess;
 
@@ -13,7 +11,7 @@ public partial class Form1 : Form
 
     private readonly Button[,] chessButtons = new Button[BoardSize, BoardSize];
 
-    
+
 
     private readonly FigureMover _figureMover;
 
@@ -30,9 +28,9 @@ public partial class Form1 : Form
 
     private void SetFigures()
     {
-        foreach(var figure in _figureMover.Figures)
+        foreach (var figure in _figureMover.Figures)
         {
-            chessButtons[figure.Position.X,figure.Position.Y].Tag = figure;
+            chessButtons[figure.Position.X, figure.Position.Y].Tag = figure;
             chessButtons[figure.Position.X, figure.Position.Y].Image = figure.GetImage();
         }
     }
@@ -56,15 +54,19 @@ public partial class Form1 : Form
             var figure = _figureMover.GetFigure(position);
             if (figure != null)
             {
-                if(isFillCells)
+                if (isFillCells)
                 {
                     figure.isChoosen = true;
-                } else {
+                }
+                else
+                {
                     figure.isChoosen = false;
                 }
-               
+
                 chessButtons[position.X, position.Y].Image = figure.GetImage();
-            } else if(isFillCells) {
+            }
+            else if (isFillCells)
+            {
                 chessButtons[position.X, position.Y].Image = Properties.Resources.Empty_Green;
             }
             else
@@ -105,15 +107,15 @@ public partial class Form1 : Form
     private void ChessButton_Click(object sender, EventArgs e)
     {
         var button = (Button)sender;
-        
+
         if (button.Tag is Figure figure && figure.isWhite == _figureMover._isWhiteTurn)
         {
             _figureMover.ChooseFigure(figure);
             button.Image = figure.GetImage();
             SetImageToAvaliablePositions(true);
         }
-        else if(_figureMover._currentfigure != null)
-        {   
+        else if (_figureMover._currentfigure != null)
+        {
             var point = button.Tag is Figure ? ((Figure)button.Tag).Position : (Point)button.Tag;
             ClearCurrentCell(_figureMover._currentfigure.Position);
             _figureMover.Move(point);
@@ -130,4 +132,5 @@ public partial class Form1 : Form
     private void button1_Click_1(object sender, EventArgs e)
     {
     }
+
 }
