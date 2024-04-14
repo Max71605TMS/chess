@@ -59,8 +59,8 @@ internal static class Initializer
                         return new Bishop(y is 7, new Point(x, y));
                     case 5:
                         return new Bishop(y is 7, new Point(x, y));
-                    case 3:
-                        //return new Queen(y is 7, new Point(x, y));
+                    //case 3:
+                    //    //return new Queen(y is 7, new Point(x, y));
                     case 4:
                         return new King(y is 7, new Point(x, y));
                 }

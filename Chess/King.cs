@@ -30,14 +30,21 @@ namespace Chess
             var attackBlackFiguresPositions = AttackOfPiecesOtherThanPawns(blackFiguresPositions);
             var attackWhiteFiguresPositions = AttackOfPiecesOtherThanPawns(whiteFiguresPositions);
 
+            var positionWhiteKing = figures.Where(f => f is King).Where(k => k.IsWhite).Select(f => f.Position).First(); 
+            var positionBlackKing = figures.Where(f => f is King).Where(k => k.IsWhite == false).Select(f => f.Position).First();
+
+            var theKingBlackAttack = AttacKing(positionBlackKing);
+            var theKingWhiteAttack = AttacKing(positionWhiteKing);
 
             List<Point> getAvaliablePositions = new List<Point>();
+
             if (IsWhite)
             {
                 foreach (var move in allTheKingMoves)
                 {
                     
-                    if (whiteFiguresPositions.All(f => f.Position != move) && attackBlackFiguresPositions.All(attack => attack != move))
+                    if (whiteFiguresPositions.All(f => f.Position != move) && attackBlackFiguresPositions.All(attack => attack != move)
+                                                                           && theKingBlackAttack.All(attack => attack != move))
                     {
                         getAvaliablePositions.Add(move);
                     }
@@ -45,11 +52,12 @@ namespace Chess
             }
 
             if (!IsWhite)
-            {
+            {                
                 foreach (var move in allTheKingMoves)
                 {
                     
-                    if (blackFiguresPositions.All(f => f.Position != move) && attackWhiteFiguresPositions.All(attack => attack != move))
+                    if (blackFiguresPositions.All(f => f.Position != move) && attackWhiteFiguresPositions.All(attack => attack != move)
+                                                                           && theKingWhiteAttack.All(attack => attack != move))
                     {
                         getAvaliablePositions.Add(move);
                     }
@@ -156,6 +164,54 @@ namespace Chess
             }
 
             return allTheKingMoves;
+        }
+
+        private List<Point> AttacKing(Point point)
+        {
+            var AttacKing = new List<Point>();
+
+            var newPoint = new Point(point.X, point.Y);
+            if (point.Y + 1 < BoardSize && point.Y + 1 >= 0)
+            {
+                AttacKing.Add(new Point(point.X, point.Y + 1));
+            }
+
+            if (point.Y - 1 < BoardSize && point.Y - 1 >= 0)
+            {
+                AttacKing.Add(new Point(point.X, point.Y - 1));
+            }
+
+            if (point.X + 1 < BoardSize && point.X + 1 >= 0)
+            {
+                AttacKing.Add(new Point(point.X + 1, point.Y));
+            }
+
+            if (point.X - 1 < BoardSize && point.X - 1 >= 0)
+            {
+                AttacKing.Add(new Point(point.X - 1, point.Y));
+            }
+
+            if (point.X + 1 < BoardSize && point.Y - 1 < BoardSize && point.X + 1 >= 0 && point.Y - 1 >= 0)
+            {
+                AttacKing.Add(new Point(point.X + 1, point.Y - 1));
+            }
+
+            if (point.X + 1 < BoardSize && point.Y + 1 < BoardSize && point.X + 1 >= 0 && point.Y + 1 >= 0)
+            {
+                AttacKing.Add(new Point(point.X + 1, point.Y + 1));
+            }
+
+            if (point.X - 1 < BoardSize && point.Y + 1 < BoardSize && point.X - 1 >= 0 && point.Y + 1 >= 0)
+            {
+                AttacKing.Add(new Point(point.X - 1, point.Y + 1));
+            }
+
+            if (point.X - 1 < BoardSize && point.Y - 1 < BoardSize && point.X - 1 >= 0 && point.Y - 1 >= 0)
+            {
+                AttacKing.Add(new Point(point.X - 1, point.Y - 1));
+            }
+
+            return AttacKing;
         }
 
     }
