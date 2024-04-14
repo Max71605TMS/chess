@@ -46,11 +46,11 @@ namespace Chess
 
             if (IsWhite)
             {
-                if(whiteRook != null && IsFirstTurn)
-                {
+                //if(whiteRook != null && IsFirstTurn)
+                //{
                   
                     
-                }
+                //}
 
                 foreach (var move in allTheKingMoves)
                 {
@@ -112,7 +112,7 @@ namespace Chess
             }
         }
 
-        private List<Point> AllTheKingMoves(IEnumerable<Figure> figures)
+        public List<Point> AllTheKingMoves(IEnumerable<Figure> figures)
         {
             var allTheKingMoves = new List<Point>();
 

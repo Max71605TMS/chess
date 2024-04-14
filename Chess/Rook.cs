@@ -22,32 +22,6 @@ public class Rook : Figure, IMarkable, IMovementBishop
         return positions;
     }
 
-    //private IEnumerable<Point> GetPositionsByDirection(IEnumerable<Figure> figures, int xDirection, int yDirection)
-    //{
-    //    var positions = new List<Point>();
-    //    var x = Position.X + xDirection;
-    //    var y = Position.Y + yDirection;
-
-    //    while (x is >= 0 and <= 7 && y is >= 0 and <= 7)
-    //    {
-    //        var figure = figures.FirstOrDefault(f => f.Position == new Point(x, y));
-
-    //        if (figure is not null)
-    //        {
-    //            if (figure.IsWhite != IsWhite)
-    //                positions.Add(new Point(x, y));
-    //            break;
-    //        }
-
-    //        positions.Add(new Point(x, y));
-
-    //        x += xDirection;
-    //        y += yDirection;
-    //    }
-
-    //    return positions;
-    //}
-
     public override Image GetImage()
     {
         if (IsWhite)
