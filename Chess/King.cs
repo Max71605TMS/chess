@@ -21,21 +21,14 @@ namespace Chess
 
         public override IEnumerable<Point> GetAvaliablePositions(IEnumerable<Figure> figures)
         {
-
+            
             var allTheKingMoves = AllTheKingMoves(figures);
 
             var whiteFiguresPositions = figures.Where(f => f.IsWhite);
             var blackFiguresPositions = figures.Where(f => f.IsWhite == false);
 
-            var attackBlackFiguresPositions = blackFiguresPositions.Where(f => !(f is Pawn))
-                                                                  .Where(f => !(f is King))
-                                                                  .Select(position => position.GetAvaliablePositions(figures))
-                                                                  .SelectMany(p => p).ToList();
-
-            var attackWhiteFiguresPositions = whiteFiguresPositions.Where(f => !(f is Pawn))
-                                                                 .Where(f => !(f is King))
-                                                                 .Select(position => position.GetAvaliablePositions(figures))
-                                                                 .SelectMany(p => p).ToList();
+            var attackBlackFiguresPositions = AttackOfPiecesOtherThanPawns(blackFiguresPositions);
+            var attackWhiteFiguresPositions = AttackOfPiecesOtherThanPawns(whiteFiguresPositions);
 
 
             List<Point> getAvaliablePositions = new List<Point>();
@@ -63,6 +56,15 @@ namespace Chess
                 }
             }
             return getAvaliablePositions;
+        }
+
+        private List<Point> AttackOfPiecesOtherThanPawns(IEnumerable<Figure> figures)
+        {
+            var attack = figures.Where(f => !(f is Pawn))
+                                            .Where(f => !(f is King))
+                                            .Select(position => position.GetAvaliablePositions(figures))
+                                            .SelectMany(p => p).ToList();
+            return attack;
         }
 
         public override Image GetImage()
