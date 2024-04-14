@@ -31,10 +31,10 @@ internal static class Initializer
         {
             for (var x = 0; x < BoardSize; x++)
             {
-               var figure = GetFigure(x, y, isWhiteDown);
-                if(figure is not null)
+                var figure = GetFigure(x, y, isWhiteDown);
+                if (figure is not null)
                 {
-                    figures.Add(figure);    
+                    figures.Add(figure);
                 }
             }
         }
@@ -59,9 +59,8 @@ internal static class Initializer
                         return new Bishop(y is 7, new Point(x, y));
                     case 5:
                         return new Bishop(y is 7, new Point(x, y));
-                        break;
-                    case 3:
-                        break;
+                    //case 3:
+                    //    //return new Queen(y is 7, new Point(x, y));
                     case 4:
                         return new King(y is 7, new Point(x, y));
                 }

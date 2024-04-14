@@ -12,11 +12,9 @@ namespace Chess
 {
     public class FigureMover
     {
-        private const int BoardSize = 8;
-
         public bool IsWhiteTurn { get; private set; } = true;
 
-        public IEnumerable<Point> AvaliablePositions { get; private set; }
+        public  IEnumerable<Point> AvaliablePositions { get;  set; }
 
         public Figure CurrentFigure { get; private set; }
 
@@ -26,10 +24,10 @@ namespace Chess
 
         public void ChooseFigure(Figure figure)
         {
-            if (figure.isWhite == IsWhiteTurn)
+            if (figure.IsWhite == IsWhiteTurn)
             {
                 AvaliablePositions = figure.GetAvaliablePositions(Figures);
-                figure.isChoosen = true;
+                figure.IsChoosen = true;
                 CurrentFigure = figure;
             }
         }
@@ -38,7 +36,7 @@ namespace Chess
 
         public void Move(Point point)
         {
-            CurrentFigure.isChoosen = false;
+            CurrentFigure.IsChoosen = false;
             if (AvaliablePositions.Any(position => position == point))
             {
 
@@ -50,7 +48,7 @@ namespace Chess
                 CurrentFigure.Position = point;
                 IsWhiteTurn = !IsWhiteTurn;
 
-                var attactedFigure = Figures.FirstOrDefault(figure => figure.Position == point && figure.isWhite != CurrentFigure.isWhite);
+                var attactedFigure = Figures.FirstOrDefault(figure => figure.Position == point && figure.IsWhite != CurrentFigure.IsWhite);
 
                 if (attactedFigure != null)
                 {
