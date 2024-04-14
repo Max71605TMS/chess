@@ -423,6 +423,16 @@ namespace Chess.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Queen_Black_Green_2 {
+            get {
+                object obj = ResourceManager.GetObject("Queen_Black_Green_2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Queen_Black_White {
             get {
                 object obj = ResourceManager.GetObject("Queen_Black_White", resourceCulture);
@@ -433,9 +443,29 @@ namespace Chess.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Queen_Black_White_2 {
+            get {
+                object obj = ResourceManager.GetObject("Queen_Black_White_2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Queen_White_Black {
             get {
                 object obj = ResourceManager.GetObject("Queen_White_Black", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Queen_White_Black_2 {
+            get {
+                object obj = ResourceManager.GetObject("Queen_White_Black_2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
