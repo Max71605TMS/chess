@@ -106,7 +106,7 @@ namespace Chess
         /// </summary>
         /// <param name="figures"></param>
         /// <returns></returns>
-        private List<Point> AllTheKingMoves(IEnumerable<Figure> figures)
+        public List<Point> AllTheKingMoves(IEnumerable<Figure> figures)
         {
             var allTheKingMoves = new List<Point>();
 

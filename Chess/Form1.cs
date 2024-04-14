@@ -120,6 +120,31 @@ public partial class Form1 : Form
             _figureMover.Move(point);
             SetFigures();
             SetImageToAvaliablePositions(false);
+
+            bool isCheck = GameStatus.IsCheck(_figureMover.IsWhiteTurn, _figureMover.Figures);
+
+            if (isCheck)
+            {
+                bool isMate = GameStatus.IsMate(_figureMover.IsWhiteTurn, _figureMover.Figures);
+                if (isMate)
+                {
+                    if (_figureMover.IsWhiteTurn)
+                    { MessageBox.Show("Black win"); }
+                    else { MessageBox.Show("White win"); }
+                }
+                else
+                {
+                    if (_figureMover.IsWhiteTurn)
+                    { MessageBox.Show("White King in Check!"); }
+                    else { MessageBox.Show("Black King in Check!"); }
+                }
+            }
+            else
+            {
+                bool isStalemate = GameStatus.IsStalemate(_figureMover.IsWhiteTurn, _figureMover.Figures);
+                if (isStalemate)
+                { MessageBox.Show("Draw"); }
+            }
         }
     }
 
