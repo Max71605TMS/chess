@@ -11,19 +11,17 @@ namespace Chess
 {
     public class King : Figure, IMarkable
     {
-        private const int BoardSize = 8; // размер шахматной доски
+        private const int BoardSize = 8;
 
         public bool IsFirstTurn { get; set; } = true;
-        //private Figure _previous; //??
-        public bool Step { get; set; } = false;
-        //public bool Сheckmate { get; set; } = false; //??
+ 
         public King(bool isWhite, Point point) : base(isWhite, point)
         {
         }
 
         public override IEnumerable<Point> GetAvaliablePositions(IEnumerable<Figure> figures)
         {
-            var allTheKingMoves = AllTheKingMoves(figures); // все возможные ходы короля без учета фигур
+            var allTheKingMoves = AllTheKingMoves(figures); 
 
             List<Point> getAvaliablePositions = new List<Point>();
             if (IsWhite)
@@ -34,7 +32,7 @@ namespace Chess
                 //                   .Select(f => f.GetAvaliablePositions(figures))
                 //                   .SelectMany(p => p);
 
-                var whiteFiguresPositions = figures.Where(f => f.IsWhite).ToList(); //расположение фигур
+                var whiteFiguresPositions = figures.Where(f => f.IsWhite).ToList(); 
                 foreach (var move in allTheKingMoves)
                 {
                     if (whiteFiguresPositions.All(f => f.Position != move) /*&& atackFigure.All(p => p != move)*/)
