@@ -35,7 +35,7 @@ public class Rook : Figure, IMarkable
 
             if (figure is not null)
             {
-                if (figure.isWhite != isWhite)
+                if (figure.IsWhite != IsWhite)
                     positions.Add(new Point(x, y));
                 break;
             }
@@ -51,15 +51,15 @@ public class Rook : Figure, IMarkable
 
     public override Image GetImage()
     {
-        if (isWhite)
+        if (IsWhite)
         {
-            if (isChoosen)
+            if (IsChoosen)
                 return Resources.Castle_White_Green;
             
             return (Position.X + Position.Y) % 2 == 0 ? Resources.Castle_White_White : Resources.Castle_White_Black;
         }
 
-        if (isChoosen)
+        if (IsChoosen)
             return Resources.Castle_Black_Green;
         return (Position.X + Position.Y) % 2 == 0 ? Resources.Castle_Black_White : Resources.Castle_Black_Black;
     }

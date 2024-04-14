@@ -12,54 +12,45 @@ namespace Chess
 {
     public class FigureMover
     {
-        private const int BoardSize = 8;
-
-        public bool _isWhiteTurn { get; private set; }  = true;
+        public bool IsWhiteTurn { get; private set; } = true;
 
         public  IEnumerable<Point> AvaliablePositions { get;  set; }
 
-        public Figure _currentfigure { get; private set; }
+        public Figure CurrentFigure { get; private set; }
 
         public List<Figure> Figures { get; private set; }
-        
-        public FigureMover(bool isWhiteDown)
-        {
-            Figures = Initializer.GetFigures(isWhiteDown);
-        }
+
+        public FigureMover(bool isWhiteDown) => Figures = Initializer.GetFigures(isWhiteDown);
 
         public void ChooseFigure(Figure figure)
         {
-            if (figure.isWhite == _isWhiteTurn)
+            if (figure.IsWhite == IsWhiteTurn)
             {
                 AvaliablePositions = figure.GetAvaliablePositions(Figures);
-                figure.isChoosen = true;
-                _currentfigure = figure;
+                figure.IsChoosen = true;
+                CurrentFigure = figure;
             }
         }
 
-        public Figure GetFigure(Point point) 
-        { 
-            return Figures.FirstOrDefault(x=>x.Position == point);
-        }
+        public Figure GetFigure(Point point) => Figures.FirstOrDefault(x => x.Position == point);
 
         public void Move(Point point)
         {
-            
-            _currentfigure.isChoosen = false;
+            CurrentFigure.IsChoosen = false;
             if (AvaliablePositions.Any(position => position == point))
             {
 
-                if(_currentfigure is IMarkable markableFigure)
+                if (CurrentFigure is IMarkable markableFigure)
                 {
                     markableFigure.IsFirstTurn = false;
                 }
 
-                _currentfigure.Position = point;
-                _isWhiteTurn = !_isWhiteTurn;
+                CurrentFigure.Position = point;
+                IsWhiteTurn = !IsWhiteTurn;
 
-                var attactedFigure = Figures.FirstOrDefault(figure => figure.Position == point && figure.isWhite != _currentfigure.isWhite);
+                var attactedFigure = Figures.FirstOrDefault(figure => figure.Position == point && figure.IsWhite != CurrentFigure.IsWhite);
 
-                if (attactedFigure!= null)
+                if (attactedFigure != null)
                 {
                     Figures.Remove(attactedFigure);
                 }

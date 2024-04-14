@@ -25,7 +25,6 @@ public partial class Form1 : Form
 
     private void SetFigures()
     {
-
         foreach (var figure in _figureMover.Figures)
         {
             chessButtons[figure.Position.X, figure.Position.Y].Tag = figure;
@@ -44,11 +43,11 @@ public partial class Form1 : Form
             {
                 if (isFillCells)
                 {
-                    figure.isChoosen = true;
+                    figure.IsChoosen = true;
                 }
                 else
                 {
-                    figure.isChoosen = false;
+                    figure.IsChoosen = false;
                 }
 
                 chessButtons[position.X, position.Y].Image = figure.GetImage();
@@ -98,14 +97,14 @@ public partial class Form1 : Form
 
         var button = (Button)sender;
 
-        if (button.Tag is Figure figure && figure.isWhite == _figureMover._isWhiteTurn)
+        if (button.Tag is Figure figure && figure.IsWhite == _figureMover.IsWhiteTurn)
         {
 
             _figureMover.ChooseFigure(figure);
             button.Image = figure.GetImage();
             SetImageToAvaliablePositions(true);
         }
-        else if (_figureMover._currentfigure != null)
+        else if (_figureMover.CurrentFigure != null)
         {
             var point = button.Tag is Figure ? ((Figure)button.Tag).Position : (Point)button.Tag;
             ClearCurrentCell(_figureMover._currentfigure.Position);

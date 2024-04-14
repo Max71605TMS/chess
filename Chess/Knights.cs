@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -25,52 +24,30 @@ namespace Chess
                 {
                     if ((Math.Abs(j - Position.X) * Math.Abs(i - Position.Y)) == 2)
                     {
-                        positions.Add(new Point(j, i));
+                        var figure = figures.SingleOrDefault(f => f.Position == new Point(j, i));
+                        if (figure == null ||
+                            (figure != null &&
+                            figure.IsWhite != IsWhite))
+                        {
+                            positions.Add(new Point(j, i));
+                        }
                     }
                 }
             }
-
-            var getAvaliablePositions = new List<Point>();
-
-            if (isWhite)
-            {
-                var whiteFigures = figures.Where(f => f.isWhite).ToList();
-
-                foreach (var move in positions)
-                {
-                    if (whiteFigures.All(f => f.Position != move))
-                    {
-                        getAvaliablePositions.Add(move);
-                    }
-                }
-            }
-            else
-            {
-                var blackFigures = figures.Where(f => f.isWhite == false).ToList();
-
-                foreach (var move in positions)
-                {
-                    if (blackFigures.All(f => f.Position != move))
-                    {
-                        getAvaliablePositions.Add(move);
-                    }
-                }
-            }
-
-            return getAvaliablePositions;
+            return positions;
         }
 
         public override Image GetImage()
         {
-            if (isWhite)
+            if (IsWhite)
             {
-                if (isChoosen)
-                    return Resources.Knight_Black_Green;
+                if (IsChoosen)
+                    return Resources.Knight_White_Green;
 
-                return (Position.X + Position.Y) % 2 == 0 ? Resources.Knight_Black_White : Resources.Knight_Black_Black;
+                return (Position.X + Position.Y) % 2 == 0 ? Resources.Knight_White_White : Resources.Knight_White_Black;
             }
 
-            if (isChoosen)
+            if (IsChoosen)
                 return Resources.Knight_Black_Green;
             return (Position.X + Position.Y) % 2 == 0 ? Resources.Knight_Black_White : Resources.Knight_Black_Black;
         }

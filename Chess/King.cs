@@ -26,8 +26,9 @@ namespace Chess
             var allTheKingMoves = AllTheKingMoves(figures); // все возможные ходы короля без учета фигур
 
             List<Point> getAvaliablePositions = new List<Point>();
-            if (isWhite)
+            if (IsWhite)
             {
+                var whiteFigures = figures.Where(f => f.IsWhite).ToList();
 
                 //var atackFigure = figures.Where(f => !f.isWhite)
                 //                   .Select(f => f.GetAvaliablePositions(figures))
@@ -45,7 +46,8 @@ namespace Chess
             
             if(!isWhite)
             {
-                var blackFiguresPositions = figures.Where(f => f.isWhite == false).ToList();
+                var blackFigures = figures.Where(f => f.IsWhite == false).ToList();
+
                 foreach (var move in allTheKingMoves)
                 {
                     if (blackFiguresPositions.All(f => f.Position != move) )
@@ -59,9 +61,9 @@ namespace Chess
 
         public override Image GetImage()
         {
-            if (isWhite)
+            if (IsWhite)
             {
-                if (isChoosen)
+                if (IsChoosen)
                 {
                     return Properties.Resources.King_White_Green;
                 } 
@@ -72,7 +74,7 @@ namespace Chess
                 
             } else
             {
-                if (isChoosen)
+                if (IsChoosen)
                 {
                     return Properties.Resources.King_Black_Green;
                 }
