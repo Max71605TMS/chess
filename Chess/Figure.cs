@@ -21,13 +21,11 @@ namespace Chess
         public Figure(bool isWhite, Point point)
         {
             this.isWhite = isWhite;
-            this.Position = point;
-            
+            this.Position = point;            
         }
 
         public abstract IEnumerable<Point> GetAvaliablePositions(IEnumerable<Figure> figures);
 
         public abstract Image GetImage();
-
     }
 }

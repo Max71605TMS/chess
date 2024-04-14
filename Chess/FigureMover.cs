@@ -20,6 +20,8 @@ namespace Chess
 
         public Figure CurrentFigure { get; private set; }
 
+
+
         public List<Figure> Figures { get; private set; }
 
         public FigureMover(bool isWhiteDown) => Figures = Initializer.GetFigures(isWhiteDown);
@@ -32,6 +34,7 @@ namespace Chess
                 figure.isChoosen = true;
                 CurrentFigure = figure;
             }
+            
         }
 
         public Figure GetFigure(Point point) => Figures.FirstOrDefault(x => x.Position == point);
