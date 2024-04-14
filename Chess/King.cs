@@ -34,7 +34,7 @@ namespace Chess
                 //                   .Select(f => f.GetAvaliablePositions(figures))
                 //                   .SelectMany(p => p);
 
-                var whiteFiguresPositions = figures.Where(f => f.isWhite).ToList(); //расположение фигур
+                var whiteFiguresPositions = figures.Where(f => f.IsWhite).ToList(); //расположение фигур
                 foreach (var move in allTheKingMoves)
                 {
                     if (whiteFiguresPositions.All(f => f.Position != move) /*&& atackFigure.All(p => p != move)*/)
@@ -44,9 +44,9 @@ namespace Chess
                 }
             }
             
-            if(!isWhite)
+            if(!IsWhite)
             {
-                var blackFigures = figures.Where(f => f.IsWhite == false).ToList();
+                var blackFiguresPositions = figures.Where(f => f.IsWhite == false).ToList();
 
                 foreach (var move in allTheKingMoves)
                 {

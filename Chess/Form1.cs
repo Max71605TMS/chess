@@ -107,7 +107,7 @@ public partial class Form1 : Form
         else if (_figureMover.CurrentFigure != null)
         {
             var point = button.Tag is Figure ? ((Figure)button.Tag).Position : (Point)button.Tag;
-            ClearCurrentCell(_figureMover._currentfigure.Position);
+            ClearCurrentCell(_figureMover.CurrentFigure.Position);
             _figureMover.Move(point);
             SetFigures();
             SetImageToAvaliablePositions(false);

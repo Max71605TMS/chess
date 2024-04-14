@@ -51,9 +51,9 @@ namespace Chess
             }
 
             //add all positions
-            if (isWhite)
+            if (IsWhite)
             {
-                var blackFigures = figures.Where(f => f.isWhite == false).ToList();
+                var blackFigures = figures.Where(f => f.IsWhite == false).ToList();
                 var pointAtackLeft = new Point(Position.X - 1, Position.Y - 1);
                 var pointAtackRight = new Point(Position.X + 1, Position.Y - 1);
                 
@@ -70,7 +70,7 @@ namespace Chess
             }
             else
             {
-                var whiteFigures = figures.Where(f => f.isWhite).ToList();
+                var whiteFigures = figures.Where(f => f.IsWhite).ToList();
                 var pointAtackLeft = new Point(Position.X - 1, Position.Y + 1);
                 var pointAtackRight = new Point(Position.X + 1, Position.Y + 1);
 
