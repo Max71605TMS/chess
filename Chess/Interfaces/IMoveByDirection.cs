@@ -1,8 +1,11 @@
-﻿namespace Chess.Interfaces;
+﻿using Chess.Abstract;
+
+namespace Chess.Interfaces;
 
 public interface IMoveByDirection
 {
-    public IEnumerable<Point> GetPositionsByDirection(IEnumerable<Figure> figures, Figure figure, int xDirection, int yDirection)
+    public IEnumerable<Point> GetPositionsByDirection(IEnumerable<Figure> figures, Figure figure, int xDirection,
+        int yDirection)
     {
         var positions = new List<Point>();
         var x = figure.Position.X + xDirection;
@@ -14,7 +17,7 @@ public interface IMoveByDirection
 
             if (figureOnTheWay is not null)
             {
-                if (figureOnTheWay.isWhite != figure.isWhite)
+                if (figureOnTheWay.IsWhite != figure.IsWhite)
                     positions.Add(new Point(x, y));
                 break;
             }
