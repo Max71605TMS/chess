@@ -1,3 +1,5 @@
+using Chess.Core;
+
 namespace Chess;
 
 internal static class Program
@@ -11,6 +13,9 @@ internal static class Program
         // To customize application configuration such as set high DPI settings or default font,
         // see https://aka.ms/applicationconfiguration.
         ApplicationConfiguration.Initialize();
-        Application.Run(new Chess());
+
+        var mover = new FigureMover();
+
+        Application.Run(new Forms.Chess(mover));
     }
 }

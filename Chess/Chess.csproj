@@ -15,6 +15,9 @@
             <AutoGen>True</AutoGen>
             <DependentUpon>ChessResources.resx</DependentUpon>
         </Compile>
+        <Compile Update="Forms\Chess.cs">
+            <SubType>Form</SubType>
+        </Compile>
     </ItemGroup>
 
     <ItemGroup>

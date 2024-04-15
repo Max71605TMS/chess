@@ -4,7 +4,7 @@ namespace Chess.Visuals;
 
 public static class ElementColors
 {
-    public static Color GetElementColor(ElementColor color, Point point)
+    public static Color GetElementColor(ElementColor color, Point point = default)
     {
         var x = point.X;
         var y = point.Y;

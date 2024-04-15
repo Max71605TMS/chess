@@ -1,4 +1,4 @@
-﻿namespace Chess
+﻿namespace Chess.Forms
 {
     partial class Chess
     {
@@ -34,7 +34,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(940, 680);
+            ClientSize = new Size(720, 740);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
             BackColor = Color.FromArgb(32, 32, 32);

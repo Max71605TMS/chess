@@ -27,7 +27,8 @@ public interface ICastling
                 break;
             }
 
-            if (x is 0 or 7 && figureOnTheWay is not null && figureOnTheWay.IsWhite == figure.IsWhite)
+            if (x is 0 or 7 && figureOnTheWay is not null && figureOnTheWay.IsWhite == figure.IsWhite &&
+                ((IFigureRestriction)figureOnTheWay).IsFirstTurn)
                 positions.Add(new Point(x, y));
 
             x += xDirection;

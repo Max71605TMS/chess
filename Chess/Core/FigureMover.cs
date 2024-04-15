@@ -1,4 +1,5 @@
 ﻿using Chess.Abstract;
+using Chess.Figures;
 using Chess.Interfaces;
 
 namespace Chess.Core;
@@ -10,6 +11,8 @@ public class FigureMover
     public IEnumerable<Point>? AvailablePositions { get; private set; }
 
     public Figure? CurrentFigure { get; private set; }
+
+    public (bool isCheck, bool isMate, bool isWhite)? CheckMateStatus { get; private set; }
 
     public List<Figure> Figures { get; } = Initializer.GetFigures();
 
@@ -55,20 +58,28 @@ public class FigureMover
             //Если обе фигуры белые, то рокировка
             if (attackedFigure.IsWhite == CurrentFigure.IsWhite)
             {
-                if (attackedFigure.Position.X < CurrentFigure.Position.X)
+                switch (CurrentFigure)
                 {
-                    CurrentFigure.Position = CurrentFigure.Position with { X = CurrentFigure.Position.X - 2 };
-                    attackedFigure.Position = CurrentFigure.Position with { X = CurrentFigure.Position.X + 1 };
-                }
-                else
-                {
-                    CurrentFigure.Position = CurrentFigure.Position with { X = CurrentFigure.Position.X + 3 };
-                    attackedFigure.Position = attackedFigure.Position with { X = attackedFigure.Position.X - 2 };
+                    case King when attackedFigure.Position.X < CurrentFigure.Position.X:
+                        CurrentFigure.Position = CurrentFigure.Position with { X = CurrentFigure.Position.X - 2 };
+                        attackedFigure.Position = CurrentFigure.Position with { X = attackedFigure.Position.X + 3 };
+                        break;
+                    case King:
+                        CurrentFigure.Position = CurrentFigure.Position with { X = CurrentFigure.Position.X + 2 };
+                        attackedFigure.Position = attackedFigure.Position with { X = attackedFigure.Position.X - 2 };
+                        break;
+                    case Rook when attackedFigure.Position.X < CurrentFigure.Position.X:
+                        CurrentFigure.Position = CurrentFigure.Position with { X = CurrentFigure.Position.X - 2 };
+                        attackedFigure.Position = CurrentFigure.Position with { X = attackedFigure.Position.X + 2 };
+                        break;
+                    case Rook:
+                        CurrentFigure.Position = CurrentFigure.Position with { X = CurrentFigure.Position.X + 3 };
+                        attackedFigure.Position = attackedFigure.Position with { X = attackedFigure.Position.X - 2 };
+                        break;
                 }
 
                 ((IFigureRestriction)attackedFigure).IsFirstTurn = false;
 
-                SwitchTurn();
                 return;
             }
 
@@ -78,6 +89,8 @@ public class FigureMover
 
         CurrentFigure.Position = targetPosition;
 
+        CheckMateStatus = CheckCheckmate();
+
         SwitchTurn();
     }
 
@@ -85,5 +98,31 @@ public class FigureMover
     private void SwitchTurn()
     {
         IsWhiteTurn = !IsWhiteTurn;
+    }
+
+    //Проверка на шах и мат
+    private (bool isCheck, bool isMate, bool isWhite)? CheckCheckmate()
+    {
+        var king = Figures.First(f => f is King king && king.IsWhite != IsWhiteTurn);
+
+        var allEnemyFiguresAvailablePositions = Figures.Where(w => w.IsWhite == IsWhiteTurn)
+            .Select(s => s.GetAvailablePositions(Figures)).SelectMany(s => s).ToList();
+
+        var isCheck = allEnemyFiguresAvailablePositions.Contains(king.Position);
+
+        if (!isCheck)
+            return null;
+
+        var kingAvailablePositions =
+            king.GetAvailablePositions(Figures).Except(allEnemyFiguresAvailablePositions).ToList();
+
+        var isMate = kingAvailablePositions.Count == 0;
+
+        return new ValueTuple<bool, bool, bool>
+        {
+            isCheck = isCheck,
+            isMate = isMate,
+            isWhite = king.IsWhite
+        };
     }
 }
