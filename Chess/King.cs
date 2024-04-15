@@ -30,6 +30,7 @@ namespace Chess
             var attackBlackFiguresPositions = AttackOfPiecesOtherThanPawns(blackFiguresPositions);
             var attackWhiteFiguresPositions = AttackOfPiecesOtherThanPawns(whiteFiguresPositions);
 
+   
             var positionWhiteKing = figures.Where(f => f is King).Where(k => k.IsWhite).Select(f => f.Position).First();
             var positionBlackKing = figures.Where(f => f is King).Where(k => k.IsWhite == false).Select(f => f.Position).First();
 
@@ -43,6 +44,7 @@ namespace Chess
 
                 foreach (var move in allTheKingMoves)
                 {
+
                     if (whiteFiguresPositions.All(f => f.Position != move) && attackBlackFiguresPositions.All(attack => attack != move)
                                                                            && theKingBlackAttack.All(attack => attack != move))
                                                                          
