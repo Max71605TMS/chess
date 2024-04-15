@@ -9,9 +9,10 @@ namespace Chess
 {
     public class Pawn : Figure, IMarkable
     {
-        private const int BoardSize = 8;
-        
         private bool _isDirectionUp;
+
+        private const int BoardSize = 8;
+
         public Pawn(bool isWhite, Point point, bool isDirectionUp) : base(isWhite, point)
         {
             _isDirectionUp = isDirectionUp;
@@ -19,56 +20,34 @@ namespace Chess
 
         public bool IsFirstTurn { get; set; } = true;
 
-        public override IEnumerable<Point> GetAvaliablePositions(IEnumerable<Figure> figures)
-        {       
-            var positions = new List<Point>();
-            if (_isDirectionUp && isWhite)
-            {
-                var isAnyFiguresBehind = figures.Any(f => f.Position == new Point(Position.X, Position.Y - 1));
-                var attackingPositions = figures.Where(f => f.Position == new Point(Position.X - 1, Position.Y - 1) 
-                || f.Position == new Point(Position.X + 1, Position.Y - 1)).ToList();
-                
-                if (Position.Y > 1)
-                {
-                    if(!isAnyFiguresBehind)
-                    {
-                        positions.Add(new Point(Position.X, Position.Y - 1));                        
-                    }                    
-                    foreach (var attackingPosition in attackingPositions)
-                    {
-                        positions.Add(attackingPosition.Position);
-                    }
-                }
-                var isAnyFiguresBehindPlus = figures.Any(f => f.Position == new Point(Position.X, Position.Y - 2));
-                if (IsFirstTurn && !isAnyFiguresBehind && !isAnyFiguresBehindPlus)
-                {
-                    positions.Add(new Point(Position.X, Position.Y - 2));
-                }
-                
-            } else
-            {
-                var isAnyFiguresBehind = figures.Any(f => f.Position == new Point(Position.X, Position.Y + 1));
-                var attackingPositions = figures.Where(f => f.Position == new Point(Position.X + 1, Position.Y + 1)
-                || f.Position == new Point(Position.X - 1, Position.Y + 1)).ToList();
-                if (Position.Y < BoardSize)
-                {
-                    if(!isAnyFiguresBehind)
-                    {
-                        positions.Add(new Point(Position.X, Position.Y + 1));                        
-                    }
-                    foreach (var attackingPosition in attackingPositions)
-                    {
-                        positions.Add(attackingPosition.Position);
-                    }
+        private IEnumerable<Point> GetAttackPositions(IEnumerable<Figure> figures, int offsetX1, int offsetY1, int offsetX2, int offsetY2)
+        {
+            var positions = figures.Where(f => f.Position == new Point(Position.X + offsetX1, Position.Y + offsetY1)
+                                            || f.Position == new Point(Position.X + offsetX2, Position.Y + offsetY2)).Select(f => f.Position);
 
-                }
-                var isAnyFiguresBehindPlus = figures.Any(f => f.Position == new Point(Position.X, Position.Y + 2));
-                if (IsFirstTurn && !isAnyFiguresBehind && !isAnyFiguresBehindPlus)
+            return positions;
+        }
+
+        public override IEnumerable<Point> GetAvaliablePositions(IEnumerable<Figure> figures)
+        {
+            var positions = new List<Point>();
+            int direction = _isDirectionUp && isWhite ? -1 : 1;
+
+            if ((Position.Y + direction) >= 1 && (Position.Y + direction) <= BoardSize)
+            {
+                if (!figures.Any(f => f.Position == new Point(Position.X, Position.Y + direction)))
                 {
-                    positions.Add(new Point(Position.X, Position.Y + 2));
+                    positions.Add(new Point(Position.X, Position.Y + direction));
+
+                    positions.AddRange(GetAttackPositions(figures, 1, direction, -1, direction));
+
+                    if (IsFirstTurn && !figures.Any(f => f.Position == new Point(Position.X, Position.Y + direction)))
+                    {
+                        positions.Add(new Point(Position.X, Position.Y + direction * 2));
+                    }
                 }
-            }            
-            //add all positions
+            }
+
             return positions;
         }
 
@@ -84,7 +63,6 @@ namespace Chess
                 {
                     return (Position.X + Position.Y) % 2 == 0 ? Properties.Resources.Pawn_White_White : Properties.Resources.Pawn_White_Black;
                 }
-
             }
             else
             {
