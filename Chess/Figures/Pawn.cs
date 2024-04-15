@@ -21,7 +21,7 @@ public class Pawn : Figure, IFigureRestriction
         if (IsWhite)
         {
             var isAnyFiguresBehind = figures.Any(f => f.Position == new Point(Position.X, Position.Y - 1));
-            if (Position.Y > 1 && !isAnyFiguresBehind) positions.Add(new Point(Position.X, Position.Y - 1));
+            if (Position.Y > 0 && !isAnyFiguresBehind) positions.Add(new Point(Position.X, Position.Y - 1));
             var isAnyFiguresBehindPlus = figures.Any(f => f.Position == new Point(Position.X, Position.Y - 2));
             if (IsFirstTurn && !isAnyFiguresBehind && !isAnyFiguresBehindPlus)
                 positions.Add(new Point(Position.X, Position.Y - 2));
