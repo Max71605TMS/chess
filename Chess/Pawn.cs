@@ -20,15 +20,24 @@ namespace Chess
         public bool IsFirstTurn { get; set; } = true;
 
         public override IEnumerable<Point> GetAvaliablePositions(IEnumerable<Figure> figures)
-        {
-           
+        {       
             var positions = new List<Point>();
             if (_isDirectionUp && IsWhite)
             {
                 var isAnyFiguresBehind = figures.Any(f => f.Position == new Point(Position.X, Position.Y - 1));
-                if (Position.Y > 1 && !isAnyFiguresBehind)
+                var attackingPositions = figures.Where(f => f.Position == new Point(Position.X - 1, Position.Y - 1) 
+                || f.Position == new Point(Position.X + 1, Position.Y - 1)).ToList();
+                
+                if (Position.Y > 1)
                 {
-                    positions.Add(new Point(Position.X, Position.Y - 1));
+                    if(!isAnyFiguresBehind)
+                    {
+                        positions.Add(new Point(Position.X, Position.Y - 1));                        
+                    }                    
+                    foreach (var attackingPosition in attackingPositions)
+                    {
+                        positions.Add(attackingPosition.Position);
+                    }
                 }
                 var isAnyFiguresBehindPlus = figures.Any(f => f.Position == new Point(Position.X, Position.Y - 2));
                 if (IsFirstTurn && !isAnyFiguresBehind && !isAnyFiguresBehindPlus)
@@ -39,54 +48,27 @@ namespace Chess
             } else
             {
                 var isAnyFiguresBehind = figures.Any(f => f.Position == new Point(Position.X, Position.Y + 1));
-                if (Position.Y < BoardSize && !isAnyFiguresBehind)
+                var attackingPositions = figures.Where(f => f.Position == new Point(Position.X + 1, Position.Y + 1)
+                || f.Position == new Point(Position.X - 1, Position.Y + 1)).ToList();
+                if (Position.Y < BoardSize)
                 {
-                    positions.Add(new Point(Position.X, Position.Y + 1));
+                    if(!isAnyFiguresBehind)
+                    {
+                        positions.Add(new Point(Position.X, Position.Y + 1));                        
+                    }
+                    foreach (var attackingPosition in attackingPositions)
+                    {
+                        positions.Add(attackingPosition.Position);
+                    }
+
                 }
                 var isAnyFiguresBehindPlus = figures.Any(f => f.Position == new Point(Position.X, Position.Y + 2));
                 if (IsFirstTurn && !isAnyFiguresBehind && !isAnyFiguresBehindPlus)
                 {
                     positions.Add(new Point(Position.X, Position.Y + 2));
                 }
-            }
-
+            }            
             //add all positions
-            if (IsWhite)
-            {
-                var blackFigures = figures.Where(f => f.IsWhite == false).ToList();
-                var pointAtackLeft = new Point(Position.X - 1, Position.Y - 1);
-                var pointAtackRight = new Point(Position.X + 1, Position.Y - 1);
-                
-                
-                    if (blackFigures.Any(f => f.Position == pointAtackLeft))
-                    {
-                         positions.Add(new Point(Position.X - 1, Position.Y - 1));
-                    }
-
-                    if (blackFigures.Any(f => f.Position == pointAtackRight))
-                    {
-                        positions.Add(new Point(Position.X + 1, Position.Y - 1));
-                    }
-            }
-            else
-            {
-                var whiteFigures = figures.Where(f => f.IsWhite).ToList();
-                var pointAtackLeft = new Point(Position.X - 1, Position.Y + 1);
-                var pointAtackRight = new Point(Position.X + 1, Position.Y + 1);
-
-                if (whiteFigures.Any(f => f.Position == pointAtackLeft))
-                {
-                    positions.Add(pointAtackLeft);
-                }
-
-                if (whiteFigures.Any(f => f.Position == pointAtackRight))
-                {
-                    positions.Add(pointAtackRight);
-                }
-            }
-
-
-
             return positions;
         }
 
