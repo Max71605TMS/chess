@@ -1,4 +1,6 @@
-﻿namespace Chess.Interfaces;
+﻿using Chess.Abstract;
+
+namespace Chess.Interfaces;
 
 public interface IMoveByDirection
 {
@@ -15,7 +17,7 @@ public interface IMoveByDirection
 
             if (figureOnTheWay is not null)
             {
-                if (figureOnTheWay.isWhite != figure.isWhite)
+                if (figureOnTheWay.IsWhite != figure.IsWhite)
                     positions.Add(new Point(x, y));
                 break;
             }
