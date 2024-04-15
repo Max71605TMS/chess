@@ -118,7 +118,7 @@ public class FigureMover
 
         var isMate = kingAvailablePositions.Count == 0;
 
-        return new ValueTuple<bool, bool, bool>
+        return new ()
         {
             isCheck = isCheck,
             isMate = isMate,
