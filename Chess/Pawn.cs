@@ -1,6 +1,7 @@
 ﻿using Chess.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,17 +12,25 @@ namespace Chess
     {
         private bool _isDirectionUp;
 
+        private bool _isWhite;
+
         private const int BoardSize = 8;
 
         public Pawn(bool isWhite, Point point, bool isDirectionUp) : base(isWhite, point)
         {
             _isDirectionUp = isDirectionUp;
+            _isWhite = isWhite;
         }
 
         public bool IsFirstTurn { get; set; } = true;
 
-        private IEnumerable<Point> GetAttackPositions(IEnumerable<Figure> figures, int offsetX1, int offsetY1, int offsetX2, int offsetY2)
+        public IEnumerable<Point> GetAttackPositions(IEnumerable<Figure> figures)
         {
+            int offsetX1 = 1;
+            int offsetY1 = _isDirectionUp && _isWhite ? -1 : 1;
+            int offsetX2 = -1;
+            int offsetY2 = _isDirectionUp && _isWhite ? -1 : 1;
+
             var positions = figures.Where(f => f.Position == new Point(Position.X + offsetX1, Position.Y + offsetY1)
                                             || f.Position == new Point(Position.X + offsetX2, Position.Y + offsetY2)).Select(f => f.Position);
 
@@ -31,7 +40,7 @@ namespace Chess
         public override IEnumerable<Point> GetAvaliablePositions(IEnumerable<Figure> figures)
         {
             var positions = new List<Point>();
-            int direction = _isDirectionUp && isWhite ? -1 : 1;
+            int direction = _isDirectionUp && _isWhite ? -1 : 1;
 
             if ((Position.Y + direction) >= 1 && (Position.Y + direction) <= BoardSize)
             {
@@ -39,7 +48,7 @@ namespace Chess
                 {
                     positions.Add(new Point(Position.X, Position.Y + direction));
 
-                    positions.AddRange(GetAttackPositions(figures, 1, direction, -1, direction));
+                    positions.AddRange(GetAttackPositions(figures));
 
                     if (IsFirstTurn && !figures.Any(f => f.Position == new Point(Position.X, Position.Y + direction)))
                     {
