@@ -45,6 +45,7 @@ namespace Chess
                 {
                     if (whiteFiguresPositions.All(f => f.Position != move) && attackBlackFiguresPositions.All(attack => attack != move)
                                                                            && theKingBlackAttack.All(attack => attack != move))
+                                                                         
                     {
                         getAvaliablePositions.Add(move);
                     }
@@ -146,75 +147,10 @@ namespace Chess
                 allTheKingMoves.Add(new Point(Position.X - 1, Position.Y - 1));
             }
 
-            var blackRooks = figures.Where(f => f is Rook).Where(f => f.IsWhite == false).Select(f => (Rook)f);
-            var whiteRooks = figures.Where(f => f is Rook).Where(f => f.IsWhite).Select(f => (Rook)f);
-            var whiteFiguresPositions = figures.Where(f => f.IsWhite);
-            var blackFiguresPositions = figures.Where(f => f.IsWhite == false);
-            var allFiguresPositions = whiteFiguresPositions.Concat(blackFiguresPositions);
+            var doCastling = DoCastling(figures);
+            var result = allTheKingMoves.Concat(doCastling).ToList();
 
-            if (IsWhite && whiteRooks != null && IsFirstTurn)
-            {
-                if (whiteRooks.Count() == 2 && whiteRooks.All(f => f.IsFirstTurn == true)
-                                           && whiteFiguresPositions.Any(f => f.Position != new Point(Position.X + 1, Position.Y))
-                                           && whiteFiguresPositions.Any(f => f.Position != new Point(Position.X + 2, Position.Y))
-                                           && whiteFiguresPositions.Any(f => f.Position != new Point(Position.X + 3, Position.Y))
-                                           && whiteFiguresPositions.Any(f => f.Position != new Point(Position.X - 1, Position.Y))
-                                           && whiteFiguresPositions.Any(f => f.Position != new Point(Position.X - 2, Position.Y))
-                                           && whiteFiguresPositions.Any(f => f.Position != new Point(Position.X - 3, Position.Y)))
-
-                {
-                    allTheKingMoves.Add(new Point(Position.X + 2, Position.Y));
-                    allTheKingMoves.Add(new Point(Position.X - 2, Position.Y));
-                }
-                else if (whiteRooks.Count() == 2 && whiteRooks.Any(f => f.IsFirstTurn == true) ||
-                         whiteRooks.Count() == 1 && whiteRooks.Any(f => f.IsFirstTurn == true))
-                {
-                    var positionRook = whiteRooks.Where(f => f.IsFirstTurn = true).First();
-
-                    if (positionRook.Position.X == 0)
-                    {
-                        allTheKingMoves.Add(new Point(Position.X - 2, Position.Y));
-                    }
-                    if (positionRook.Position.X == 7)
-                    {
-                        allTheKingMoves.Add(new Point(Position.X + 2, Position.Y));
-                    }
-                }
-
-            }
-            if (!IsWhite && blackRooks != null && IsFirstTurn)
-            {
-                bool aa = blackRooks.All(f => f.IsFirstTurn == true);
-                if (blackRooks.Count() == 2 && blackRooks.All(f => f.IsFirstTurn == true)
-                                          && whiteFiguresPositions.Any(f => f.Position != new Point(Position.X + 1, Position.Y))
-                                          && whiteFiguresPositions.Any(f => f.Position != new Point(Position.X + 2, Position.Y))
-                                          && whiteFiguresPositions.Any(f => f.Position != new Point(Position.X + 3, Position.Y))
-                                          && whiteFiguresPositions.Any(f => f.Position != new Point(Position.X - 1, Position.Y))
-                                          && whiteFiguresPositions.Any(f => f.Position != new Point(Position.X - 2, Position.Y))
-                                          && whiteFiguresPositions.Any(f => f.Position != new Point(Position.X - 3, Position.Y)))
-
-                {
-                    allTheKingMoves.Add(new Point(Position.X + 2, Position.Y));
-                    allTheKingMoves.Add(new Point(Position.X - 2, Position.Y));
-                }
-                else if (blackRooks.Count() == 2 && blackRooks.Any(f => f.IsFirstTurn == true) ||
-                         blackRooks.Count() == 1 && blackRooks.Any(f => f.IsFirstTurn == true))
-                {
-                    var positionRook = blackRooks.Where(f => f.IsFirstTurn = true).First();
-
-                    if (positionRook.Position.X == 0)
-                    {
-                        allTheKingMoves.Add(new Point(Position.X - 2, Position.Y));
-                    }
-                    if (positionRook.Position.X == 7)
-                    {
-                        allTheKingMoves.Add(new Point(Position.X + 2, Position.Y));
-                    }
-                }
-
-            }
-
-            return allTheKingMoves;
+            return result;
 
         }
 
@@ -266,15 +202,79 @@ namespace Chess
             return AttacKing;
         }
 
-        //private bool checkAttackPosition(List<Point> attackFigurePosition,List<Point> allTheKingMoves) 
-        //{
-        //    bool result = false;
-        //    foreach (var move in attackFigurePosition)
-        //    {
-        //        if (attackFigurePosition.All(attack => attack != move)) result = true;
-        //    }
-        //    return result;
-        //}
+        private List<Point> DoCastling(IEnumerable<Figure> figures)
+        {
+            var doCastling = new List<Point>();
+            var blackRooks = figures.Where(f => f is Rook).Where(f => f.IsWhite == false).Select(f => (Rook)f);
+            var whiteRooks = figures.Where(f => f is Rook).Where(f => f.IsWhite).Select(f => (Rook)f);
+            var whiteFiguresPositions = figures.Where(f => f.IsWhite);
+            var blackFiguresPositions = figures.Where(f => f.IsWhite == false);
+            var allFiguresPositions = whiteFiguresPositions.Concat(blackFiguresPositions);
+
+            if (IsWhite && whiteRooks != null && IsFirstTurn)
+            {
+                if (whiteRooks.Count() == 2 && whiteRooks.All(f => f.IsFirstTurn == true)
+                                           && allFiguresPositions.Any(f => f.Position != new Point(Position.X + 1, Position.Y))
+                                           && allFiguresPositions.Any(f => f.Position != new Point(Position.X + 2, Position.Y))
+                                           && allFiguresPositions.Any(f => f.Position != new Point(Position.X + 3, Position.Y))
+                                           && allFiguresPositions.Any(f => f.Position != new Point(Position.X - 1, Position.Y))
+                                           && allFiguresPositions.Any(f => f.Position != new Point(Position.X - 2, Position.Y))
+                                           && allFiguresPositions.Any(f => f.Position != new Point(Position.X - 3, Position.Y)))
+
+                {
+                    doCastling.Add(new Point(Position.X + 2, Position.Y));
+                    doCastling.Add(new Point(Position.X - 2, Position.Y));
+                }
+                else if (whiteRooks.Count() == 2 && whiteRooks.Any(f => f.IsFirstTurn == true) ||
+                         whiteRooks.Count() == 1 && whiteRooks.Any(f => f.IsFirstTurn == true))
+                {
+                    var positionRook = whiteRooks.Where(f => f.IsFirstTurn = true).First();
+
+                    if (positionRook.Position.X == 0)
+                    {
+                        doCastling.Add(new Point(Position.X - 2, Position.Y));
+                    }
+                    if (positionRook.Position.X == 7)
+                    {
+                        doCastling.Add(new Point(Position.X + 2, Position.Y));
+                    }
+                }
+
+            }
+            if (!IsWhite && blackRooks != null && IsFirstTurn)
+            {
+                bool aa = blackRooks.All(f => f.IsFirstTurn == true);
+                if (blackRooks.Count() == 2 && blackRooks.All(f => f.IsFirstTurn == true)
+                                          && allFiguresPositions.Any(f => f.Position != new Point(Position.X + 1, Position.Y))
+                                          && allFiguresPositions.Any(f => f.Position != new Point(Position.X + 2, Position.Y))
+                                          && allFiguresPositions.Any(f => f.Position != new Point(Position.X + 3, Position.Y))
+                                          && allFiguresPositions.Any(f => f.Position != new Point(Position.X - 1, Position.Y))
+                                          && allFiguresPositions.Any(f => f.Position != new Point(Position.X - 2, Position.Y))
+                                          && allFiguresPositions.Any(f => f.Position != new Point(Position.X - 3, Position.Y)))
+
+                {
+                    doCastling.Add(new Point(Position.X + 2, Position.Y));
+                    doCastling.Add(new Point(Position.X - 2, Position.Y));
+                }
+                else if (blackRooks.Count() == 2 && blackRooks.Any(f => f.IsFirstTurn == true) ||
+                         blackRooks.Count() == 1 && blackRooks.Any(f => f.IsFirstTurn == true))
+                {
+                    var positionRook = blackRooks.Where(f => f.IsFirstTurn = true).First();
+
+                    if (positionRook.Position.X == 0)
+                    {
+                        doCastling.Add(new Point(Position.X - 2, Position.Y));
+                    }
+                    if (positionRook.Position.X == 7)
+                    {
+                        doCastling.Add(new Point(Position.X + 2, Position.Y));
+                    }
+                }
+
+            }
+            return doCastling;
+        }
 
     }
+
 }
