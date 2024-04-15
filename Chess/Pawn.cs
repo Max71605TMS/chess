@@ -31,7 +31,7 @@ namespace Chess
         public override IEnumerable<Point> GetAvaliablePositions(IEnumerable<Figure> figures)
         {
             var positions = new List<Point>();
-            int direction = _isDirectionUp && isWhite ? -1 : 1;
+            int direction = _isDirectionUp && IsWhite ? -1 : 1;
 
             if ((Position.Y + direction) >= 1 && (Position.Y + direction) <= BoardSize)
             {

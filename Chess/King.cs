@@ -27,8 +27,8 @@ namespace Chess
             var whiteFiguresPositions = figures.Where(f => f.IsWhite);
             var blackFiguresPositions = figures.Where(f => f.IsWhite == false);
 
-            var attackBlackFiguresPositions = AttackOfPiecesOtherThanPawns(blackFiguresPositions);
-            var attackWhiteFiguresPositions = AttackOfPiecesOtherThanPawns(whiteFiguresPositions);
+            var attackBlackFiguresPositions = AttackOfPiecesOtherThanPawns(blackFiguresPositions, figures);
+            var attackWhiteFiguresPositions = AttackOfPiecesOtherThanPawns(whiteFiguresPositions, figures);
 
    
             var positionWhiteKing = figures.Where(f => f is King).Where(k => k.IsWhite).Select(f => f.Position).First();
@@ -68,11 +68,12 @@ namespace Chess
             return getAvaliablePositions;
         }
 
-        private List<Point> AttackOfPiecesOtherThanPawns(IEnumerable<Figure> figures)
+        private List<Point> AttackOfPiecesOtherThanPawns(IEnumerable<Figure> figures , IEnumerable<Figure> allfigures)
         {
+
             var attack = figures.Where(f => !(f is Pawn))
                                             .Where(f => !(f is King))
-                                            .Select(position => position.GetAvaliablePositions(figures))
+                                            .Select(position => position.GetAvaliablePositions(allfigures))
                                             .SelectMany(p => p).ToList();
             return attack;
         }
