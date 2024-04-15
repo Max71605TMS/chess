@@ -56,7 +56,7 @@ internal static class Initializer
                         return new Rook(y is 7, new Point(x, y));
                     case 1:
                     case 6:
-                        break;
+                        return new Knight(y is 7, new Point(x, y));
                     case 2:
                     case 5:
                         return new Bishop(y is 7, new Point(x, y));                        

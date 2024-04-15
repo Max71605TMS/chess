@@ -30,7 +30,7 @@ namespace Chess
         {
             if (figure.isWhite == _isWhiteTurn)
             {
-                AvaliablePositions = figure.GetAvaliablePositions(Figures);
+                AvaliablePositions = figure.GetAvailablePositions(Figures);
                 figure.isChoosen = true;
                 _currentfigure = figure;
             }

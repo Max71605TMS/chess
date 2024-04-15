@@ -19,7 +19,7 @@ namespace Chess
 
         public bool IsFirstTurn { get; set; } = true;
 
-        public override IEnumerable<Point> GetAvaliablePositions(IEnumerable<Figure> figures)
+        public override IEnumerable<Point> GetAvailablePositions(IEnumerable<Figure> figures)
         {
            
             var positions = new List<Point>();

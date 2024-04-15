@@ -47,7 +47,7 @@ public partial class Form1 : Form
         }
     }
 
-    private void SetImageToAvaliablePositions(bool isFillCells)
+    private void SetImageToAvailablePositions(bool isFillCells)
     {
         foreach (var position in _figureMover.AvaliablePositions)
         {
@@ -112,7 +112,7 @@ public partial class Form1 : Form
         {
             _figureMover.ChooseFigure(figure);
             button.Image = figure.GetImage();
-            SetImageToAvaliablePositions(true);
+            SetImageToAvailablePositions(true);
         }
         else if (_figureMover._currentfigure != null)
         {
@@ -120,17 +120,8 @@ public partial class Form1 : Form
             ClearCurrentCell(_figureMover._currentfigure.Position);
             _figureMover.Move(point);
             SetFigures();
-            SetImageToAvaliablePositions(false);
+            SetImageToAvailablePositions(false);
             SetTurnIcon();
         }
     }
-
-    private void button1_Click(object sender, EventArgs e)
-    {
-    }
-
-    private void button1_Click_1(object sender, EventArgs e)
-    {
-    }
-
 }

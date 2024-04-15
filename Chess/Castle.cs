@@ -15,7 +15,7 @@ namespace Chess
 
         }
 
-        public override IEnumerable<Point> GetAvaliablePositions(IEnumerable<Figure> figures)
+        public override IEnumerable<Point> GetAvailablePositions(IEnumerable<Figure> figures)
         {
             var positions = new List<Point>();
             int step = 1;

@@ -11,7 +11,7 @@ public class Rook : Figure, IMarkable, IMoveByDirection
     {
     }
 
-    public override IEnumerable<Point> GetAvaliablePositions(IEnumerable<Figure> figures)
+    public override IEnumerable<Point> GetAvailablePositions(IEnumerable<Figure> figures)
     {
         var positions = new List<Point>();
 
