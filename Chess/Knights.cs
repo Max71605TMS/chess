@@ -25,9 +25,7 @@ namespace Chess
                     if ((Math.Abs(j - Position.X) * Math.Abs(i - Position.Y)) == 2)
                     {
                         var figure = figures.SingleOrDefault(f => f.Position == new Point(j, i));
-                        if (figure == null ||
-                            (figure != null &&
-                            figure.IsWhite != IsWhite))
+                        if (figure == null || figure.IsWhite != IsWhite || figure.IsWhite == IsWhite)
                         {
                             positions.Add(new Point(j, i));
                         }

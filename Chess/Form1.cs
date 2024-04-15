@@ -37,6 +37,10 @@ public partial class Form1 : Form
     {
         foreach (var position in _figureMover.AvaliablePositions)
         {
+            var figuresPosition = _figureMover.Figures.Where(f => f.IsWhite == _figureMover.CurrentFigure.IsWhite)
+                                                     .Select(f =>f.Position).ToList();
+
+            if (figuresPosition.Any(p => p == position)) continue;
 
             var figure = _figureMover.GetFigure(position);
             if (figure != null)
@@ -56,7 +60,7 @@ public partial class Form1 : Form
             {
                 chessButtons[position.X, position.Y].Image = Properties.Resources.Empty_Green;
             }
-            else
+            else 
             {
                 chessButtons[position.X, position.Y].Image = GetEmptyImage(new Point(position.X, position.Y));
             }

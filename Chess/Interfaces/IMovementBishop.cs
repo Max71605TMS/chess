@@ -22,7 +22,7 @@ namespace Chess.Interfaces
 
                 if (figureStep is not null)
                 {
-                    if (figureStep.IsWhite != figure.IsWhite)
+                    if (figureStep.IsWhite != figure.IsWhite || figureStep.IsWhite == figure.IsWhite) 
                         positions.Add(new Point(x, y));
                     break;
                 }

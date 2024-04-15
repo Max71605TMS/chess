@@ -16,9 +16,7 @@ namespace Chess
 
         public  IEnumerable<Point> AvaliablePositions { get;  set; }
 
-        public Figure CurrentFigure { get; private set; }
-
-
+        public Figure CurrentFigure { get;  set; }
 
         public List<Figure> Figures { get; private set; }
 
@@ -32,7 +30,7 @@ namespace Chess
                 figure.IsChoosen = true;
                 CurrentFigure = figure;
             }
-            
+            var king = Figures.Where(f => f is King).Where(f => f.IsWhite == figure.IsWhite).First();
         }
 
         public Figure GetFigure(Point point) => Figures.FirstOrDefault(x => x.Position == point);
