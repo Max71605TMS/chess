@@ -31,8 +31,7 @@ namespace Chess
             int offsetX2 = -1;
             int offsetY2 = _isDirectionUp && _isWhite ? -1 : 1;
 
-            var positions = figures.Where(f => f.Position == new Point(Position.X + offsetX1, Position.Y + offsetY1)
-                                            || f.Position == new Point(Position.X + offsetX2, Position.Y + offsetY2)).Select(f => f.Position);
+            var positions = figures.Where(f => (f.Position == new Point(Position.X + offsetX1, Position.Y + offsetY1) || f.Position == new Point(Position.X + offsetX2, Position.Y + offsetY2)) && f.IsWhite != IsWhite).Select(f => f.Position);
 
             return positions;
         }
@@ -48,13 +47,14 @@ namespace Chess
                 {
                     positions.Add(new Point(Position.X, Position.Y + direction));
 
-                    positions.AddRange(GetAttackPositions(figures));
+
 
                     if (IsFirstTurn && !figures.Any(f => f.Position == new Point(Position.X, Position.Y + direction)))
                     {
                         positions.Add(new Point(Position.X, Position.Y + direction * 2));
                     }
                 }
+                positions.AddRange(GetAttackPositions(figures));
             }
 
             return positions;
