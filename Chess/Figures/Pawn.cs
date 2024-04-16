@@ -21,7 +21,7 @@ public class Pawn : Figure, IFigureRestriction
 
         if (IsSelected) positions.AddRange(GetMovementPositions(figures));
 
-        positions.AddRange(GetAttackPositions(figures, IsSelected));
+        positions.AddRange(GetAttackPositions(figures));
 
         return positions;
     }
@@ -70,7 +70,7 @@ public class Pawn : Figure, IFigureRestriction
         return positions;
     }
 
-    private IEnumerable<Point> GetAttackPositions(IEnumerable<Figure> figures, bool isSelected)
+    private IEnumerable<Point> GetAttackPositions(IEnumerable<Figure> figures)
     {
         var positions = new List<Point>();
 
