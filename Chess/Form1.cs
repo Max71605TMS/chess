@@ -37,7 +37,7 @@ public partial class Form1 : Form
         foreach (var position in _figureMover.AvaliablePositions)
         {
             var figuresPosition = _figureMover.Figures.Where(f => f.IsWhite == _figureMover.CurrentFigure.IsWhite)
-                                                     .Select(f =>f.Position).ToList();
+                                                     .Select(f => f.Position).ToList();
 
             if (figuresPosition.Any(p => p == position)) continue;
 
@@ -59,7 +59,7 @@ public partial class Form1 : Form
             {
                 chessButtons[position.X, position.Y].Image = Properties.Resources.Empty_Green;
             }
-            else 
+            else
             {
                 chessButtons[position.X, position.Y].Image = GetEmptyImage(new Point(position.X, position.Y));
             }
@@ -120,38 +120,49 @@ public partial class Form1 : Form
         {
             var point = button.Tag is Figure ? ((Figure)button.Tag).Position : (Point)button.Tag;
 
-            if (_figureMover.CurrentFigure is King && point.X == 6)
+
+            var isPointEmptyCell = _figureMover.CurrentFigure.GetAvaliablePositions(_figureMover.Figures).Contains(point);
+            if (!isPointEmptyCell)
             {
-                
-                var Rook = _figureMover.Figures.Where(f => f is Rook)
-                                               .Where(f => f.IsWhite == _figureMover.CurrentFigure.IsWhite)
-                                               .Where(f => f.Position.X == 7).First();
-
-                var moveRookPoint = new Point(point.X - 1, point.Y);
-                ClearCurrentCell(Rook.Position);
-                Rook.Position = moveRookPoint;
+                TakebacksToTryDifferentMove(_figureMover.CurrentFigure);
+                _figureMover.CurrentFigure = null;
             }
-
-            if (_figureMover.CurrentFigure is King && point.X == 2)
+            else
             {
-                var Rook = _figureMover.Figures.Where(f => f is Rook)
-                                               .Where(f => f.IsWhite == _figureMover.CurrentFigure.IsWhite)
-                                               .Where(f => f.Position.X == 0).First();
+                if (_figureMover.CurrentFigure is King && point.X == 6)
+                {
 
-                var moveRookPoint = new Point(point.X + 1, point.Y);
-                ClearCurrentCell(Rook.Position);
-                Rook.Position = moveRookPoint;
-            }
+                    var Rook = _figureMover.Figures.Where(f => f is Rook)
+                                                   .Where(f => f.IsWhite == _figureMover.CurrentFigure.IsWhite)
+                                                   .Where(f => f.Position.X == 7).First();
 
-            ClearCurrentCell(_figureMover.CurrentFigure.Position);
-            _figureMover.Move(point);
-            SetFigures();
-            SetImageToAvaliablePositions(false);
+                    var moveRookPoint = new Point(point.X - 1, point.Y);
+                    ClearCurrentCell(Rook.Position);
+                    Rook.Position = moveRookPoint;
+                }
+
+                if (_figureMover.CurrentFigure is King && point.X == 2)
+                {
+                    var Rook = _figureMover.Figures.Where(f => f is Rook)
+                                                   .Where(f => f.IsWhite == _figureMover.CurrentFigure.IsWhite)
+                                                   .Where(f => f.Position.X == 0).First();
+
+                    var moveRookPoint = new Point(point.X + 1, point.Y);
+                    ClearCurrentCell(Rook.Position);
+                    Rook.Position = moveRookPoint;
+                }
+
+                ClearCurrentCell(_figureMover.CurrentFigure.Position);
+                _figureMover.Move(point);
+                SetFigures();
+                SetImageToAvaliablePositions(false);
 
                 ShowGameStatusMethod();
+
             }
         }
-    
+    }
+
 
     private void ShowGameStatusMethod()
     {
