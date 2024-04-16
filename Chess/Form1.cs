@@ -151,7 +151,7 @@ public partial class Form1 : Form
                 ShowGameStatusMethod();
             }
         }
-    }
+    
 
     private void ShowGameStatusMethod()
     {
