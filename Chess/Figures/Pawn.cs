@@ -7,8 +7,6 @@ namespace Chess.Figures;
 
 public class Pawn : Figure, IFigureRestriction
 {
-    private const int BoardSize = 8;
-
     public Pawn(bool isWhite, Point point) : base(isWhite, point)
     {
     }
