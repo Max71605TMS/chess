@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Chess
 {
-    internal class Knights : Figure
+    internal class Knight : Figure
     {
         private const int BoardSize = 8;
 
-        public Knights(bool isWhite, Point point) : base(isWhite, point)
+        public Knight(bool isWhite, Point point) : base(isWhite, point)
         {
         }
 

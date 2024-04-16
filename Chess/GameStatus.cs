@@ -166,7 +166,7 @@ namespace Chess
             IEnumerable<Figure> FiguresWhoMove = figures.Where(f => f.IsWhite == isWhiteTurn).ToList();
             IEnumerable<Point> attackFigureAP = null;
 
-            if (attackingFigure is Knights Knight)
+            if (attackingFigure is Knight Knight)
             { return isPossibleToProtectKing; }
             else if (attackingFigure is Rook)
             {

@@ -120,35 +120,50 @@ public partial class Form1 : Form
                 _figureMover.CurrentFigure.IsWhite == _figureMover.IsWhiteTurn)
         {
             var point = button.Tag is Figure ? ((Figure)button.Tag).Position : (Point)button.Tag;
-            ClearCurrentCell(_figureMover.CurrentFigure.Position);
-            _figureMover.Move(point);
-            SetFigures();
-            SetImageToAvaliablePositions(false);
 
-            bool isCheck = GameStatus.IsCheck(_figureMover.IsWhiteTurn, _figureMover.Figures);
-
-            if (isCheck)
+            var isPointEmptyCell = _figureMover.CurrentFigure.GetAvaliablePositions(_figureMover.Figures).Contains(point);
+            if (!isPointEmptyCell)
             {
-                bool isMate = GameStatus.IsMate(_figureMover.IsWhiteTurn, _figureMover.Figures);
-                if (isMate)
-                {
-                    if (_figureMover.IsWhiteTurn)
-                    { MessageBox.Show("Black win"); }
-                    else { MessageBox.Show("White win"); }
-                }
-                else
-                {
-                    if (_figureMover.IsWhiteTurn)
-                    { MessageBox.Show("White King in Check!"); }
-                    else { MessageBox.Show("Black King in Check!"); }
-                }
+                TakebacksToTryDifferentMove(_figureMover.CurrentFigure);
+                _figureMover.CurrentFigure = null;
             }
             else
             {
-                bool isStalemate = GameStatus.IsStalemate(_figureMover.IsWhiteTurn, _figureMover.Figures);
-                if (isStalemate)
-                { MessageBox.Show("Draw"); }
+                ClearCurrentCell(_figureMover.CurrentFigure.Position);
+                _figureMover.Move(point);
+                SetFigures();
+                SetImageToAvaliablePositions(false);
+
+                ShowGameStatusMethod();
             }
+        }
+    }
+
+    private void ShowGameStatusMethod()
+    {
+        bool isCheck = GameStatus.IsCheck(_figureMover.IsWhiteTurn, _figureMover.Figures);
+
+        if (isCheck)
+        {
+            bool isMate = GameStatus.IsMate(_figureMover.IsWhiteTurn, _figureMover.Figures);
+            if (isMate)
+            {
+                if (_figureMover.IsWhiteTurn)
+                { MessageBox.Show("Black win"); }
+                else { MessageBox.Show("White win"); }
+            }
+            else
+            {
+                if (_figureMover.IsWhiteTurn)
+                { MessageBox.Show("White King in Check!"); }
+                else { MessageBox.Show("Black King in Check!"); }
+            }
+        }
+        else
+        {
+            bool isStalemate = GameStatus.IsStalemate(_figureMover.IsWhiteTurn, _figureMover.Figures);
+            if (isStalemate)
+            { MessageBox.Show("Draw"); }
         }
     }
 
