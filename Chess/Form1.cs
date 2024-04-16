@@ -29,7 +29,6 @@ public partial class Form1 : Form
         {
             chessButtons[figure.Position.X, figure.Position.Y].Tag = figure;
             chessButtons[figure.Position.X, figure.Position.Y].Image = figure.GetImage();
-
         }
     }
 
@@ -120,6 +119,30 @@ public partial class Form1 : Form
                 _figureMover.CurrentFigure.IsWhite == _figureMover.IsWhiteTurn)
         {
             var point = button.Tag is Figure ? ((Figure)button.Tag).Position : (Point)button.Tag;
+
+            if (_figureMover.CurrentFigure is King && point.X == 6)
+            {
+                
+                var Rook = _figureMover.Figures.Where(f => f is Rook)
+                                               .Where(f => f.IsWhite == _figureMover.CurrentFigure.IsWhite)
+                                               .Where(f => f.Position.X == 7).First();
+
+                var moveRookPoint = new Point(point.X - 1, point.Y);
+                ClearCurrentCell(Rook.Position);
+                Rook.Position = moveRookPoint;
+            }
+
+            if (_figureMover.CurrentFigure is King && point.X == 2)
+            {
+                var Rook = _figureMover.Figures.Where(f => f is Rook)
+                                               .Where(f => f.IsWhite == _figureMover.CurrentFigure.IsWhite)
+                                               .Where(f => f.Position.X == 0).First();
+
+                var moveRookPoint = new Point(point.X + 1, point.Y);
+                ClearCurrentCell(Rook.Position);
+                Rook.Position = moveRookPoint;
+            }
+
             ClearCurrentCell(_figureMover.CurrentFigure.Position);
             _figureMover.Move(point);
             SetFigures();

@@ -15,7 +15,7 @@ namespace Chess
 
         public bool IsChoosen { get; set; }
 
-        public bool IsWhite {  get; set; }
+        public bool IsWhite { get; set; }
 
         public Figure(bool isWhite, Point point)
         {

@@ -36,17 +36,17 @@ namespace Chess
             {
                 var attackBlackFiguresPositions = AttackOfPiecesOtherThanPawns(blackFiguresPositions, figures);
                 var theKingBlackAttack = AttacKing(positionBlackKing);
-                //var attackPawnBlack = figures.Where(f => f is Pawn).Where(f => f.IsWhite == false)
-                //                               .Select(f => (Pawn)f)
-                //                               .Select(position => position.GetAttackPositions(figures))
-                //                               .SelectMany(p => p).ToList();
+                var attackPawnBlack = figures.Where(f => f is Pawn).Where(f => f.IsWhite == false)
+                                               .Select(f => (Pawn)f)
+                                               .Select(position => position.GetAttackPositions(figures))
+                                               .SelectMany(p => p).ToList();
 
                 foreach (var move in allTheKingMoves)
                 {
 
                     if (whiteFiguresPositions.All(f => f.Position != move) && attackBlackFiguresPositions.All(attack => attack != move)
                                                                            && theKingBlackAttack.All(attack => attack != move)
-                                                                           /*&& attackPawnBlack.All(attack => attack != move)*/)
+                                                                           && attackPawnBlack.All(attack => attack != move))
 
                     {
                         getAvaliablePositions.Add(move);
@@ -67,7 +67,7 @@ namespace Chess
                 {
                     if (blackFiguresPositions.All(f => f.Position != move) && attackWhiteFiguresPositions.All(attack => attack != move)
                                                                            && theKingWhiteAttack.All(attack => attack != move)
-                                                                           /*&& attackPawnWhite.All(attack => attack != move)*/)
+                                                                           && attackPawnWhite.All(attack => attack != move))
                     {
                         getAvaliablePositions.Add(move);
                     }
