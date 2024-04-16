@@ -29,7 +29,6 @@ public partial class Form1 : Form
         {
             chessButtons[figure.Position.X, figure.Position.Y].Tag = figure;
             chessButtons[figure.Position.X, figure.Position.Y].Image = figure.GetImage();
-
         }
     }
 
@@ -121,18 +120,33 @@ public partial class Form1 : Form
         {
             var point = button.Tag is Figure ? ((Figure)button.Tag).Position : (Point)button.Tag;
 
-            var isPointEmptyCell = _figureMover.CurrentFigure.GetAvaliablePositions(_figureMover.Figures).Contains(point);
-            if (!isPointEmptyCell)
+            if (_figureMover.CurrentFigure is King && point.X == 6)
             {
-                TakebacksToTryDifferentMove(_figureMover.CurrentFigure);
-                _figureMover.CurrentFigure = null;
+                
+                var Rook = _figureMover.Figures.Where(f => f is Rook)
+                                               .Where(f => f.IsWhite == _figureMover.CurrentFigure.IsWhite)
+                                               .Where(f => f.Position.X == 7).First();
+
+                var moveRookPoint = new Point(point.X - 1, point.Y);
+                ClearCurrentCell(Rook.Position);
+                Rook.Position = moveRookPoint;
             }
-            else
+
+            if (_figureMover.CurrentFigure is King && point.X == 2)
             {
-                ClearCurrentCell(_figureMover.CurrentFigure.Position);
-                _figureMover.Move(point);
-                SetFigures();
-                SetImageToAvaliablePositions(false);
+                var Rook = _figureMover.Figures.Where(f => f is Rook)
+                                               .Where(f => f.IsWhite == _figureMover.CurrentFigure.IsWhite)
+                                               .Where(f => f.Position.X == 0).First();
+
+                var moveRookPoint = new Point(point.X + 1, point.Y);
+                ClearCurrentCell(Rook.Position);
+                Rook.Position = moveRookPoint;
+            }
+
+            ClearCurrentCell(_figureMover.CurrentFigure.Position);
+            _figureMover.Move(point);
+            SetFigures();
+            SetImageToAvaliablePositions(false);
 
                 ShowGameStatusMethod();
             }
