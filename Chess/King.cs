@@ -279,6 +279,21 @@ namespace Chess
             return doCastling;
         }
 
+        private bool ChekPositionForCastling(IEnumerable<Figure> figures, List<Point> chekPoints)
+        {
+            bool result = true;
+
+            foreach (var chekPoint in chekPoints)
+            {
+                if (figures.Select(f => f.Position).Any(position => position == chekPoint))
+                {
+                    result = false;
+                    break;
+                }
+            }
+
+            return result;
+        }
     }
 
 }
