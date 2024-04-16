@@ -13,9 +13,12 @@ public partial class Chess : Form
 
     private readonly Button[,] _chessButtons = new Button[BoardSize, BoardSize];
     private readonly FigureMover _mover;
+    private bool _isSwitchPawnSectionActive;
     private PictureBox _moveStatusPicture = new();
 
     private Label _moveStatusText = new();
+    private List<Button>? _switchPawnFigures;
+    private GroupBox _switchPawnGroupBox = new();
 
     public Chess(FigureMover mover)
     {
@@ -44,19 +47,15 @@ public partial class Chess : Form
                 { { 0, "8" }, { 1, "7" }, { 2, "6" }, { 3, "5" }, { 4, "4" }, { 5, "3" }, { 6, "2" }, { 7, "1" } };
 
             if (y == 7 && horizontalLabels.TryGetValue(x, out var horizontalLabel))
-            {
                 SetLabelOnBoard(LabelDirection.Horizontal, button, horizontalLabel);
-            }
 
             if (x != 0) continue;
 
             if (verticalLabels.TryGetValue(y, out var verticalLabel))
-            {
                 SetLabelOnBoard(LabelDirection.Vertical, button, verticalLabel);
-            }
         }
 
-        SetFigures();
+        SetFigures(_mover.Figures);
     }
 
     //Установка букв и цифр рядом с доской
@@ -150,9 +149,105 @@ public partial class Chess : Form
         Controls.Add(groupBox);
     }
 
+    // Переключение видимости и создание секции замены пешки на другую фигуру
+    private void SwitchPawnReplaceSection(bool isActive)
+    {
+        const int sectionWidth = 300;
+
+        if (!isActive)
+        {
+            ClientSize = ClientSize with { Width = ClientSize.Width - sectionWidth };
+
+            if (_switchPawnFigures is not null)
+                foreach (var figure in _switchPawnFigures)
+                    figure.Click -= SwitchPawnClicked;
+
+            Controls.Remove(_switchPawnGroupBox);
+            _switchPawnFigures = null;
+
+            _isSwitchPawnSectionActive = isActive;
+
+            return;
+        }
+
+        ClientSize = ClientSize with { Width = ClientSize.Width + sectionWidth };
+
+        var anchorButton = _chessButtons[7, 0];
+
+        _switchPawnGroupBox = new GroupBox
+        {
+            Location = anchorButton.Location,
+            Margin = new Padding(0),
+            Name = "SwitchFigure",
+            TabIndex = 0,
+            TabStop = false,
+            Text = @"Выберите фигуру для замены пешки",
+            ForeColor = ElementColors.GetElementColor(ElementColor.White),
+            BackColor = Color.Transparent
+        };
+
+        _switchPawnGroupBox.Location = _switchPawnGroupBox.Location with
+        {
+            X = _switchPawnGroupBox.Location.X + anchorButton.Size.Width + 60
+        };
+
+        _switchPawnGroupBox.Size = new Size
+        {
+            Width = sectionWidth - 60,
+            Height = ButtonSize * 8
+        };
+
+        _switchPawnFigures = new List<Button>();
+
+        for (var i = 0; i < 4; i++)
+        {
+            (int x, int y) coordinates = (i, _mover.IsWhiteTurn ? 7 : 0);
+
+            var button = Initializer.GetButton(ButtonSize, coordinates.x, coordinates.y);
+            button.Name = "SwitchFigure";
+
+            var offset = _switchPawnGroupBox.Location.X + _switchPawnGroupBox.Width / 2 / 2 - button.Width / 2 -
+                         _switchPawnGroupBox.Location.X;
+
+            button.Location = new Point
+            {
+                X = _switchPawnGroupBox.Location.X + offset + (offset * 2 + button.Width) * (i < 2 ? i : i - 2),
+                Y = _switchPawnGroupBox.Location.Y + 30 + (offset + button.Width) * (i < 2 ? 0 : 1)
+            };
+
+            button.Click += SwitchPawnClicked;
+
+            var figure = Initializer.GetFigure(coordinates.x, coordinates.y);
+
+            if (figure is null) continue;
+
+            var figureVisuals = figure.GetVisuals();
+
+            button.Tag = figure;
+            button.BackgroundImage = figureVisuals.image;
+            button.BackColor = figureVisuals.color;
+
+            _switchPawnFigures.Add(button);
+        }
+
+        Controls.Add(_switchPawnGroupBox);
+
+        _switchPawnGroupBox.BringToFront();
+
+        foreach (var figure in _switchPawnFigures)
+        {
+            Controls.Add(figure);
+            figure.BringToFront();
+        }
+
+        _isSwitchPawnSectionActive = isActive;
+    }
+
     //Ивент нажатия на кнопку поля
     private void ChessButtonClicked(object? sender, EventArgs e)
     {
+        if (_isSwitchPawnSectionActive) return;
+
         var button = (Button)sender!;
 
         if (button.Tag is Figure figure)
@@ -170,7 +265,7 @@ public partial class Chess : Form
                 {
                     _mover.SelectCurrentFigure(figure);
 
-                    SetFigures();
+                    SetFigures(_mover.Figures);
 
                     if (_mover.AvailablePositions is not null)
                         MarkAvailablePositions(_mover.AvailablePositions);
@@ -183,7 +278,7 @@ public partial class Chess : Form
                 {
                     _mover.DeselectCurrentFigure();
 
-                    SetFigures();
+                    SetFigures(_mover.Figures);
 
                     return;
                 }
@@ -198,7 +293,7 @@ public partial class Chess : Form
                     _mover.MoveFigure(figure.Position);
                     _mover.DeselectCurrentFigure();
 
-                    SetFigures();
+                    SetFigures(_mover.Figures);
                     SetTurnInfo();
 
                     return;
@@ -208,7 +303,7 @@ public partial class Chess : Form
                 _mover.DeselectCurrentFigure();
                 _mover.SelectCurrentFigure(figure);
 
-                SetFigures();
+                SetFigures(_mover.Figures);
 
                 if (_mover.AvailablePositions is not null)
                     MarkAvailablePositions(_mover.AvailablePositions);
@@ -218,13 +313,22 @@ public partial class Chess : Form
 
             //Атака вражеской фигуры
             _mover.MoveFigure(figure.Position);
+
+            if (_mover.CurrentFigure is Pawn { Position.Y: 0 or 7 })
+            {
+                SwitchPawnReplaceSection(true);
+                SetFigures(_mover.Figures);
+                return;
+            }
+
             _mover.DeselectCurrentFigure();
 
-            SetFigures();
+            SetFigures(_mover.Figures);
 
+            //Проверка на мат
             if (_mover.CheckMateStatus is not null && _mover.CheckMateStatus.Value.isMate)
             {
-                SetTurnInfo(true);
+                SetTurnInfo();
                 UnsubClickEvent();
                 return;
             }
@@ -238,13 +342,21 @@ public partial class Chess : Form
         if (button.Tag is not Point point) return;
 
         _mover.MoveFigure(point);
+
+        if (_mover.CurrentFigure is Pawn { Position.Y: 0 or 7 })
+        {
+            SwitchPawnReplaceSection(true);
+            SetFigures(_mover.Figures);
+            return;
+        }
+
         _mover.DeselectCurrentFigure();
 
-        SetFigures();
+        SetFigures(_mover.Figures);
 
         if (_mover.CheckMateStatus is not null && _mover.CheckMateStatus.Value.isMate)
         {
-            SetTurnInfo(true);
+            SetTurnInfo();
             UnsubClickEvent();
             return;
         }
@@ -252,11 +364,32 @@ public partial class Chess : Form
         SetTurnInfo();
     }
 
+    //Ивент нажатия кнопки в секции замены пешки на другую фигуру
+    private void SwitchPawnClicked(object? sender, EventArgs e)
+    {
+        var targetFigure = (Figure)((Button)sender!).Tag!;
+
+        _mover.SwitchPawnToTargetFigure(targetFigure);
+
+        SetFigures(_mover.Figures);
+
+        if (_mover.CheckMateStatus is not null && _mover.CheckMateStatus.Value.isMate)
+        {
+            SetTurnInfo();
+            UnsubClickEvent();
+            return;
+        }
+
+        SetTurnInfo();
+
+        SwitchPawnReplaceSection(false);
+    }
+
     //Установка информации о фигурах в кнопки
-    private void SetFigures()
+    private void SetFigures(List<Figure> figures)
     {
         ResetAllButtonInformation();
-        foreach (var figure in _mover.Figures) SetFigureButtonInformation(figure);
+        foreach (var figure in figures) SetFigureButtonInformation(figure);
     }
 
     //Сброс информации в кнопке
@@ -321,14 +454,16 @@ public partial class Chess : Form
     }
 
     //Задание информации в верхнем окне
-    private void SetTurnInfo(bool isWin = false)
+    private void SetTurnInfo()
     {
-        var text = isWin
+        var checkmateStatus = _mover.CheckMateStatus;
+
+        var text = checkmateStatus is not null && checkmateStatus.Value.isMate
             ? $"Победили {(_mover.CheckMateStatus!.Value.isWhite ? "чёрные" : "белые")}"
             : _mover.IsWhiteTurn
                 ? "Ход белых"
                 : "Ход чёрных";
-        var color = isWin
+        var color = checkmateStatus is not null && checkmateStatus.Value.isMate
             ? _mover.CheckMateStatus!.Value.isWhite
                 ? Color.Black
                 : Color.White
@@ -339,7 +474,21 @@ public partial class Chess : Form
         _moveStatusText.Text = text;
         _moveStatusPicture.BackColor = color;
 
-        if (isWin) MessageBox.Show(text);
+        if (checkmateStatus is null) return;
+
+        var message = checkmateStatus.Value is { isCheck: true, isMate: true }
+            ? text
+            : $"Король {(checkmateStatus.Value.isWhite ? "белых" : "чёрных")} под угрозой! Шах!";
+
+        var caption = checkmateStatus.Value is { isCheck: true, isMate: true }
+            ? "Победа!"
+            : "Внимание!";
+
+        var icon = checkmateStatus.Value is { isCheck: true, isMate: true }
+            ? MessageBoxIcon.None
+            : MessageBoxIcon.Exclamation;
+
+        MessageBox.Show(message, caption, MessageBoxButtons.OK, icon);
     }
 
     //Отписываемся от всех ивентов кнопок

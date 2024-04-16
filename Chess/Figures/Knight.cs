@@ -23,17 +23,12 @@ public class Knight : Figure, IMoveByDirection
             if (isFigureExist)
             {
                 var figure = figures.First(f => f.Position == new Point(position.X, position.Y));
-                if (IsWhite != figure.IsWhite)
-                {
-                    positions.Add(figure.Position);
-                }
+                if (IsWhite != figure.IsWhite) positions.Add(figure.Position);
             }
             else
             {
                 if (position.X is >= 0 and < 8 && position.Y is >= 0 and < 8)
-                {
                     positions.Add(new Point(position.X, position.Y));
-                }
             }
         }
 
@@ -56,7 +51,7 @@ public class Knight : Figure, IMoveByDirection
 
         return positions;
     }
-    
+
     public override (Color color, Image image) GetVisuals()
     {
         if (IsWhite)

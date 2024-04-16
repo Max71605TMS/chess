@@ -25,12 +25,6 @@ public class FigureMover
         GetAvailablePositions(figure);
     }
 
-    //Получение возможных ходов для фигуры
-    private void GetAvailablePositions(Figure figure)
-    {
-        AvailablePositions = figure.GetAvailablePositions(Figures);
-    }
-
     //Сброс выделения и информации о выбранной фигуре
     public void DeselectCurrentFigure()
     {
@@ -91,7 +85,28 @@ public class FigureMover
 
         CheckMateStatus = CheckCheckmate();
 
+        if (CurrentFigure is Pawn { Position.Y: 0 or 7 }) return;
+
         SwitchTurn();
+    }
+
+    //Замена пешки на другую фигуру
+    public void SwitchPawnToTargetFigure(Figure targetFigure)
+    {
+        if (CurrentFigure is null) return;
+
+        targetFigure.Position = CurrentFigure.Position;
+        Figures.Remove(CurrentFigure);
+        Figures.Add(targetFigure);
+        DeselectCurrentFigure();
+
+        SwitchTurn();
+    }
+
+    //Получение возможных ходов для фигуры
+    private void GetAvailablePositions(Figure figure)
+    {
+        AvailablePositions = figure.GetAvailablePositions(Figures);
     }
 
     //Смена хода
@@ -118,7 +133,8 @@ public class FigureMover
 
         var isMate = kingAvailablePositions.Count == 0;
 
-        return new ()
+        // ReSharper disable once ArrangeObjectCreationWhenTypeNotEvident
+        return new()
         {
             isCheck = isCheck,
             isMate = isMate,

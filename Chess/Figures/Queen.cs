@@ -9,7 +9,6 @@ public class Queen : Figure, IMoveByDirection
 {
     public Queen(bool isWhite, Point point) : base(isWhite, point)
     {
-
     }
 
     public override IEnumerable<Point> GetAvailablePositions(IEnumerable<Figure> figures)
@@ -20,14 +19,14 @@ public class Queen : Figure, IMoveByDirection
         positions.AddRange(((IMoveByDirection)this).GetPositionsByDirection(figures, this, 1, 1));
         positions.AddRange(((IMoveByDirection)this).GetPositionsByDirection(figures, this, 1, -1));
         positions.AddRange(((IMoveByDirection)this).GetPositionsByDirection(figures, this, -1, -1));
-        positions.AddRange(((IMoveByDirection)this).GetPositionsByDirection(figures, this, -1, 0)); 
-        positions.AddRange(((IMoveByDirection)this).GetPositionsByDirection(figures, this, 1, 0));  
-        positions.AddRange(((IMoveByDirection)this).GetPositionsByDirection(figures, this, 0, -1)); 
-        positions.AddRange(((IMoveByDirection)this).GetPositionsByDirection(figures, this, 0, 1));  
+        positions.AddRange(((IMoveByDirection)this).GetPositionsByDirection(figures, this, -1, 0));
+        positions.AddRange(((IMoveByDirection)this).GetPositionsByDirection(figures, this, 1, 0));
+        positions.AddRange(((IMoveByDirection)this).GetPositionsByDirection(figures, this, 0, -1));
+        positions.AddRange(((IMoveByDirection)this).GetPositionsByDirection(figures, this, 0, 1));
 
         return positions;
     }
-    
+
     public override (Color color, Image image) GetVisuals()
     {
         if (IsWhite)

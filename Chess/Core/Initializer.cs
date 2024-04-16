@@ -24,7 +24,8 @@ internal static class Initializer
                 ? ElementColors.GetElementColor(ElementColor.White, new Point(x, y))
                 : ElementColors.GetElementColor(ElementColor.Black, new Point(x, y)),
             Tag = new Point(x, y),
-            BackgroundImageLayout = ImageLayout.Stretch
+            BackgroundImageLayout = ImageLayout.Stretch,
+            Name = "Figure"
         };
     }
 
@@ -36,7 +37,7 @@ internal static class Initializer
             Font = new Font("Segoe UI", 20F, FontStyle.Bold, GraphicsUnit.Pixel),
             ForeColor = SystemColors.Menu,
             Location = button.Location,
-            Name = "label1",
+            Name = "PositionLabel",
             Size = new Size(26, 28),
             Text = text
         };
@@ -55,8 +56,7 @@ internal static class Initializer
         return figures;
     }
 
-
-    private static Figure? GetFigure(int x, int y)
+    public static Figure? GetFigure(int x, int y)
     {
         switch (y)
         {
