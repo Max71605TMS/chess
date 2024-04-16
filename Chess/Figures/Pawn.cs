@@ -18,40 +18,10 @@ public class Pawn : Figure, IFigureRestriction
     public override IEnumerable<Point> GetAvailablePositions(IEnumerable<Figure> figures)
     {
         var positions = new List<Point>();
-        if (IsWhite)
-        {
-            var isAnyFiguresBehind = figures.Any(f => f.Position == new Point(Position.X, Position.Y - 1));
-            if (Position.Y > 0 && !isAnyFiguresBehind) positions.Add(new Point(Position.X, Position.Y - 1));
-            var isAnyFiguresBehindPlus = figures.Any(f => f.Position == new Point(Position.X, Position.Y - 2));
-            if (IsFirstTurn && !isAnyFiguresBehind && !isAnyFiguresBehindPlus)
-                positions.Add(new Point(Position.X, Position.Y - 2));
 
-            var isAnyEnemyFigureDiagonallyToTheLeft = figures.Any(f =>
-                f.IsWhite == !IsWhite && f.Position == new Point(Position.X - 1, Position.Y - 1));
-            if (isAnyEnemyFigureDiagonallyToTheLeft) positions.Add(new Point(Position.X - 1, Position.Y - 1));
+        if (IsSelected) positions.AddRange(GetMovementPositions(figures));
 
-            var isAnyEnemyFigureDiagonallyToTheRight = figures.Any(f =>
-                f.IsWhite == !IsWhite && f.Position == new Point(Position.X + 1, Position.Y - 1));
-            if (isAnyEnemyFigureDiagonallyToTheRight) positions.Add(new Point(Position.X + 1, Position.Y - 1));
-        }
-        else
-        {
-            var isAnyFiguresBehind = figures.Any(f => f.Position == new Point(Position.X, Position.Y + 1));
-            if (Position.Y < BoardSize && !isAnyFiguresBehind) positions.Add(new Point(Position.X, Position.Y + 1));
-
-            var isAnyFiguresBehindPlus = figures.Any(f => f.Position == new Point(Position.X, Position.Y + 2));
-            if (IsFirstTurn && !isAnyFiguresBehind && !isAnyFiguresBehindPlus)
-                positions.Add(new Point(Position.X, Position.Y + 2));
-
-            var isAnyEnemyFigureDiagonallyToTheLeft = figures.Any(f =>
-                f.IsWhite == !IsWhite && f.Position == new Point(Position.X - 1, Position.Y + 1));
-            if (isAnyEnemyFigureDiagonallyToTheLeft) positions.Add(new Point(Position.X - 1, Position.Y + 1));
-
-            var isAnyEnemyFigureDiagonallyToTheRight = figures.Any(f =>
-                f.IsWhite == !IsWhite && f.Position == new Point(Position.X + 1, Position.Y + 1));
-            if (isAnyEnemyFigureDiagonallyToTheRight) positions.Add(new Point(Position.X + 1, Position.Y + 1));
-        }
-
+        positions.AddRange(GetAttackPositions(figures, IsSelected));
 
         return positions;
     }
@@ -72,5 +42,55 @@ public class Pawn : Figure, IFigureRestriction
         return (Position.X + Position.Y) % 2 == 0
             ? (ElementColors.GetElementColor(ElementColor.White, Position), ChessResources.PawnBlack)
             : (ElementColors.GetElementColor(ElementColor.Black, Position), ChessResources.PawnBlack);
+    }
+
+    private IEnumerable<Point> GetMovementPositions(IEnumerable<Figure> figures)
+    {
+        var positions = new List<Point>();
+
+        var moveCount = IsFirstTurn ? 2 : 1;
+
+        for (var i = 1; i <= moveCount; i++)
+        {
+            var newPoint = Position with
+            {
+                X = Position.X,
+                Y = IsWhite ? Position.Y - i : Position.Y + i
+            };
+
+            if (newPoint.X is < 0 or > 7 || newPoint.Y is < 0 or > 7) continue;
+
+            var figure = figures.FirstOrDefault(f => f.Position == newPoint);
+
+            if (figure is not null) continue;
+
+            positions.Add(newPoint);
+        }
+
+        return positions;
+    }
+
+    private IEnumerable<Point> GetAttackPositions(IEnumerable<Figure> figures, bool isSelected)
+    {
+        var positions = new List<Point>();
+
+        for (var i = 0; i < 2; i++)
+        {
+            var newPoint = Position with
+            {
+                X = Position.X - 1 + 2 * i,
+                Y = IsWhite ? Position.Y - 1 : Position.Y + 1
+            };
+
+            if (newPoint.X is < 0 or > 7 || newPoint.Y is < 0 or > 7) continue;
+
+            var figure = figures.FirstOrDefault(f => f.Position == newPoint);
+
+            if ((figure is null || figure.IsWhite == IsWhite) && IsSelected) continue;
+
+            positions.Add(newPoint);
+        }
+
+        return positions;
     }
 }

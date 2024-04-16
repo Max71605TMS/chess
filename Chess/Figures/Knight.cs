@@ -35,23 +35,6 @@ public class Knight : Figure, IMoveByDirection
         return positions;
     }
 
-    private List<Point> GetPossiblePositions()
-    {
-        var positions = new List<Point>
-        {
-            new(Position.X - 1, Position.Y - 2),
-            new(Position.X + 1, Position.Y - 2),
-            new(Position.X - 1, Position.Y + 2),
-            new(Position.X + 1, Position.Y + 2),
-            new(Position.X - 2, Position.Y - 1),
-            new(Position.X - 2, Position.Y + 1),
-            new(Position.X + 2, Position.Y - 1),
-            new(Position.X + 2, Position.Y + 1)
-        };
-
-        return positions;
-    }
-
     public override (Color color, Image image) GetVisuals()
     {
         if (IsWhite)
@@ -68,5 +51,22 @@ public class Knight : Figure, IMoveByDirection
         return (Position.X + Position.Y) % 2 == 0
             ? (ElementColors.GetElementColor(ElementColor.White, Position), ChessResources.KnightBlack)
             : (ElementColors.GetElementColor(ElementColor.Black, Position), ChessResources.KnightBlack);
+    }
+
+    private List<Point> GetPossiblePositions()
+    {
+        var positions = new List<Point>
+        {
+            new(Position.X - 1, Position.Y - 2),
+            new(Position.X + 1, Position.Y - 2),
+            new(Position.X - 1, Position.Y + 2),
+            new(Position.X + 1, Position.Y + 2),
+            new(Position.X - 2, Position.Y - 1),
+            new(Position.X - 2, Position.Y + 1),
+            new(Position.X + 2, Position.Y - 1),
+            new(Position.X + 2, Position.Y + 1)
+        };
+
+        return positions;
     }
 }

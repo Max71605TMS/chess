@@ -31,6 +31,24 @@ public class King : Figure, IFigureRestriction, ICastling
         return availablePositions;
     }
 
+    public override (Color color, Image image) GetVisuals()
+    {
+        if (IsWhite)
+        {
+            if (IsSelected)
+                return (ElementColors.GetElementColor(ElementColor.Green, Position), ChessResources.KingWhite);
+            return (Position.X + Position.Y) % 2 == 0
+                ? (ElementColors.GetElementColor(ElementColor.White, Position), ChessResources.KingWhite)
+                : (ElementColors.GetElementColor(ElementColor.Black, Position), ChessResources.KingWhite);
+        }
+
+        if (IsSelected)
+            return (ElementColors.GetElementColor(ElementColor.Green, Position), ChessResources.KingBlack);
+        return (Position.X + Position.Y) % 2 == 0
+            ? (ElementColors.GetElementColor(ElementColor.White, Position), ChessResources.KingBlack)
+            : (ElementColors.GetElementColor(ElementColor.Black, Position), ChessResources.KingBlack);
+    }
+
     private IEnumerable<Point> GetMovePositions(IEnumerable<Figure> figures)
     {
         var positions = new List<Point>();
@@ -79,24 +97,5 @@ public class King : Figure, IFigureRestriction, ICastling
         return figures.Where(figure => figure.IsWhite != IsWhite)
             .Select(figure => figure.GetAvailablePositions(figures.Except([this]))).Aggregate(possibleMoves,
                 (current, positions) => current.Except(positions).ToList());
-    }
-
-
-    public override (Color color, Image image) GetVisuals()
-    {
-        if (IsWhite)
-        {
-            if (IsSelected)
-                return (ElementColors.GetElementColor(ElementColor.Green, Position), ChessResources.KingWhite);
-            return (Position.X + Position.Y) % 2 == 0
-                ? (ElementColors.GetElementColor(ElementColor.White, Position), ChessResources.KingWhite)
-                : (ElementColors.GetElementColor(ElementColor.Black, Position), ChessResources.KingWhite);
-        }
-
-        if (IsSelected)
-            return (ElementColors.GetElementColor(ElementColor.Green, Position), ChessResources.KingBlack);
-        return (Position.X + Position.Y) % 2 == 0
-            ? (ElementColors.GetElementColor(ElementColor.White, Position), ChessResources.KingBlack)
-            : (ElementColors.GetElementColor(ElementColor.Black, Position), ChessResources.KingBlack);
     }
 }
