@@ -257,8 +257,16 @@ public partial class Chess : Form
                 var checkMateStatus = _mover.CheckMateStatus;
 
                 if (checkMateStatus is not null && checkMateStatus.Value.isCheck &&
-                    checkMateStatus.Value.isWhite == _mover.IsWhiteTurn && figure is not King)
-                    return;
+                    checkMateStatus.Value.kingColor == _mover.IsWhiteTurn)
+                {
+                    var allKingColorFigures = _mover.Figures.Where(w => w.IsWhite == checkMateStatus.Value.kingColor);
+
+                    var figuresToDefend = allKingColorFigures.Where(defendFigure =>
+                        defendFigure.GetAvailablePositions(allKingColorFigures)
+                            .Any(a => a == checkMateStatus.Value.threatFigure?.Position)).ToList();
+
+                    if (figuresToDefend.All(a => a != figure) && figure is not King) return;
+                }
 
                 //Если не выбрана фигура
                 if (_mover.CurrentFigure is null)
@@ -311,6 +319,9 @@ public partial class Chess : Form
                 return;
             }
 
+            if (_mover.CurrentFigure is null || (_mover.AvailablePositions is not null &&
+                                                 _mover.AvailablePositions.All(a => a != figure.Position))) return;
+
             //Атака вражеской фигуры
             _mover.MoveFigure(figure.Position);
 
@@ -340,6 +351,9 @@ public partial class Chess : Form
 
         //Нажатие в пустом месте. Передвижение или отмена выделения
         if (button.Tag is not Point point) return;
+
+        if (_mover.CurrentFigure is null ||
+            (_mover.AvailablePositions is not null && _mover.AvailablePositions.All(a => a != point))) return;
 
         _mover.MoveFigure(point);
 
@@ -459,12 +473,12 @@ public partial class Chess : Form
         var checkmateStatus = _mover.CheckMateStatus;
 
         var text = checkmateStatus is not null && checkmateStatus.Value.isMate
-            ? $"Победили {(_mover.CheckMateStatus!.Value.isWhite ? "чёрные" : "белые")}"
+            ? $"Победили {(_mover.CheckMateStatus!.Value.kingColor ? "чёрные" : "белые")}"
             : _mover.IsWhiteTurn
                 ? "Ход белых"
                 : "Ход чёрных";
         var color = checkmateStatus is not null && checkmateStatus.Value.isMate
-            ? _mover.CheckMateStatus!.Value.isWhite
+            ? _mover.CheckMateStatus!.Value.kingColor
                 ? Color.Black
                 : Color.White
             : _mover.IsWhiteTurn
@@ -478,7 +492,7 @@ public partial class Chess : Form
 
         var message = checkmateStatus.Value is { isCheck: true, isMate: true }
             ? text
-            : $"Король {(checkmateStatus.Value.isWhite ? "белых" : "чёрных")} под угрозой! Шах!";
+            : $"Король {(checkmateStatus.Value.kingColor ? "белых" : "чёрных")} под угрозой! Шах!";
 
         var caption = checkmateStatus.Value is { isCheck: true, isMate: true }
             ? "Победа!"

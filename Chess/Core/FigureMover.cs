@@ -12,7 +12,7 @@ public class FigureMover
 
     public Figure? CurrentFigure { get; private set; }
 
-    public (bool isCheck, bool isMate, bool isWhite)? CheckMateStatus { get; private set; }
+    public (bool isCheck, bool isMate, bool kingColor, Figure? threatFigure)? CheckMateStatus { get; private set; }
 
     public List<Figure> Figures { get; } = Initializer.GetFigures();
 
@@ -116,7 +116,7 @@ public class FigureMover
     }
 
     //Проверка на шах и мат
-    private (bool isCheck, bool isMate, bool isWhite)? CheckCheckmate()
+    private (bool isCheck, bool isMate, bool kingColor, Figure? threatFigure)? CheckCheckmate()
     {
         var king = Figures.First(f => f is King king && king.IsWhite != IsWhiteTurn);
 
@@ -131,6 +131,11 @@ public class FigureMover
         var kingAvailablePositions =
             king.GetAvailablePositions(Figures).Except(allEnemyFiguresAvailablePositions).ToList();
 
+        if (kingAvailablePositions.Count == 1 && Figures.Where(w => w.IsWhite == IsWhiteTurn)
+                .Select(s => s?.GetAvailablePositions(Figures.Except([CurrentFigure])!)).SelectMany(s => (s ?? null)!)
+                .Any(a => a == kingAvailablePositions.First()))
+            kingAvailablePositions.Clear();
+
         var isMate = kingAvailablePositions.Count == 0;
 
         // ReSharper disable once ArrangeObjectCreationWhenTypeNotEvident
@@ -138,7 +143,8 @@ public class FigureMover
         {
             isCheck = isCheck,
             isMate = isMate,
-            isWhite = king.IsWhite
+            kingColor = king.IsWhite,
+            threatFigure = CurrentFigure
         };
     }
 }
