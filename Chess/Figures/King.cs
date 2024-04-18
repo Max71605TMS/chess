@@ -94,8 +94,19 @@ public class King : Figure, IFigureRestriction, ICastling
 
         if (!IsSelected) return possibleMoves;
 
+        var t = figures.Where(figure => figure.IsWhite != IsWhite);
+        var w = figures.FirstOrDefault(f => f is King king && king.IsWhite == IsWhite);
+        var r = t.Select(figure =>
+            figure.GetAvailablePositions(
+                figures.Except([w])));
+        var e = r.Aggregate(possibleMoves,
+            (current, positions) => current.Except(positions).ToList());
+
         possibleMoves = figures.Where(figure => figure.IsWhite != IsWhite)
-            .Select(figure => figure.GetAvailablePositions(figures)).Aggregate(possibleMoves,
+            .Select(figure =>
+                figure.GetAvailablePositions(figures.Except([
+                    figures.FirstOrDefault(f => f is King king && king.IsWhite == IsWhite)
+                ]))).Aggregate(possibleMoves,
                 (current, positions) => current.Except(positions).ToList());
 
         if (possibleMoves.Count == 1 &&

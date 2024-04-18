@@ -121,7 +121,10 @@ public class FigureMover
         var king = Figures.First(f => f is King king && king.IsWhite != IsWhiteTurn);
 
         var allEnemyFiguresAvailablePositions = Figures.Where(w => w.IsWhite == IsWhiteTurn)
-            .Select(s => s.GetAvailablePositions(Figures)).SelectMany(s => s).ToList();
+            .Select(s =>
+                s.GetAvailablePositions(Figures.Except([
+                    Figures.First(f => f is King kingFigure && kingFigure.IsWhite != IsWhiteTurn)
+                ]))).SelectMany(s => s).ToList();
 
         var isCheck = allEnemyFiguresAvailablePositions.Contains(king.Position);
 
