@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Chess.Interfaces
 {
-    public interface IMovementBishop
+    public interface IMovement
     {
 
         public IEnumerable<Point> GetMove(IEnumerable<Figure> figures, Figure figure, int xDirection, int yDirection)

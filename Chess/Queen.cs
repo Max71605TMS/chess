@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Chess
 {
-    internal class Queen : Figure, IMovementBishop
+    internal class Queen : Figure, IMovement
     {
         public Queen(bool isWhite, Point point) : base(isWhite, point)
         {
@@ -18,15 +18,15 @@ namespace Chess
         {
             var positions = new List<Point>();
 
-            positions.AddRange(((IMovementBishop)this).GetMove(figures, this, -1, 1));
-            positions.AddRange(((IMovementBishop)this).GetMove(figures, this, 1, 1));
-            positions.AddRange(((IMovementBishop)this).GetMove(figures, this, 1, -1));
-            positions.AddRange(((IMovementBishop)this).GetMove(figures, this, -1, -1));
+            positions.AddRange(((IMovement)this).GetMove(figures, this, -1, 1));
+            positions.AddRange(((IMovement)this).GetMove(figures, this, 1, 1));
+            positions.AddRange(((IMovement)this).GetMove(figures, this, 1, -1));
+            positions.AddRange(((IMovement)this).GetMove(figures, this, -1, -1));
 
-            positions.AddRange(((IMovementBishop)this).GetMove(figures, this, -1, 0));
-            positions.AddRange(((IMovementBishop)this).GetMove(figures, this, 1, 0));
-            positions.AddRange(((IMovementBishop)this).GetMove(figures, this, 0, -1));
-            positions.AddRange(((IMovementBishop)this).GetMove(figures, this, 0, 1));
+            positions.AddRange(((IMovement)this).GetMove(figures, this, -1, 0));
+            positions.AddRange(((IMovement)this).GetMove(figures, this, 1, 0));
+            positions.AddRange(((IMovement)this).GetMove(figures, this, 0, -1));
+            positions.AddRange(((IMovement)this).GetMove(figures, this, 0, 1));
 
             return positions;
         }

@@ -3,7 +3,7 @@ using Chess.Properties;
 
 namespace Chess;
 
-public class Rook : Figure, IMarkable, IMovementBishop
+public class Rook : Figure, IMarkable, IMovement
 {
     public bool IsFirstTurn { get; set; } = true;
 
@@ -14,10 +14,10 @@ public class Rook : Figure, IMarkable, IMovementBishop
     public override IEnumerable<Point> GetAvaliablePositions(IEnumerable<Figure> figures)
     {
         var positions = new List<Point>();
-        positions.AddRange(((IMovementBishop)this).GetMove(figures, this, -1, 0)); // По горизонтали слева
-        positions.AddRange(((IMovementBishop)this).GetMove(figures, this, 1, 0));  // По горизонтали справа
-        positions.AddRange(((IMovementBishop)this).GetMove(figures, this, 0, -1)); // По вертикали сверху
-        positions.AddRange(((IMovementBishop)this).GetMove(figures, this, 0, 1));  // По вертикали снизу
+        positions.AddRange(((IMovement)this).GetMove(figures, this, -1, 0)); // По горизонтали слева
+        positions.AddRange(((IMovement)this).GetMove(figures, this, 1, 0));  // По горизонтали справа
+        positions.AddRange(((IMovement)this).GetMove(figures, this, 0, -1)); // По вертикали сверху
+        positions.AddRange(((IMovement)this).GetMove(figures, this, 0, 1));  // По вертикали снизу
 
         return positions;
     }
