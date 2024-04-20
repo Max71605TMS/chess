@@ -176,12 +176,20 @@ public partial class Form1 : Form
                 if (_figureMover.IsWhiteTurn)
                 { MessageBox.Show("Black win"); }
                 else { MessageBox.Show("White win"); }
+
+                for (var y = 0; y < BoardSize; y++)
+                {
+                    for (var x = 0; x < BoardSize; x++)
+                    {
+                        chessButtons[x, y].Enabled = false;
+                    }
+                }
             }
             else
             {
                 if (_figureMover.IsWhiteTurn)
-                { MessageBox.Show("White King in Check!"); }
-                else { MessageBox.Show("Black King in Check!"); }
+                { MessageBox.Show("Check to the White King!"); }
+                else { MessageBox.Show("Check to the Black King!"); }
             }
         }
         else

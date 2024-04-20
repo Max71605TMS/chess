@@ -36,16 +36,8 @@ namespace Chess
 
         private static King FindKing(bool isWhiteTurn, IEnumerable<Figure> figures)
         {
-            if (isWhiteTurn)
-            {
-                King king = (King)figures.First(f => (f is King && f.IsWhite));
-                return king;
-            }
-            else
-            {
-                King king = (King)figures.First(f => (f is King && !f.IsWhite));
-                return king;
-            }
+            King king = (King)figures.First(f => (f is King && f.IsWhite == isWhiteTurn));
+            return king;
         }
 
         // проверка на шах, находим атакующую фигуру
@@ -54,41 +46,21 @@ namespace Chess
             King king = FindKing(isWhiteTurn, figures);
             bool isCheck = false;
 
-            if (king.IsWhite)
+            IEnumerable<Figure> noTurnFigures = figures.Where(f => f.IsWhite != isWhiteTurn).ToList();
+            foreach (Figure figure in noTurnFigures)
             {
-                IEnumerable<Figure> blackFigures = figures.Where(f => !f.IsWhite).ToList();
-                foreach (Figure figure in blackFigures)
+                IEnumerable<Point> availablePositionsNoTurnFigures = figure.GetAvaliablePositions(figures);
+                foreach (var position in availablePositionsNoTurnFigures)
                 {
-                    IEnumerable<Point> availableBlackPositions = figure.GetAvaliablePositions(figures);
-                    foreach (var position in availableBlackPositions)
+                    if (position == king.Position)
                     {
-                        if (position == king.Position)
-                        {
-                            isCheck = true;
-                            attackingFigure = figure;
-                            break;
-                        }
+                        isCheck = true;
+                        attackingFigure = figure;
+                        break;
                     }
                 }
             }
 
-            if (!king.IsWhite)
-            {
-                IEnumerable<Figure> whiteFigures = figures.Where(f => f.IsWhite).ToList();
-                foreach (Figure figure in whiteFigures)
-                {
-                    IEnumerable<Point> availableWhitePositions = figure.GetAvaliablePositions(figures);
-                    foreach (var position in availableWhitePositions)
-                    {
-                        if (position == king.Position)
-                        {
-                            isCheck = true;
-                            attackingFigure = figure;
-                            break;
-                        }
-                    }
-                }
-            }
             return isCheck;
         }
 
@@ -97,38 +69,21 @@ namespace Chess
         {
             King king = FindKing(isWhiteTurn, figures);
             bool canEatAttackingFigure = false;
-            if (king.IsWhite)
+            IEnumerable<Figure> figuresWithKingColour = figures.Where(f => f.IsWhite == isWhiteTurn).ToList();
+
+            foreach (Figure figure in figuresWithKingColour)
             {
-                IEnumerable<Figure> whiteFigures = figures.Where(f => f.IsWhite).ToList();
-                foreach (Figure figure in whiteFigures)
+                IEnumerable<Point> CurrentTurnFiguresAvailablePositions = figure.GetAvaliablePositions(figures);
+                foreach (var position in CurrentTurnFiguresAvailablePositions)
                 {
-                    IEnumerable<Point> availableWhitePositions = figure.GetAvaliablePositions(figures);
-                    foreach (var position in availableWhitePositions)
+                    if (attackingFigure.Position == position)
                     {
-                        if (attackingFigure.Position == position)
-                        {
-                            canEatAttackingFigure = true;
-                            break;
-                        }
+                        canEatAttackingFigure = true;
+                        break;
                     }
                 }
             }
-            else
-            {
-                IEnumerable<Figure> blackFigures = figures.Where(f => !f.IsWhite).ToList();
-                foreach (Figure figure in blackFigures)
-                {
-                    IEnumerable<Point> availableBlackPositions = figure.GetAvaliablePositions(figures);
-                    foreach (var position in availableBlackPositions)
-                    {
-                        if (attackingFigure.Position == position)
-                        {
-                            canEatAttackingFigure = true;
-                            break;
-                        }
-                    }
-                }
-            }
+
             return canEatAttackingFigure;
         }
 
@@ -148,11 +103,32 @@ namespace Chess
             return canKingMove;
         }
 
+        //у всех ли фигур текущего хода есть возможность ходить
+        private static bool AllFiguresCanMove(bool isWhiteTurn, IEnumerable<Figure> figures)
+        {
+            King king = FindKing(isWhiteTurn, figures);
+            bool figuresCanMove = false;
+
+            IEnumerable<Figure> figuresWithKingColour = figures.Where(f => f.IsWhite == isWhiteTurn).ToList();
+            foreach (Figure figure in figuresWithKingColour)
+            {
+                List<Point> CurrentTurnFiguresAvailablePositions = figure.GetAvaliablePositions(figures).ToList();
+                if (CurrentTurnFiguresAvailablePositions.Count != 0)
+                {
+                    figuresCanMove = true;
+                    break;
+                }
+            }
+
+            return figuresCanMove;
+        }
+
         // можно ли защитить короля другой фигурой
         private static bool IsPossibleToProtectKing(bool isWhiteTurn, IEnumerable<Figure> figures)
         {
-            King king = FindKing(isWhiteTurn, figures);
             bool isPossibleToProtectKing = false;
+            King king = FindKing(isWhiteTurn, figures);
+            
             List<Point> positionsAroundKing = king.AllTheKingMoves(figures);
             positionsAroundKing.Remove(new Point(king.Position.X + 2, king.Position.Y));
             positionsAroundKing.Remove(new Point(king.Position.X - 2, king.Position.Y));
@@ -163,30 +139,37 @@ namespace Chess
                 { return isPossibleToProtectKing; }
             }
 
-            IEnumerable<Figure> FiguresWhoMove = figures.Where(f => f.IsWhite == isWhiteTurn).ToList();
-            IEnumerable<Point> attackFigureAP = null;
+            IEnumerable<Figure> FiguresWhoseTurn = figures.Where(f => f.IsWhite == isWhiteTurn).ToList();
+            List<Point> attackFigureAvailablePositions = new List<Point>();
+            IEnumerable<Point> attackFigureAllAvailablePositions = attackingFigure.GetAvaliablePositions(figures);
 
             if (attackingFigure is Knight Knight)
-            { return isPossibleToProtectKing; }
+            {
+                return isPossibleToProtectKing;
+            }
             else if (attackingFigure is Rook)
             {
-                attackFigureAP = GetAvailablePositionRookCheck(king, figures);
+                attackFigureAvailablePositions = AvailableMovesForRook(king, attackingFigure, attackFigureAllAvailablePositions);
             }
             else if (attackingFigure is Bishop)
             {
-                attackFigureAP = GetAvailablePositionBishopCheck(king, figures);
+                attackFigureAvailablePositions = AvailableMovesForBishop(king, attackingFigure, attackFigureAllAvailablePositions);
             }
             else if (attackingFigure is Queen)
-            { attackFigureAP = GetAvailablePositionQueenCheck(king, figures); }
-
-            foreach (Figure figure in FiguresWhoMove)
             {
-                IEnumerable<Point> FiguresWhoseMoveAP = figure.GetAvaliablePositions(figures);
-                foreach (var position in FiguresWhoseMoveAP)
+                attackFigureAvailablePositions = AvailableMovesForQueen(king, attackingFigure, attackFigureAllAvailablePositions);
+            }
+
+            Func<Point, Point, bool> predicate = (Point1, Point2) => Point1 == Point2;
+
+            foreach (Figure figure in FiguresWhoseTurn)
+            {
+                IEnumerable<Point> FiguresWhoseTurnAvailablePositions = figure.GetAvaliablePositions(figures);
+                foreach (var position in FiguresWhoseTurnAvailablePositions)
                 {
-                    foreach (var pos in attackFigureAP)
+                    foreach (var pos in attackFigureAvailablePositions)
                     {
-                        if (pos == position)
+                        if (predicate(position, pos))
                         {
                             isPossibleToProtectKing = true;
                             break;
@@ -198,196 +181,73 @@ namespace Chess
             return isPossibleToProtectKing;
         }
 
-        //у всех ли фигур текущего хода есть возможность ходить
-        private static bool AllFiguresCanMove(bool isWhiteTurn, IEnumerable<Figure> figures)
+        private static void AddPositios(Func<Point, bool> predicate, Point point, List<Point> attackFigureAP)
         {
-            King king = FindKing(isWhiteTurn, figures);
-            bool figuresCanMove = false;
-            if (king.IsWhite)
+            if (predicate(point))
             {
-                IEnumerable<Figure> whiteFigures = figures.Where(f => f.IsWhite).ToList();
-                foreach (Figure figure in whiteFigures)
-                {
-                    List<Point> availableWhitePositions = figure.GetAvaliablePositions(figures).ToList();
-                    if (availableWhitePositions.Count != 0)
-                    {
-                        figuresCanMove = true;
-                        break;
-                    }
-                }
+                attackFigureAP.Add(point);
             }
-            else
-            {
-                IEnumerable<Figure> BlackFigures = figures.Where(f => !f.IsWhite).ToList();
-                foreach (Figure figure in BlackFigures)
-                {
-                    List<Point> availableBlackPositions = figure.GetAvaliablePositions(figures).ToList();
-                    if (availableBlackPositions.Count != 0)
-                    {
-                        figuresCanMove = true;
-                        break;
-                    }
-                }
-            }
-            return figuresCanMove;
         }
 
-        private static IEnumerable<Point> GetAvailablePositionRookCheck(King king, IEnumerable<Figure> figures)
+        private static List<Point> AvailableMovesForRook(King king, Figure attackingFigure, IEnumerable<Point> attackFigureAllAP)
         {
-            IEnumerable<Point> attackFigureAllAP = attackingFigure.GetAvaliablePositions(figures);
-            List<Point> attackFigureAP = attackFigureAllAP.ToList();
+            List<Point> attackFigureAP = new List<Point>();
 
-            if (king.Position.X == attackingFigure.Position.X)
+            foreach (var position in attackFigureAllAP)
             {
-                attackFigureAP = RemovePointsVerticalMove(king, attackingFigure, attackFigureAllAP, attackFigureAP);
-            }
-
-            if (king.Position.Y == attackingFigure.Position.Y)
-            {
-                attackFigureAP = RemovePointsHorizontalMove(king, attackingFigure, attackFigureAllAP, attackFigureAP);
-            }
-            return attackFigureAP;
-        }
-
-        private static IEnumerable<Point> GetAvailablePositionBishopCheck(King king, IEnumerable<Figure> figures)
-        {
-            IEnumerable<Point> attackFigureAllAP = attackingFigure.GetAvaliablePositions(figures);
-            List<Point> attackFigureAP = attackFigureAllAP.ToList();
-
-            attackFigureAP = RemovePointsDiagonalMove(king, attackingFigure, attackFigureAllAP, attackFigureAP);
-
-            return attackFigureAP;
-        }
-
-        private static IEnumerable<Point> GetAvailablePositionQueenCheck(King king, IEnumerable<Figure> figures)
-        {
-            IEnumerable<Point> attackFigureAllAP = attackingFigure.GetAvaliablePositions(figures);
-            List<Point> attackFigureAP = attackFigureAllAP.ToList();
-
-            if (king.Position.X == attackingFigure.Position.X)
-            {
-                attackFigureAP = RemovePointsVerticalMove(king, attackingFigure, attackFigureAllAP, attackFigureAP);
-            }
-            else if (king.Position.Y == attackingFigure.Position.Y)
-            {
-                attackFigureAP = RemovePointsHorizontalMove(king, attackingFigure, attackFigureAllAP, attackFigureAP);
-            }
-            else
-            {
-                attackFigureAP = RemovePointsDiagonalMove(king, attackingFigure, attackFigureAllAP, attackFigureAP);
+                AddPositios(position => position.X > king.Position.X && position.X < attackingFigure.Position.X, position, attackFigureAP);
+                AddPositios(position => position.X > attackingFigure.Position.X && position.X < king.Position.X, position, attackFigureAP);
+                AddPositios(position => position.Y > king.Position.Y && position.Y < attackingFigure.Position.Y, position, attackFigureAP);
+                AddPositios(position => position.Y > attackingFigure.Position.Y && position.Y < king.Position.Y, position, attackFigureAP);
             }
 
             return attackFigureAP;
         }
 
-        private static List<Point> RemovePointsVerticalMove(King king, Figure attackingFigure,
-            IEnumerable<Point> attackFigureAllAP, List<Point> attackFigureAP)
+        private static List<Point> AvailableMovesForBishop(King king, Figure attackingFigure, IEnumerable<Point> attackFigureAllAP)
         {
-            foreach (var f in attackFigureAllAP)
+            List<Point> attackFigureAP = new List<Point>();
+
+            foreach (var position in attackFigureAllAP)
             {
-                if (f.X != attackingFigure.Position.X)
-                { attackFigureAP.Remove(f); }
+                AddPositios(position => position.X > attackingFigure.Position.X && position.X < king.Position.X
+                && position.Y > attackingFigure.Position.Y && position.Y < king.Position.Y, position, attackFigureAP);
+                AddPositios(position => position.X > attackingFigure.Position.X && position.X < king.Position.X
+                && position.Y < attackingFigure.Position.Y && position.Y > king.Position.Y, position, attackFigureAP);
+                AddPositios(position => position.X < attackingFigure.Position.X && position.X > king.Position.X
+                && position.Y > attackingFigure.Position.Y && position.Y < king.Position.Y, position, attackFigureAP);
+                AddPositios(position => position.X < attackingFigure.Position.X && position.X > king.Position.X
+                && position.Y < attackingFigure.Position.Y && position.Y > king.Position.Y, position, attackFigureAP);
             }
 
-            if (king.Position.Y > attackingFigure.Position.Y)
-            {
-                foreach (var f in attackFigureAllAP)
-                {
-                    if (f.Y < attackingFigure.Position.Y)
-                    { attackFigureAP.Remove(f); }
-                }
-            }
-            else
-            {
-                foreach (var f in attackFigureAllAP)
-                {
-                    if (f.Y > attackingFigure.Position.Y)
-                    { attackFigureAP.Remove(f); }
-                }
-            }
             return attackFigureAP;
         }
 
-        private static List<Point> RemovePointsHorizontalMove(King king, Figure attackingFigure,
-         IEnumerable<Point> attackFigureAllAP, List<Point> attackFigureAP)
+        private static List<Point> AvailableMovesForQueen(King king, Figure attackingFigure, IEnumerable<Point> attackFigureAllAP)
         {
-            foreach (var f in attackFigureAllAP)
+            List<Point> attackFigureAP = new List<Point>();
+
+            foreach (var position in attackFigureAllAP)
             {
-                if (f.Y != attackingFigure.Position.Y)
-                { attackFigureAP.Remove(f); }
+                AddPositios(position => position.X > king.Position.X && position.X < attackingFigure.Position.X
+                    && position.Y == attackingFigure.Position.Y, position, attackFigureAP);
+                AddPositios(position => position.X > attackingFigure.Position.X && position.X < king.Position.X
+                && position.Y == attackingFigure.Position.Y, position, attackFigureAP);
+                AddPositios(position => position.Y > king.Position.Y && position.Y < attackingFigure.Position.Y
+                && position.X == attackingFigure.Position.X, position, attackFigureAP);
+                AddPositios(position => position.Y > attackingFigure.Position.Y && position.Y < king.Position.Y
+                && position.X == attackingFigure.Position.X, position, attackFigureAP);
+
+                AddPositios(position => position.X > attackingFigure.Position.X && position.X < king.Position.X
+                && position.Y > attackingFigure.Position.Y && position.Y < king.Position.Y, position, attackFigureAP);
+                AddPositios(position => position.X > attackingFigure.Position.X && position.X < king.Position.X
+                && position.Y < attackingFigure.Position.Y && position.Y > king.Position.Y, position, attackFigureAP);
+                AddPositios(position => position.X < attackingFigure.Position.X && position.X > king.Position.X
+                && position.Y > attackingFigure.Position.Y && position.Y < king.Position.Y, position, attackFigureAP);
+                AddPositios(position => position.X < attackingFigure.Position.X && position.X > king.Position.X
+                && position.Y < attackingFigure.Position.Y && position.Y > king.Position.Y, position, attackFigureAP);
             }
 
-            if (king.Position.X > attackingFigure.Position.X)
-            {
-                foreach (var f in attackFigureAllAP)
-                {
-                    if (f.X < attackingFigure.Position.X)
-                    { attackFigureAP.Remove(f); }
-                }
-            }
-            else
-            {
-                foreach (var f in attackFigureAllAP)
-                {
-                    if (f.X > attackingFigure.Position.X)
-                    { attackFigureAP.Remove(f); }
-                }
-            }
-            return attackFigureAP;
-        }
-        private static List<Point> RemovePointsDiagonalMove(King king, Figure attackingFigure,
-         IEnumerable<Point> attackFigureAllAP, List<Point> attackFigureAP)
-        {
-            if (king.Position.X > attackingFigure.Position.X)
-            {
-                foreach (var f in attackFigureAllAP)
-                {
-                    if (f.X < attackingFigure.Position.X)
-                    { attackFigureAP.Remove(f); }
-                }
-
-                if (king.Position.Y > attackingFigure.Position.Y)
-                {
-                    foreach (var f in attackFigureAllAP)
-                    {
-                        if (f.Y < attackingFigure.Position.Y)
-                        { attackFigureAP.Remove(f); }
-                    }
-                }
-                else
-                {
-                    foreach (var f in attackFigureAllAP)
-                    {
-                        if (f.Y > attackingFigure.Position.Y)
-                        { attackFigureAP.Remove(f); }
-                    }
-                }
-            }
-            else
-            {
-                foreach (var f in attackFigureAllAP)
-                {
-                    if (f.X > attackingFigure.Position.X)
-                    { attackFigureAP.Remove(f); }
-                }
-
-                if (king.Position.Y > attackingFigure.Position.Y)
-                {
-                    foreach (var f in attackFigureAllAP)
-                    {
-                        if (f.Y < attackingFigure.Position.Y)
-                        { attackFigureAP.Remove(f); }
-                    }
-                }
-                else
-                {
-                    foreach (var f in attackFigureAllAP)
-                    {
-                        if (f.Y > attackingFigure.Position.Y)
-                        { attackFigureAP.Remove(f); }
-                    }
-                }
-            }
             return attackFigureAP;
         }
     }
