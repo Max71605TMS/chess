@@ -42,15 +42,15 @@ public class Knight : Figure, IMoveByDirection
             if (IsSelected)
                 return (ElementColors.GetElementColor(ElementColor.Green, Position), ChessResources.KnightWhite);
             return (Position.X + Position.Y) % 2 == 0
-                ? (ElementColors.GetElementColor(ElementColor.White, Position), ChessResources.KnightWhite)
-                : (ElementColors.GetElementColor(ElementColor.Black, Position), ChessResources.KnightWhite);
+                       ? (ElementColors.GetElementColor(ElementColor.White, Position), ChessResources.KnightWhite)
+                       : (ElementColors.GetElementColor(ElementColor.Black, Position), ChessResources.KnightWhite);
         }
 
         if (IsSelected)
             return (ElementColors.GetElementColor(ElementColor.Green, Position), ChessResources.KnightBlack);
         return (Position.X + Position.Y) % 2 == 0
-            ? (ElementColors.GetElementColor(ElementColor.White, Position), ChessResources.KnightBlack)
-            : (ElementColors.GetElementColor(ElementColor.Black, Position), ChessResources.KnightBlack);
+                   ? (ElementColors.GetElementColor(ElementColor.White, Position), ChessResources.KnightBlack)
+                   : (ElementColors.GetElementColor(ElementColor.Black, Position), ChessResources.KnightBlack);
     }
 
     private List<Point> GetPossiblePositions()

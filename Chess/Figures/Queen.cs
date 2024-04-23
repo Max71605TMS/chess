@@ -34,14 +34,14 @@ public class Queen : Figure, IMoveByDirection
             if (IsSelected)
                 return (ElementColors.GetElementColor(ElementColor.Green, Position), ChessResources.QueenWhite);
             return (Position.X + Position.Y) % 2 == 0
-                ? (ElementColors.GetElementColor(ElementColor.White, Position), ChessResources.QueenWhite)
-                : (ElementColors.GetElementColor(ElementColor.Black, Position), ChessResources.QueenWhite);
+                       ? (ElementColors.GetElementColor(ElementColor.White, Position), ChessResources.QueenWhite)
+                       : (ElementColors.GetElementColor(ElementColor.Black, Position), ChessResources.QueenWhite);
         }
 
         if (IsSelected)
             return (ElementColors.GetElementColor(ElementColor.Green, Position), ChessResources.QueenBlack);
         return (Position.X + Position.Y) % 2 == 0
-            ? (ElementColors.GetElementColor(ElementColor.White, Position), ChessResources.QueenBlack)
-            : (ElementColors.GetElementColor(ElementColor.Black, Position), ChessResources.QueenBlack);
+                   ? (ElementColors.GetElementColor(ElementColor.White, Position), ChessResources.QueenBlack)
+                   : (ElementColors.GetElementColor(ElementColor.Black, Position), ChessResources.QueenBlack);
     }
 }

@@ -30,14 +30,14 @@ public class Bishop : Figure, IMoveByDirection
             if (IsSelected)
                 return (ElementColors.GetElementColor(ElementColor.Green, Position), ChessResources.BishopWhite);
             return (Position.X + Position.Y) % 2 == 0
-                ? (ElementColors.GetElementColor(ElementColor.White, Position), ChessResources.BishopWhite)
-                : (ElementColors.GetElementColor(ElementColor.Black, Position), ChessResources.BishopWhite);
+                       ? (ElementColors.GetElementColor(ElementColor.White, Position), ChessResources.BishopWhite)
+                       : (ElementColors.GetElementColor(ElementColor.Black, Position), ChessResources.BishopWhite);
         }
 
         if (IsSelected)
             return (ElementColors.GetElementColor(ElementColor.Green, Position), ChessResources.BishopBlack);
         return (Position.X + Position.Y) % 2 == 0
-            ? (ElementColors.GetElementColor(ElementColor.White, Position), ChessResources.BishopBlack)
-            : (ElementColors.GetElementColor(ElementColor.Black, Position), ChessResources.BishopBlack);
+                   ? (ElementColors.GetElementColor(ElementColor.White, Position), ChessResources.BishopBlack)
+                   : (ElementColors.GetElementColor(ElementColor.Black, Position), ChessResources.BishopBlack);
     }
 }

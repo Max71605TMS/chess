@@ -7,7 +7,7 @@ public interface ICastling
 {
     //Получить фигуры для рокировки. Проверка по направлению
     public IEnumerable<Point> GetCastlingFiguresByDirection(IEnumerable<Figure> figures, Figure figure,
-        int xDirection)
+                                                            int xDirection)
     {
         var positions = new List<Point>();
         var x = figure.Position.X + xDirection;
@@ -39,7 +39,7 @@ public interface ICastling
 
     //Проверка возможных путей рокировки на угрозу королю
     public IEnumerable<Point> CheckCastlingPositions(IEnumerable<Figure> figures, Figure figure,
-        IEnumerable<Point> castlingFiguresPositions)
+                                                     IEnumerable<Point> castlingFiguresPositions)
     {
         var positions = new List<Point>();
         var king = figures.First(f => f is King { IsFirstTurn: true } king && king.IsWhite == figure.IsWhite);
@@ -54,8 +54,8 @@ public interface ICastling
                 offset = position is { X: 0, Y: 7 } or { X: 0, Y: 0 } ? -2 : 2;
 
             var isUnderAttack = figures.Where(w => w.IsWhite != king.IsWhite)
-                .Select(s => s.GetAvailablePositions(figures.Except([king]))).SelectMany(s => s)
-                .Any(a => a == king.Position with { X = king.Position.X + offset });
+                                       .Select(s => s.GetAvailablePositions(figures.Except([king]))).SelectMany(s => s)
+                                       .Any(a => a == king.Position with { X = king.Position.X + offset });
 
             if (!isUnderAttack)
                 positions.Add(position);

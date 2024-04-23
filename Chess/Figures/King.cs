@@ -38,15 +38,15 @@ public class King : Figure, IFigureRestriction, ICastling
             if (IsSelected)
                 return (ElementColors.GetElementColor(ElementColor.Green, Position), ChessResources.KingWhite);
             return (Position.X + Position.Y) % 2 == 0
-                ? (ElementColors.GetElementColor(ElementColor.White, Position), ChessResources.KingWhite)
-                : (ElementColors.GetElementColor(ElementColor.Black, Position), ChessResources.KingWhite);
+                       ? (ElementColors.GetElementColor(ElementColor.White, Position), ChessResources.KingWhite)
+                       : (ElementColors.GetElementColor(ElementColor.Black, Position), ChessResources.KingWhite);
         }
 
         if (IsSelected)
             return (ElementColors.GetElementColor(ElementColor.Green, Position), ChessResources.KingBlack);
         return (Position.X + Position.Y) % 2 == 0
-            ? (ElementColors.GetElementColor(ElementColor.White, Position), ChessResources.KingBlack)
-            : (ElementColors.GetElementColor(ElementColor.Black, Position), ChessResources.KingBlack);
+                   ? (ElementColors.GetElementColor(ElementColor.White, Position), ChessResources.KingBlack)
+                   : (ElementColors.GetElementColor(ElementColor.Black, Position), ChessResources.KingBlack);
     }
 
     private IEnumerable<Point> GetMovePositions(IEnumerable<Figure> figures)
@@ -65,7 +65,10 @@ public class King : Figure, IFigureRestriction, ICastling
         };
 
         foreach (var point in offsets.Select(offset =>
-                     Position with { X = Position.X + offset.X, Y = Position.Y + offset.Y }))
+                                                 Position with
+                                                 {
+                                                     X = Position.X + offset.X, Y = Position.Y + offset.Y
+                                                 }))
         {
             if (point.X is < 0 or > 7 || point.Y is < 0 or > 7) continue;
 
@@ -86,7 +89,7 @@ public class King : Figure, IFigureRestriction, ICastling
     }
 
     private List<Point> CheckAvailablePositions(IEnumerable<Figure> figures,
-        IEnumerable<Point> kingPositions)
+                                                IEnumerable<Point> kingPositions)
     {
         var possibleMoves = new List<Point>();
 
@@ -94,26 +97,19 @@ public class King : Figure, IFigureRestriction, ICastling
 
         if (!IsSelected) return possibleMoves;
 
-        var t = figures.Where(figure => figure.IsWhite != IsWhite);
-        var w = figures.FirstOrDefault(f => f is King king && king.IsWhite == IsWhite);
-        var r = t.Select(figure =>
-            figure.GetAvailablePositions(
-                figures.Except([w])));
-        var e = r.Aggregate(possibleMoves,
-            (current, positions) => current.Except(positions).ToList());
-
         possibleMoves = figures.Where(figure => figure.IsWhite != IsWhite)
-            .Select(figure =>
-                figure.GetAvailablePositions(figures.Except([
-                    figures.FirstOrDefault(f => f is King king && king.IsWhite == IsWhite)
-                ]))).Aggregate(possibleMoves,
-                (current, positions) => current.Except(positions).ToList());
+                               .Select(figure =>
+                                           figure.GetAvailablePositions(figures.Except([
+                                               figures.FirstOrDefault(f => f is King king && king.IsWhite == IsWhite)
+                                           ]))).Aggregate(possibleMoves,
+                                                          (current, positions) => current.Except(positions).ToList());
 
         if (possibleMoves.Count == 1 &&
             figures.FirstOrDefault(f => f.Position == possibleMoves.First()) is { } figure &&
             figure.IsWhite != IsWhite && figures.Where(w => w.IsWhite != IsWhite)
-                .Select(s => s.GetAvailablePositions(figures.Except([figure]))).SelectMany(s => s)
-                .Any(a => a == possibleMoves.First()))
+                                                .Select(s => s.GetAvailablePositions(figures.Except([figure])))
+                                                .SelectMany(s => s)
+                                                .Any(a => a == possibleMoves.First()))
             possibleMoves.Clear();
 
         return possibleMoves;

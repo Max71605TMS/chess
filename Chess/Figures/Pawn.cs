@@ -31,15 +31,15 @@ public class Pawn : Figure, IFigureRestriction
             if (IsSelected)
                 return (ElementColors.GetElementColor(ElementColor.Green, Position), ChessResources.PawnWhite);
             return (Position.X + Position.Y) % 2 == 0
-                ? (ElementColors.GetElementColor(ElementColor.White, Position), ChessResources.PawnWhite)
-                : (ElementColors.GetElementColor(ElementColor.Black, Position), ChessResources.PawnWhite);
+                       ? (ElementColors.GetElementColor(ElementColor.White, Position), ChessResources.PawnWhite)
+                       : (ElementColors.GetElementColor(ElementColor.Black, Position), ChessResources.PawnWhite);
         }
 
         if (IsSelected)
             return (ElementColors.GetElementColor(ElementColor.Green, Position), ChessResources.PawnBlack);
         return (Position.X + Position.Y) % 2 == 0
-            ? (ElementColors.GetElementColor(ElementColor.White, Position), ChessResources.PawnBlack)
-            : (ElementColors.GetElementColor(ElementColor.Black, Position), ChessResources.PawnBlack);
+                   ? (ElementColors.GetElementColor(ElementColor.White, Position), ChessResources.PawnBlack)
+                   : (ElementColors.GetElementColor(ElementColor.Black, Position), ChessResources.PawnBlack);
     }
 
     private IEnumerable<Point> GetMovementPositions(IEnumerable<Figure> figures)

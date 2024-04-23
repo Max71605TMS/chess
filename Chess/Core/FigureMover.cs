@@ -1,11 +1,14 @@
 ﻿using Chess.Abstract;
 using Chess.Figures;
 using Chess.Interfaces;
+using Chess.Models;
 
 namespace Chess.Core;
 
 public class FigureMover
 {
+    public delegate void MoveEndEventHandler(MoveEndEventArgs? args);
+
     public bool IsWhiteTurn { get; private set; } = true;
 
     public IEnumerable<Point>? AvailablePositions { get; private set; }
@@ -15,6 +18,8 @@ public class FigureMover
     public (bool isCheck, bool isMate, bool kingColor, Figure? threatFigure)? CheckMateStatus { get; private set; }
 
     public List<Figure> Figures { get; } = Initializer.GetFigures();
+
+    public event MoveEndEventHandler? OnMoveEnd;
 
     //Выбор фигуры
     public void SelectCurrentFigure(Figure figure)
@@ -74,6 +79,8 @@ public class FigureMover
 
                 ((IFigureRestriction)attackedFigure).IsFirstTurn = false;
 
+                EndMove(true);
+
                 return;
             }
 
@@ -83,11 +90,27 @@ public class FigureMover
 
         CurrentFigure.Position = targetPosition;
 
+        EndMove(CurrentFigure is not Pawn { Position.Y: 0 or 7 });
+    }
+
+    //Вызов конца хода. Вызов ивента
+    private void EndMove(bool isSwitchTurn)
+    {
         CheckMateStatus = CheckCheckmate();
 
-        if (CurrentFigure is Pawn { Position.Y: 0 or 7 }) return;
+        if (isSwitchTurn) SwitchTurn();
 
-        SwitchTurn();
+        var arg = CheckMateStatus is null
+                      ? null
+                      : new MoveEndEventArgs
+                      {
+                          IsCheck = CheckMateStatus.Value.isCheck,
+                          IsMate = CheckMateStatus.Value.isMate,
+                          KingColor = CheckMateStatus.Value.kingColor,
+                          ThreatFigure = CheckMateStatus.Value.threatFigure
+                      };
+
+        OnMoveEnd?.Invoke(arg);
     }
 
     //Замена пешки на другую фигуру
@@ -100,7 +123,7 @@ public class FigureMover
         Figures.Add(targetFigure);
         DeselectCurrentFigure();
 
-        SwitchTurn();
+        EndMove(true);
     }
 
     //Получение возможных ходов для фигуры
@@ -121,10 +144,11 @@ public class FigureMover
         var king = Figures.First(f => f is King king && king.IsWhite != IsWhiteTurn);
 
         var allEnemyFiguresAvailablePositions = Figures.Where(w => w.IsWhite == IsWhiteTurn)
-            .Select(s =>
-                s.GetAvailablePositions(Figures.Except([
-                    Figures.First(f => f is King kingFigure && kingFigure.IsWhite != IsWhiteTurn)
-                ]))).SelectMany(s => s).ToList();
+                                                       .Select(s =>
+                                                                   s.GetAvailablePositions(Figures.Except([
+                                                                       Figures.First(f => f is King kingFigure &&
+                                                                                kingFigure.IsWhite != IsWhiteTurn)
+                                                                   ]))).SelectMany(s => s).ToList();
 
         var isCheck = allEnemyFiguresAvailablePositions.Contains(king.Position);
 
@@ -135,8 +159,10 @@ public class FigureMover
             king.GetAvailablePositions(Figures).Except(allEnemyFiguresAvailablePositions).ToList();
 
         if (kingAvailablePositions.Count == 1 && Figures.Where(w => w.IsWhite == IsWhiteTurn)
-                .Select(s => s?.GetAvailablePositions(Figures.Except([CurrentFigure])!)).SelectMany(s => (s ?? null)!)
-                .Any(a => a == kingAvailablePositions.First()))
+                                                        .Select(s => s?.GetAvailablePositions(Figures.Except([
+                                                            CurrentFigure
+                                                        ])!)).SelectMany(s => (s ?? null)!)
+                                                        .Any(a => a == kingAvailablePositions.First()))
             kingAvailablePositions.Clear();
 
         var isMate = kingAvailablePositions.Count == 0;

@@ -21,11 +21,11 @@ internal static class Initializer
                 BorderSize = 0
             },
             BackColor = (x + y) % 2 == 0
-                ? ElementColors.GetElementColor(ElementColor.White, new Point(x, y))
-                : ElementColors.GetElementColor(ElementColor.Black, new Point(x, y)),
+                            ? ElementColors.GetElementColor(ElementColor.White, new Point(x, y))
+                            : ElementColors.GetElementColor(ElementColor.Black, new Point(x, y)),
             Tag = new Point(x, y),
             BackgroundImageLayout = ImageLayout.Stretch,
-            Name = "Figure"
+            Name = "ThreatFigure"
         };
     }
 
@@ -47,11 +47,11 @@ internal static class Initializer
     {
         var figures = new List<Figure>();
         for (var y = 0; y < BoardSize; y++)
-        for (var x = 0; x < BoardSize; x++)
-        {
-            var figure = GetFigure(x, y);
-            if (figure is not null) figures.Add(figure);
-        }
+            for (var x = 0; x < BoardSize; x++)
+            {
+                var figure = GetFigure(x, y);
+                if (figure is not null) figures.Add(figure);
+            }
 
         return figures;
     }

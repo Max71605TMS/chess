@@ -2,6 +2,7 @@ using Chess.Abstract;
 using Chess.Core;
 using Chess.Enums;
 using Chess.Figures;
+using Chess.Models;
 using Chess.Visuals;
 
 namespace Chess.Forms;
@@ -26,34 +27,55 @@ public partial class Chess : Form
         InitializeComponent();
         InitializeChessBoard();
         InitializeTurnInformation();
+        SubEvent();
 
-        SetTurnInfo();
+        SetTurnInfo(null);
+    }
+
+    //Подписаться на ивент конца хода
+    private void SubEvent()
+    {
+        _mover.OnMoveEnd += OnMoveEnd;
+    }
+
+    //Обработчик ивента конца хода
+    private void OnMoveEnd(MoveEndEventArgs? args)
+    {
+        //Проверка на мат
+        if (args is not null && args.IsMate)
+        {
+            SetTurnInfo(args);
+            UnsubClickEvent();
+            return;
+        }
+
+        SetTurnInfo(args);
     }
 
     private void InitializeChessBoard()
     {
         for (var y = 0; y < BoardSize; y++)
-        for (var x = 0; x < BoardSize; x++)
-        {
-            var button = Initializer.GetButton(ButtonSize, x, y, 60, 80);
-            _chessButtons[x, y] = button;
-            Controls.Add(_chessButtons[x, y]);
+            for (var x = 0; x < BoardSize; x++)
+            {
+                var button = Initializer.GetButton(ButtonSize, x, y, 60, 80);
+                _chessButtons[x, y] = button;
+                Controls.Add(_chessButtons[x, y]);
 
-            _chessButtons[x, y].Click += ChessButtonClicked;
+                _chessButtons[x, y].Click += ChessButtonClicked;
 
-            var horizontalLabels = new Dictionary<int, string>
-                { { 7, "H" }, { 6, "G" }, { 5, "F" }, { 4, "E" }, { 3, "D" }, { 2, "C" }, { 1, "B" }, { 0, "A" } };
-            var verticalLabels = new Dictionary<int, string>
-                { { 0, "8" }, { 1, "7" }, { 2, "6" }, { 3, "5" }, { 4, "4" }, { 5, "3" }, { 6, "2" }, { 7, "1" } };
+                var horizontalLabels = new Dictionary<int, string>
+                    { { 7, "H" }, { 6, "G" }, { 5, "F" }, { 4, "E" }, { 3, "D" }, { 2, "C" }, { 1, "B" }, { 0, "A" } };
+                var verticalLabels = new Dictionary<int, string>
+                    { { 0, "8" }, { 1, "7" }, { 2, "6" }, { 3, "5" }, { 4, "4" }, { 5, "3" }, { 6, "2" }, { 7, "1" } };
 
-            if (y == 7 && horizontalLabels.TryGetValue(x, out var horizontalLabel))
-                SetLabelOnBoard(LabelDirection.Horizontal, button, horizontalLabel);
+                if (y == 7 && horizontalLabels.TryGetValue(x, out var horizontalLabel))
+                    SetLabelOnBoard(LabelDirection.Horizontal, button, horizontalLabel);
 
-            if (x != 0) continue;
+                if (x != 0) continue;
 
-            if (verticalLabels.TryGetValue(y, out var verticalLabel))
-                SetLabelOnBoard(LabelDirection.Vertical, button, verticalLabel);
-        }
+                if (verticalLabels.TryGetValue(y, out var verticalLabel))
+                    SetLabelOnBoard(LabelDirection.Vertical, button, verticalLabel);
+            }
 
         SetFigures(_mover.Figures);
     }
@@ -262,8 +284,11 @@ public partial class Chess : Form
                     var allKingColorFigures = _mover.Figures.Where(w => w.IsWhite == checkMateStatus.Value.kingColor);
 
                     var figuresToDefend = allKingColorFigures.Where(defendFigure =>
-                        defendFigure.GetAvailablePositions(allKingColorFigures)
-                            .Any(a => a == checkMateStatus.Value.threatFigure?.Position)).ToList();
+                                                                        defendFigure
+                                                                            .GetAvailablePositions(allKingColorFigures)
+                                                                            .Any(a => a == checkMateStatus.Value
+                                                                                         .threatFigure?.Position))
+                                                             .ToList();
 
                     if (figuresToDefend.All(a => a != figure) && figure is not King) return;
                 }
@@ -302,7 +327,7 @@ public partial class Chess : Form
                     _mover.DeselectCurrentFigure();
 
                     SetFigures(_mover.Figures);
-                    SetTurnInfo();
+                    // SetTurnInfo();
 
                     return;
                 }
@@ -336,15 +361,7 @@ public partial class Chess : Form
 
             SetFigures(_mover.Figures);
 
-            //Проверка на мат
-            if (_mover.CheckMateStatus is not null && _mover.CheckMateStatus.Value.isMate)
-            {
-                SetTurnInfo();
-                UnsubClickEvent();
-                return;
-            }
-
-            SetTurnInfo();
+            // SetTurnInfo();
 
             return;
         }
@@ -368,14 +385,14 @@ public partial class Chess : Form
 
         SetFigures(_mover.Figures);
 
-        if (_mover.CheckMateStatus is not null && _mover.CheckMateStatus.Value.isMate)
-        {
-            SetTurnInfo();
-            UnsubClickEvent();
-            return;
-        }
-
-        SetTurnInfo();
+        // if (_mover.CheckMateStatus is not null && _mover.CheckMateStatus.Value.isMate)
+        // {
+        //     SetTurnInfo();
+        //     UnsubClickEvent();
+        //     return;
+        // }
+        //
+        // SetTurnInfo();
     }
 
     //Ивент нажатия кнопки в секции замены пешки на другую фигуру
@@ -387,14 +404,14 @@ public partial class Chess : Form
 
         SetFigures(_mover.Figures);
 
-        if (_mover.CheckMateStatus is not null && _mover.CheckMateStatus.Value.isMate)
-        {
-            SetTurnInfo();
-            UnsubClickEvent();
-            return;
-        }
-
-        SetTurnInfo();
+        // if (_mover.CheckMateStatus is not null && _mover.CheckMateStatus.Value.isMate)
+        // {
+        //     SetTurnInfo();
+        //     UnsubClickEvent();
+        //     return;
+        // }
+        //
+        // SetTurnInfo();
 
         SwitchPawnReplaceSection(false);
     }
@@ -410,14 +427,15 @@ public partial class Chess : Form
     private void ResetAllButtonInformation()
     {
         for (var y = 0; y < BoardSize; y++)
-        for (var x = 0; x < BoardSize; x++)
-        {
-            _chessButtons[x, y].Tag = new Point(x, y);
-            _chessButtons[x, y].BackgroundImage = null;
-            _chessButtons[x, y].BackColor = (x + y) % 2 == 0
-                ? ElementColors.GetElementColor(ElementColor.White, new Point(x, y))
-                : ElementColors.GetElementColor(ElementColor.Black, new Point(x, y));
-        }
+            for (var x = 0; x < BoardSize; x++)
+            {
+                _chessButtons[x, y].Tag = new Point(x, y);
+                _chessButtons[x, y].BackgroundImage = null;
+                _chessButtons[x, y].BackColor = (x + y) % 2 == 0
+                                                    ? ElementColors.GetElementColor(ElementColor.White, new Point(x, y))
+                                                    : ElementColors.GetElementColor(ElementColor.Black,
+                                                         new Point(x, y));
+            }
     }
 
     //Подсветить доступные ходы
@@ -443,12 +461,12 @@ public partial class Chess : Form
     {
         var visuals = figure.GetVisuals();
         var color = isBattle
-            ? figure.IsWhite == _mover.IsWhiteTurn
-                ? figure is Rook or King
-                    ? ElementColors.GetElementColor(ElementColor.Castling, figure.Position)
-                    : ElementColors.GetElementColor(ElementColor.Green, figure.Position)
-                : ElementColors.GetElementColor(ElementColor.Red, figure.Position)
-            : visuals.color;
+                        ? figure.IsWhite == _mover.IsWhiteTurn
+                              ? figure is Rook or King
+                                    ? ElementColors.GetElementColor(ElementColor.Castling, figure.Position)
+                                    : ElementColors.GetElementColor(ElementColor.Green, figure.Position)
+                              : ElementColors.GetElementColor(ElementColor.Red, figure.Position)
+                        : visuals.color;
 
         SetButtonProperties(figure.Position.X, figure.Position.Y, color, figure, visuals.image);
     }
@@ -468,39 +486,39 @@ public partial class Chess : Form
     }
 
     //Задание информации в верхнем окне
-    private void SetTurnInfo()
+    private void SetTurnInfo(MoveEndEventArgs? status)
     {
-        var checkmateStatus = _mover.CheckMateStatus;
+        // var status = _mover.CheckMateStatus;
 
-        var text = checkmateStatus is not null && checkmateStatus.Value.isMate
-            ? $"Победили {(_mover.CheckMateStatus!.Value.kingColor ? "чёрные" : "белые")}"
-            : _mover.IsWhiteTurn
-                ? "Ход белых"
-                : "Ход чёрных";
-        var color = checkmateStatus is not null && checkmateStatus.Value.isMate
-            ? _mover.CheckMateStatus!.Value.kingColor
-                ? Color.Black
-                : Color.White
-            : _mover.IsWhiteTurn
-                ? Color.White
-                : Color.Black;
+        var text = status is not null && status.IsMate
+                       ? $"Победили {(_mover.CheckMateStatus!.Value.kingColor ? "чёрные" : "белые")}"
+                       : _mover.IsWhiteTurn
+                           ? "Ход белых"
+                           : "Ход чёрных";
+        var color = status is not null && status.IsMate
+                        ? _mover.CheckMateStatus!.Value.kingColor
+                              ? Color.Black
+                              : Color.White
+                        : _mover.IsWhiteTurn
+                            ? Color.White
+                            : Color.Black;
 
         _moveStatusText.Text = text;
         _moveStatusPicture.BackColor = color;
 
-        if (checkmateStatus is null) return;
+        if (status is null) return;
 
-        var message = checkmateStatus.Value is { isCheck: true, isMate: true }
-            ? text
-            : $"Король {(checkmateStatus.Value.kingColor ? "белых" : "чёрных")} под угрозой! Шах!";
+        var message = status is { IsCheck: true, IsMate: true }
+                          ? text
+                          : $"Король {(status.KingColor ? "белых" : "чёрных")} под угрозой! Шах!";
 
-        var caption = checkmateStatus.Value is { isCheck: true, isMate: true }
-            ? "Победа!"
-            : "Внимание!";
+        var caption = status is { IsCheck: true, IsMate: true }
+                          ? "Победа!"
+                          : "Внимание!";
 
-        var icon = checkmateStatus.Value is { isCheck: true, isMate: true }
-            ? MessageBoxIcon.None
-            : MessageBoxIcon.Exclamation;
+        var icon = status is { IsCheck: true, IsMate: true }
+                       ? MessageBoxIcon.None
+                       : MessageBoxIcon.Exclamation;
 
         MessageBox.Show(message, caption, MessageBoxButtons.OK, icon);
     }
@@ -509,5 +527,7 @@ public partial class Chess : Form
     private void UnsubClickEvent()
     {
         foreach (var button in _chessButtons) button.Click -= ChessButtonClicked;
+
+        _mover.OnMoveEnd -= OnMoveEnd;
     }
 }
