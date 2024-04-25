@@ -87,5 +87,17 @@ namespace Chess
                 }
             }
         }
+
+        //public IEnumerable<Point> GetAttackForKing(IEnumerable<Figure> figures)
+        //{
+        //    int offsetX1 = 1;
+        //    int offsetY1 = _isDirectionUp && _isWhite ? -1 : 1;
+        //    int offsetX2 = -1;
+        //    int offsetY2 = _isDirectionUp && _isWhite ? -1 : 1;
+
+     
+
+        //    return positions;
+        //}
     }
 }

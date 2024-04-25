@@ -22,9 +22,16 @@ namespace Chess.Interfaces
 
                 if (figureStep is not null)
                 {
-                    if (figureStep.IsWhite != figure.IsWhite || figureStep.IsWhite == figure.IsWhite) 
+                    if (figureStep is King && figureStep.IsWhite != figure.IsWhite)
+                    {
+                        positions.Add(new Point(x, y)); 
+                    }
+
+                    else if (figureStep.IsWhite != figure.IsWhite || figureStep.IsWhite == figure.IsWhite)
+                    {
                         positions.Add(new Point(x, y));
-                    break;
+                        break;
+                    }
                 }
 
                 positions.Add(new Point(x, y));
@@ -36,5 +43,5 @@ namespace Chess.Interfaces
             return positions;
         }
     }
-    
+
 }
