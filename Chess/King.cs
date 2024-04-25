@@ -38,7 +38,7 @@ namespace Chess
                 var theKingBlackAttack = AttacKing(positionBlackKing);
                 var attackPawnBlack = figures.Where(f => f is Pawn).Where(f => f.IsWhite == false)
                                                .Select(f => (Pawn)f)
-                                               .Select(position => position.GetAttackPositions(figures))
+                                               .Select(position => position.GetAttackForKing(figures))
                                                .SelectMany(p => p).ToList();
 
                 foreach (var move in allTheKingMoves)
@@ -60,7 +60,7 @@ namespace Chess
                 var attackWhiteFiguresPositions = AttackOfPiecesOtherThanPawns(whiteFiguresPositions, figures);
                 var attackPawnWhite = figures.Where(f => f is Pawn).Where(p => p.IsWhite)
                                           .Select(f => (Pawn)f)
-                                          .Select(position => position.GetAttackPositions(figures))
+                                          .Select(position => position.GetAttackForKing(figures))
                                           .SelectMany(p => p).ToList();
 
                 foreach (var move in allTheKingMoves)
@@ -230,7 +230,7 @@ namespace Chess
             LeftPosition.Add(new Point(Position.X - 2, Position.Y));
             LeftPosition.Add(new Point(Position.X - 3, Position.Y));
 
-            if (IsWhite && whiteRooks != null && IsFirstTurn && whiteRooks.Where(f => f.IsFirstTurn == true) != null)
+            if (IsWhite && whiteRooks != null && this.IsFirstTurn && whiteRooks.Where(f => f.IsFirstTurn == true) != null)
             {
                 if (whiteRooks.Count() == 2 && whiteRooks.All(f => f.IsFirstTurn == true))
                 {
@@ -258,7 +258,7 @@ namespace Chess
                     }
                 }
             }
-            if (!IsWhite && blackRooks != null && IsFirstTurn && blackRooks.Where(f => f.IsFirstTurn == true) != null)
+            if (!IsWhite && blackRooks != null && this.IsFirstTurn && blackRooks.Where(f => f.IsFirstTurn == true) != null)
             {
                 if (blackRooks.Count() == 2 && blackRooks.All(f => f.IsFirstTurn == true))
                 {

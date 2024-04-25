@@ -88,16 +88,27 @@ namespace Chess
             }
         }
 
-        //public IEnumerable<Point> GetAttackForKing(IEnumerable<Figure> figures)
-        //{
-        //    int offsetX1 = 1;
-        //    int offsetY1 = _isDirectionUp && _isWhite ? -1 : 1;
-        //    int offsetX2 = -1;
-        //    int offsetY2 = _isDirectionUp && _isWhite ? -1 : 1;
+        public IEnumerable<Point> GetAttackForKing(IEnumerable<Figure> figures)
+        {
+            List<Point> attack = new List<Point>();
+            if (IsWhite)
+            {
+                var blackFigures = figures.Where(f => f.IsWhite == false).ToList();
+                var pointAtackLeft = new Point(Position.X - 1, Position.Y - 1);
+                var pointAtackRight = new Point(Position.X + 1, Position.Y - 1);
 
-     
+                attack.Add(new Point(Position.X - 1, Position.Y - 1));
+                attack.Add(new Point(Position.X + 1, Position.Y - 1));
+            }
+            else
+            {
+                var pointAtackLeft = new Point(Position.X - 1, Position.Y + 1);
+                var pointAtackRight = new Point(Position.X + 1, Position.Y + 1);
 
-        //    return positions;
-        //}
+                attack.Add(pointAtackLeft);
+                attack.Add(pointAtackRight);
+            }
+            return attack;
+        }
     }
 }

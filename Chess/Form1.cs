@@ -131,25 +131,33 @@ public partial class Form1 : Form
             {
                 if (_figureMover.CurrentFigure is King && point.X == 6)
                 {
+                    King king = (King)_figureMover.CurrentFigure;
+                    if (king.IsFirstTurn)
+                    { 
+                        var Rook = _figureMover.Figures.Where(f => f is Rook)
+                                                       .Where(f => f.IsWhite == _figureMover.CurrentFigure.IsWhite)
+                                                       .Where(f => f.Position.X == 7).First();
 
-                    var Rook = _figureMover.Figures.Where(f => f is Rook)
-                                                   .Where(f => f.IsWhite == _figureMover.CurrentFigure.IsWhite)
-                                                   .Where(f => f.Position.X == 7).First();
+                        var moveRookPoint = new Point(point.X - 1, point.Y);
+                        ClearCurrentCell(Rook.Position);
+                        Rook.Position = moveRookPoint;
+                    }
 
-                    var moveRookPoint = new Point(point.X - 1, point.Y);
-                    ClearCurrentCell(Rook.Position);
-                    Rook.Position = moveRookPoint;
                 }
 
                 if (_figureMover.CurrentFigure is King && point.X == 2)
                 {
-                    var Rook = _figureMover.Figures.Where(f => f is Rook)
-                                                   .Where(f => f.IsWhite == _figureMover.CurrentFigure.IsWhite)
-                                                   .Where(f => f.Position.X == 0).First();
+                    King king = (King)_figureMover.CurrentFigure;
+                    if(king.IsFirstTurn)
+                    {
+                        var Rook = _figureMover.Figures.Where(f => f is Rook)
+                                                       .Where(f => f.IsWhite == _figureMover.CurrentFigure.IsWhite)
+                                                       .Where(f => f.Position.X == 0).First();
 
-                    var moveRookPoint = new Point(point.X + 1, point.Y);
-                    ClearCurrentCell(Rook.Position);
-                    Rook.Position = moveRookPoint;
+                        var moveRookPoint = new Point(point.X + 1, point.Y);
+                        ClearCurrentCell(Rook.Position);
+                        Rook.Position = moveRookPoint;
+                    }
                 }
 
                 ClearCurrentCell(_figureMover.CurrentFigure.Position);
