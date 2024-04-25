@@ -51,7 +51,8 @@ namespace Chess
 
 
 
-                    if (IsFirstTurn && !figures.Any(f => f.Position == new Point(Position.X, Position.Y + direction)))
+                    if (IsFirstTurn && !figures.Any(f => f.Position == new Point(Position.X, Position.Y + direction)) 
+                        && !figures.Any(f => f.Position == new Point(Position.X, Position.Y + direction * 2)))
                     {
                         positions.Add(new Point(Position.X, Position.Y + direction * 2));
                     }
