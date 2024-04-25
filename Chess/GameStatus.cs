@@ -230,13 +230,13 @@ namespace Chess
             foreach (var position in attackFigureAllAP)
             {
                 AddPositios(position => position.X > king.Position.X && position.X < attackingFigure.Position.X
-                    && position.Y == attackingFigure.Position.Y, position, attackFigureAP);
+                    && position.Y == attackingFigure.Position.Y && position.Y == king.Position.Y, position, attackFigureAP);
                 AddPositios(position => position.X > attackingFigure.Position.X && position.X < king.Position.X
-                && position.Y == attackingFigure.Position.Y, position, attackFigureAP);
+                && position.Y == attackingFigure.Position.Y && position.Y == king.Position.Y, position, attackFigureAP);
                 AddPositios(position => position.Y > king.Position.Y && position.Y < attackingFigure.Position.Y
-                && position.X == attackingFigure.Position.X, position, attackFigureAP);
+                && position.X == attackingFigure.Position.X && position.X == king.Position.X, position, attackFigureAP);
                 AddPositios(position => position.Y > attackingFigure.Position.Y && position.Y < king.Position.Y
-                && position.X == attackingFigure.Position.X, position, attackFigureAP);
+                && position.X == attackingFigure.Position.X && position.X == king.Position.X, position, attackFigureAP);
 
                 AddPositios(position => position.X > attackingFigure.Position.X && position.X < king.Position.X
                 && position.Y > attackingFigure.Position.Y && position.Y < king.Position.Y, position, attackFigureAP);
