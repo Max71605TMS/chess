@@ -19,6 +19,9 @@ public partial class Form1 : Form
     public Form1()
     {
         _figureMover = new FigureMover(true);
+        this.AutoSize = true;
+        this.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+        this.StartPosition = FormStartPosition.CenterScreen;
         InitializeComponent();
         InitializeChessBoard();
     }
@@ -86,7 +89,7 @@ public partial class Form1 : Form
         {
             for (var x = 0; x < BoardSize; x++)
             {
-                var button = Initializer.GetButton(ButtonSize, x, y, 150, 50);
+                var button = Initializer.GetButton(ButtonSize, x, y);
                 chessButtons[x, y] = button;
                 Controls.Add(chessButtons[x, y]);
                 chessButtons[x, y].Click += ChessButton_Click;
