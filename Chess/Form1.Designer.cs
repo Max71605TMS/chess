@@ -28,24 +28,19 @@
         /// </summary>
         private void InitializeComponent()
         {
-            button1 = new Button();
             SuspendLayout();
-            // 
-         
             // 
             // Form1
             // 
-            AutoScaleDimensions = new SizeF(7F, 12F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(957, 564);
-            Controls.Add(button1);
+            ClientSize = new Size(957, 705);
+            Margin = new Padding(3, 4, 3, 4);
             Name = "Form1";
             Text = "Form1";
             ResumeLayout(false);
         }
 
         #endregion
-
-        private Button button1;
     }
 }
