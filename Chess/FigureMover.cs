@@ -26,7 +26,12 @@ namespace Chess
         {
             if (figure.IsWhite == IsWhiteTurn)
             {
-                AvaliablePositions = figure.GetAvaliablePositions(Figures);
+                if (figure is not King && GameStatus.IsCheck(IsWhiteTurn, Figures))
+                {
+                    AvaliablePositions = GameStatus.ChangeAvailablePositionProtectingFigures(IsWhiteTurn, Figures, figure);
+                }
+                else { AvaliablePositions = figure.GetAvaliablePositions(Figures); }
+                
                 figure.IsChoosen = true;
                 CurrentFigure = figure;
             }

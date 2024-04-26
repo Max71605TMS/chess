@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -249,6 +250,32 @@ namespace Chess
             }
 
             return attackFigureAP;
+        }
+
+        public static IEnumerable<Point> ChangeAvailablePositionProtectingFigures(bool isWhiteTurn, IEnumerable<Figure> figures, Figure currentFigure)
+        {
+            King king = FindKing(isWhiteTurn, figures);
+           
+            var availablePositionsCurrentFigure = currentFigure.GetAvaliablePositions(figures);
+
+            var attackFigureAvailablePositions = new List<Point>();
+            var attackFigureAllAvailablePositions = attackingFigure.GetAvaliablePositions(figures);
+
+             if (attackingFigure is Rook)
+            {
+                attackFigureAvailablePositions = AvailableMovesForRook(king, attackingFigure, attackFigureAllAvailablePositions);
+            }
+            else if (attackingFigure is Bishop)
+            {
+                attackFigureAvailablePositions = AvailableMovesForBishop(king, attackingFigure, attackFigureAllAvailablePositions);
+            }
+            else if (attackingFigure is Queen)
+            {
+                attackFigureAvailablePositions = AvailableMovesForQueen(king, attackingFigure, attackFigureAllAvailablePositions);
+            }
+
+            return availablePositionsCurrentFigure.Intersect(attackFigureAvailablePositions);
+
         }
     }
 }
