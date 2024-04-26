@@ -4,7 +4,7 @@ using System.Resources;
 
 namespace Chess;
 
-public partial class Form1 : Form
+public partial class Chess : Form
 {
     //Team Two
     private const int BoardSize = 8;
@@ -16,13 +16,13 @@ public partial class Form1 : Form
 
     private readonly bool isWhiteTurn = true;
 
-    public Form1()
+    public Chess()
     {
         _figureMover = new FigureMover(true);
+        this.Text = "Шахматы";
         this.AutoSize = true;
         this.AutoSizeMode = AutoSizeMode.GrowAndShrink;
         this.StartPosition = FormStartPosition.CenterScreen;
-        InitializeComponent();
         InitializeChessBoard();
     }
 
