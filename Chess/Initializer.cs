@@ -17,7 +17,7 @@ internal static class Initializer
             Width = ButtonSize,
             Height = ButtonSize,
             Location = new Point(x * ButtonSize , y * ButtonSize ),
-            BackColor = (x + y) % 2 == 0 ? Color.White : Color.Black,
+            BackgroundImage = (x + y) % 2 == 0 ? Chess.Properties.Resources.Empty_White : Chess.Properties.Resources.Empty_Black,
             Tag = new Point(x, y),
 
         };
