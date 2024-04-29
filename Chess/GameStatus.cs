@@ -282,11 +282,12 @@ namespace Chess
 
         public static bool CheckPositionsAroundCurrentFigure(bool isWhiteTurn, IEnumerable<Figure> figures, Figure currentFigure, out List <Point> currentfigureAvailablePos)
         {
+
             currentfigureAvailablePos = currentFigure.GetAvaliablePositions(figures).ToList();
             var canMove = false;
             King king = FindKing(isWhiteTurn, figures);
             // var APpositionsRook = figures.Where(fig => fig is Rook && fig.IsWhite != currentFigure.IsWhite)
-             //   .Select(fig => fig.GetAvaliablePositions(figures)).SelectMany(p =>p);
+            //   .Select(fig => fig.GetAvaliablePositions(figures)).SelectMany(p =>p);
 
             var positionsRook = figures.Where(fig => fig is Rook && fig.IsWhite != currentFigure.IsWhite)
                   .Select(fig => fig.Position).ToList();
@@ -298,128 +299,85 @@ namespace Chess
             var availablePositionsFigures = figures.Where(fig => fig != king).Select(fig => fig.Position);
             var availablePositionsTowardAttackingFigure = new List<Point>();
 
+
             //позиции вверх и вниз по прямой
             if (currentFigure.Position.X == king.Position.X)
             {
-                if (currentFigure.Position.Y < king.Position.Y)
+                var direction = currentFigure.Position.Y < king.Position.Y ? 1 : -1;
+                var start = currentFigure.Position.Y + direction;
+                var end = direction == 1 ? king.Position.Y : 0;
+
+                for (int i = start; i != end; i += direction)
                 {
-                    for (int i = currentFigure.Position.Y + 1; i < king.Position.Y; i++)
+                    var position = new Point(currentFigure.Position.X, i);
+                    if (availablePositionsFigures.Any(pos => pos == position))
                     {
-                        var position = new Point(currentFigure.Position.X, i);
-                        if (availablePositionsFigures.Any(pos => pos == position))
-                        {
-                            return canMove = true;
-                        }
-                        availablePositionsTowardAttackingFigure.Add(position);
+                        return canMove = true;
                     }
-                    for (int i = currentFigure.Position.Y - 1; i >= 0; i--)
-                    {
-                        var position = new Point(currentFigure.Position.X, i);
-                        if (positionsRook.All(pos => pos != position) && positionsQueen.All(pos => pos != position)
-                                                            && availablePositionsFigures.Any(pos => pos == position))
-                        {
-                            return canMove = true;
-                        }
-                        else if (positionsRook.Any(pos => pos == position) || positionsQueen.Any(pos => pos == position))
-                        {
-                            availablePositionsTowardAttackingFigure.Add(position);
-                            break;
-                        }
-                        availablePositionsTowardAttackingFigure.Add(position);
-                    }
+                    availablePositionsTowardAttackingFigure.Add(position);
                 }
-                else
+
+                start = currentFigure.Position.Y - direction;
+                end = direction == 1 ? 0 : 7;
+
+                for (int i = start; i != end; i -= direction)
                 {
-                    for (int i = currentFigure.Position.Y - 1; i > king.Position.Y; i--)
+                    var position = new Point(currentFigure.Position.X, i);
+                    if (positionsRook.All(pos => pos != position) && positionsQueen.All(pos => pos != position)
+                                                                && availablePositionsFigures.Any(pos => pos == position))
                     {
-                        var position = new Point(currentFigure.Position.X, i);
-                        if (availablePositionsFigures.Any(pos => pos == position))
-                        {
-                            return canMove = true;
-                        }
-                        availablePositionsTowardAttackingFigure.Add(position);
+                        return canMove = true;
                     }
-                    for (int i = currentFigure.Position.Y + 1; i <= 7; i++)
+                    else if (positionsRook.Any(pos => pos == position) || positionsQueen.Any(pos => pos == position))
                     {
-                        var position = new Point(currentFigure.Position.X, i);
-                        if (positionsRook.All(pos => pos != position) && positionsQueen.All(pos => pos != position)
-                                                            && availablePositionsFigures.Any(pos => pos == position))
-                        {
-                            return canMove = true;
-                        }
-                        else if (positionsRook.Any(pos => pos == position) || positionsQueen.Any(pos => pos == position))
-                        {
-                            availablePositionsTowardAttackingFigure.Add(position);
-                            break;
-                        }
                         availablePositionsTowardAttackingFigure.Add(position);
+                        break;
                     }
+                    availablePositionsTowardAttackingFigure.Add(position);
                 }
-                currentfigureAvailablePos = currentfigureAvailablePos.Intersect(availablePositionsTowardAttackingFigure).ToList(); 
+                currentfigureAvailablePos = currentfigureAvailablePos.Intersect(availablePositionsTowardAttackingFigure).ToList();
             }
 
             //позиции справа и слева по прямой
             if (currentFigure.Position.Y == king.Position.Y)
             {
-                if (currentFigure.Position.X < king.Position.X)
+                var direction = currentFigure.Position.X < king.Position.X ? 1 : -1;
+                var start = currentFigure.Position.X + direction;
+                var end = direction == 1 ? king.Position.X : 0;
+
+                for (int i = start; i != end; i += direction)
                 {
-                    for (int i = currentFigure.Position.X + 1; i < king.Position.X; i++)
+                    var position = new Point(i, currentFigure.Position.Y);
+                    if (availablePositionsFigures.Any(pos => pos == position))
                     {
-                        var position = new Point(i, currentFigure.Position.Y);
-                        if (availablePositionsFigures.Any(pos => pos == position))
-                        {
-                            return canMove = true;
-                        }
-                        availablePositionsTowardAttackingFigure.Add(position);
+                        return canMove = true;
                     }
-                    for (int i = currentFigure.Position.X - 1; i >= 0; i--)
-                    {
-                        var position = new Point(i, currentFigure.Position.Y);
-                        if (positionsRook.All(pos => pos != position) && positionsQueen.All(pos => pos != position)
-                                                            && availablePositionsFigures.Any(pos => pos == position))
-                        {
-                            return canMove = true;
-                        }
-                        else if (positionsRook.Any(pos => pos == position) || positionsQueen.Any(pos => pos == position))
-                        {
-                            availablePositionsTowardAttackingFigure.Add(position);
-                            break;
-                        }
-                        availablePositionsTowardAttackingFigure.Add(position);
-                    }
+                    availablePositionsTowardAttackingFigure.Add(position);
                 }
-                else
+
+                start = currentFigure.Position.X - direction;
+                end = direction == 1 ? 0 : 7;
+
+                for (int i = start; i != end; i -= direction)
                 {
-                    for (int i = currentFigure.Position.X - 1; i > king.Position.X; i--)
+                    var position = new Point(i, currentFigure.Position.Y);
+                    if (positionsRook.All(pos => pos != position) && positionsQueen.All(pos => pos != position)
+                                                                && availablePositionsFigures.Any(pos => pos == position))
                     {
-                        var position = new Point(i, currentFigure.Position.Y);
-                        if (availablePositionsFigures.Any(pos => pos == position))
-                        {
-                            return canMove = true;
-                        }
-                        availablePositionsTowardAttackingFigure.Add(position);
+                        return canMove = true;
                     }
-                    for (int i = currentFigure.Position.X + 1; i <= 7; i++)
+                    else if (positionsRook.Any(pos => pos == position) || positionsQueen.Any(pos => pos == position))
                     {
-                        var position = new Point(i, currentFigure.Position.Y);
-                        if (positionsRook.All(pos => pos != position) && positionsQueen.All(pos => pos != position)
-                                                            && availablePositionsFigures.Any(pos => pos == position))
-                        {
-                            return canMove = true;
-                        }
-                        else if (positionsRook.Any(pos => pos == position) || positionsQueen.Any(pos => pos == position))
-                        {
-                            availablePositionsTowardAttackingFigure.Add(position);
-                            break;
-                        }
                         availablePositionsTowardAttackingFigure.Add(position);
+                        break;
                     }
+                    availablePositionsTowardAttackingFigure.Add(position);
                 }
                 currentfigureAvailablePos = currentfigureAvailablePos.Intersect(availablePositionsTowardAttackingFigure).ToList();
             }
+            return canMove;
 
-
-            return canMove = false;
-        } 
+           
+        }
     }
 }
