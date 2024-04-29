@@ -24,17 +24,25 @@ namespace Chess
 
         public void ChooseFigure(Figure figure)
         {
+            var currentfigureAvailablePos = figure.GetAvaliablePositions(Figures).ToList();
+            var test = GameStatus.CheckPositionsAroundCurrentFigure(IsWhiteTurn, Figures, figure, out currentfigureAvailablePos);
             if (figure.IsWhite == IsWhiteTurn)
             {
                 if (figure is not King && GameStatus.IsCheck(IsWhiteTurn, Figures))
                 {
                     AvaliablePositions = GameStatus.ChangeAvailablePositionProtectingFigures(IsWhiteTurn, Figures, figure);
                 }
-                else
+                else 
                 {
-                    AvaliablePositions = figure.GetAvaliablePositions(Figures);
-                }
+                    if (GameStatus.CheckPositionsAroundCurrentFigure(IsWhiteTurn, Figures, figure, out currentfigureAvailablePos))
+                    { AvaliablePositions = figure.GetAvaliablePositions(Figures); }
+                    else 
+                    {
+                        AvaliablePositions = currentfigureAvailablePos;
+                    }
 
+                }
+                
                 figure.IsChoosen = true;
                 CurrentFigure = figure;
             }

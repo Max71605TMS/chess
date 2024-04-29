@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Runtime.CompilerServices;
@@ -279,5 +280,146 @@ namespace Chess
 
         }
 
+        public static bool CheckPositionsAroundCurrentFigure(bool isWhiteTurn, IEnumerable<Figure> figures, Figure currentFigure, out List <Point> currentfigureAvailablePos)
+        {
+            currentfigureAvailablePos = currentFigure.GetAvaliablePositions(figures).ToList();
+            var canMove = false;
+            King king = FindKing(isWhiteTurn, figures);
+            // var APpositionsRook = figures.Where(fig => fig is Rook && fig.IsWhite != currentFigure.IsWhite)
+             //   .Select(fig => fig.GetAvaliablePositions(figures)).SelectMany(p =>p);
+
+            var positionsRook = figures.Where(fig => fig is Rook && fig.IsWhite != currentFigure.IsWhite)
+                  .Select(fig => fig.Position).ToList();
+            var positionsQueen = figures.Where(fig => fig is Queen && fig.IsWhite != currentFigure.IsWhite)
+                  .Select(fig => fig.Position).ToList();
+            var positionsBishop = figures.Where(fig => fig is Bishop && fig.IsWhite != currentFigure.IsWhite)
+                  .Select(fig => fig.Position).ToList();
+
+            var availablePositionsFigures = figures.Where(fig => fig != king).Select(fig => fig.Position);
+            var availablePositionsTowardAttackingFigure = new List<Point>();
+
+            //позиции вверх и вниз по прямой
+            if (currentFigure.Position.X == king.Position.X)
+            {
+                if (currentFigure.Position.Y < king.Position.Y)
+                {
+                    for (int i = currentFigure.Position.Y + 1; i < king.Position.Y; i++)
+                    {
+                        var position = new Point(currentFigure.Position.X, i);
+                        if (availablePositionsFigures.Any(pos => pos == position))
+                        {
+                            return canMove = true;
+                        }
+                        availablePositionsTowardAttackingFigure.Add(position);
+                    }
+                    for (int i = currentFigure.Position.Y - 1; i >= 0; i--)
+                    {
+                        var position = new Point(currentFigure.Position.X, i);
+                        if (positionsRook.All(pos => pos != position) && positionsQueen.All(pos => pos != position)
+                                                            && availablePositionsFigures.Any(pos => pos == position))
+                        {
+                            return canMove = true;
+                        }
+                        else if (positionsRook.Any(pos => pos == position) || positionsQueen.Any(pos => pos == position))
+                        {
+                            availablePositionsTowardAttackingFigure.Add(position);
+                            break;
+                        }
+                        availablePositionsTowardAttackingFigure.Add(position);
+                    }
+                }
+                else
+                {
+                    for (int i = currentFigure.Position.Y - 1; i > king.Position.Y; i--)
+                    {
+                        var position = new Point(currentFigure.Position.X, i);
+                        if (availablePositionsFigures.Any(pos => pos == position))
+                        {
+                            return canMove = true;
+                        }
+                        availablePositionsTowardAttackingFigure.Add(position);
+                    }
+                    for (int i = currentFigure.Position.Y + 1; i <= 7; i++)
+                    {
+                        var position = new Point(currentFigure.Position.X, i);
+                        if (positionsRook.All(pos => pos != position) && positionsQueen.All(pos => pos != position)
+                                                            && availablePositionsFigures.Any(pos => pos == position))
+                        {
+                            return canMove = true;
+                        }
+                        else if (positionsRook.Any(pos => pos == position) || positionsQueen.Any(pos => pos == position))
+                        {
+                            availablePositionsTowardAttackingFigure.Add(position);
+                            break;
+                        }
+                        availablePositionsTowardAttackingFigure.Add(position);
+                    }
+                }
+                currentfigureAvailablePos = currentfigureAvailablePos.Intersect(availablePositionsTowardAttackingFigure).ToList(); 
+            }
+
+            //позиции справа и слева по прямой
+            if (currentFigure.Position.Y == king.Position.Y)
+            {
+                if (currentFigure.Position.X < king.Position.X)
+                {
+                    for (int i = currentFigure.Position.X + 1; i < king.Position.X; i++)
+                    {
+                        var position = new Point(i, currentFigure.Position.Y);
+                        if (availablePositionsFigures.Any(pos => pos == position))
+                        {
+                            return canMove = true;
+                        }
+                        availablePositionsTowardAttackingFigure.Add(position);
+                    }
+                    for (int i = currentFigure.Position.X - 1; i >= 0; i--)
+                    {
+                        var position = new Point(i, currentFigure.Position.Y);
+                        if (positionsRook.All(pos => pos != position) && positionsQueen.All(pos => pos != position)
+                                                            && availablePositionsFigures.Any(pos => pos == position))
+                        {
+                            return canMove = true;
+                        }
+                        else if (positionsRook.Any(pos => pos == position) || positionsQueen.Any(pos => pos == position))
+                        {
+                            availablePositionsTowardAttackingFigure.Add(position);
+                            break;
+                        }
+                        availablePositionsTowardAttackingFigure.Add(position);
+                    }
+                }
+                else
+                {
+                    for (int i = currentFigure.Position.X - 1; i > king.Position.X; i--)
+                    {
+                        var position = new Point(i, currentFigure.Position.Y);
+                        if (availablePositionsFigures.Any(pos => pos == position))
+                        {
+                            return canMove = true;
+                        }
+                        availablePositionsTowardAttackingFigure.Add(position);
+                    }
+                    for (int i = currentFigure.Position.X + 1; i <= 7; i++)
+                    {
+                        var position = new Point(i, currentFigure.Position.Y);
+                        if (positionsRook.All(pos => pos != position) && positionsQueen.All(pos => pos != position)
+                                                            && availablePositionsFigures.Any(pos => pos == position))
+                        {
+                            return canMove = true;
+                        }
+                        else if (positionsRook.Any(pos => pos == position) || positionsQueen.Any(pos => pos == position))
+                        {
+                            availablePositionsTowardAttackingFigure.Add(position);
+                            break;
+                        }
+                        availablePositionsTowardAttackingFigure.Add(position);
+                    }
+                }
+                currentfigureAvailablePos = currentfigureAvailablePos.Intersect(availablePositionsTowardAttackingFigure).ToList();
+            }
+
+
+            return canMove = false;
+        } 
     }
 }
