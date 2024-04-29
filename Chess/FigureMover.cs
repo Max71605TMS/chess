@@ -30,8 +30,11 @@ namespace Chess
                 {
                     AvaliablePositions = GameStatus.ChangeAvailablePositionProtectingFigures(IsWhiteTurn, Figures, figure);
                 }
-                else { AvaliablePositions = figure.GetAvaliablePositions(Figures); }
-                
+                else
+                {
+                    AvaliablePositions = figure.GetAvaliablePositions(Figures);
+                }
+
                 figure.IsChoosen = true;
                 CurrentFigure = figure;
             }
