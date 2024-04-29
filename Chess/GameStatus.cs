@@ -130,7 +130,7 @@ namespace Chess
         {
             bool isPossibleToProtectKing = false;
             King king = FindKing(isWhiteTurn, figures);
-            
+
             List<Point> positionsAroundKing = king.AllTheKingMoves(figures);
             positionsAroundKing.Remove(new Point(king.Position.X + 2, king.Position.Y));
             positionsAroundKing.Remove(new Point(king.Position.X - 2, king.Position.Y));
@@ -256,13 +256,13 @@ namespace Chess
         public static IEnumerable<Point> ChangeAvailablePositionProtectingFigures(bool isWhiteTurn, IEnumerable<Figure> figures, Figure currentFigure)
         {
             King king = FindKing(isWhiteTurn, figures);
-           
+
             var availablePositionsCurrentFigure = currentFigure.GetAvaliablePositions(figures);
 
             var attackFigureAvailablePositions = new List<Point>();
             var attackFigureAllAvailablePositions = attackingFigure.GetAvaliablePositions(figures);
 
-             if (attackingFigure is Rook)
+            if (attackingFigure is Rook)
             {
                 attackFigureAvailablePositions = AvailableMovesForRook(king, attackingFigure, attackFigureAllAvailablePositions);
             }

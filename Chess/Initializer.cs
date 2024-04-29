@@ -10,15 +10,14 @@ using Chess;
 internal static class Initializer
 {
     private const int BoardSize = 8;
-    internal static Button GetButton(int ButtonSize, int x, int y, int offestX = 0, int offsetY = 0)
+    internal static Button GetButton(int ButtonSize, int x, int y)
     {
-        //var figure = GetFigure(x, y, true);
         return new Button
         {
             Width = ButtonSize,
             Height = ButtonSize,
-            Location = new Point(x * ButtonSize + offestX, y * ButtonSize + offsetY),
-            BackColor = (x + y) % 2 == 0 ? Color.White : Color.Black,
+            Location = new Point(x * ButtonSize , y * ButtonSize ),
+            BackgroundImage = (x + y) % 2 == 0 ? Chess.Properties.Resources.Empty_White : Chess.Properties.Resources.Empty_Black,
             Tag = new Point(x, y),
 
         };
