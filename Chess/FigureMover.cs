@@ -25,7 +25,8 @@ namespace Chess
         public void ChooseFigure(Figure figure)
         {
             var currentfigureAvailablePos = figure.GetAvaliablePositions(Figures).ToList();
-            var test = GameStatus.CheckPositionsAroundCurrentFigure(IsWhiteTurn, Figures, figure, out currentfigureAvailablePos);
+            var test = GameStatus.CheckPositionsAroundCurrentFigureTest(IsWhiteTurn, Figures, figure, out currentfigureAvailablePos);
+
             if (figure.IsWhite == IsWhiteTurn)
             {
                 if (figure is not King && GameStatus.IsCheck(IsWhiteTurn, Figures))
