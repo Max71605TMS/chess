@@ -414,7 +414,6 @@ namespace Chess
                     }
                 }
                 currentfigureAvailablePos = currentfigureAvailablePos.Intersect(availablePositionsTowardAttackingFigure).ToList();
-
             }
 
 
@@ -429,8 +428,10 @@ namespace Chess
                 int startY = currentFigure.Position.Y + directionY;
 
                 var position = new Point(startX, startY);
+
                 while (startX >= 0 && startX <= 7 && startY >= 0 && startY <= 7 && position != king.Position)
                 {
+                    position = new Point(startX, startY);
                     if (availablePositionsFigures.Any(pos => pos == position))
                     {
                         return canMove = true;
@@ -440,7 +441,6 @@ namespace Chess
                     startX += directionX;
                     startY += directionY;
                 }
-
 
                 // Проверка диагональных позиций вниз от текущей позиции
                 directionX = -directionX;
@@ -467,22 +467,15 @@ namespace Chess
                     startY += directionY;
                 }
 
-
-
                 if (availablePositionsTowardAttackingFigure.All(pos => !positionsBishop.Contains(pos)) &&
                     availablePositionsTowardAttackingFigure.All(pos => !positionsQueen.Contains(pos)))
                 {
                     return canMove = true;
                 }
                 currentfigureAvailablePos = currentfigureAvailablePos.Intersect(availablePositionsTowardAttackingFigure).ToList();
-                // Пересечение доступных позиций с текущими доступными позициями фигуры
-
-
             }
-
             return canMove;
-            
-           
+
         }
     }
 }
